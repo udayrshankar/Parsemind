@@ -5,6 +5,7 @@ import { Reveal } from './Reveal';
 
 // Replace this with the actual path to your uploaded image
 import CalendarImage from '../assets/Calendar.png'; 
+
 const benefits = [
   "Strategic AI Consulting",
   "Custom Solution Driven Approach",
@@ -42,11 +43,10 @@ export const Booking = () => {
   }, []);
 
   const openCalendly = () => {
-    if (window.Calendly) {
-      window.Calendly.initPopupWidget({
-        url: 'https://calendly.com/udaymadavana40/30min'
-      });
-    }
+    if (!isScriptLoaded || !window.Calendly) return;
+    window.Calendly.initPopupWidget({
+      url: 'https://calendly.com/udaymadavana40/30min'
+    });
   };
 
   return (
@@ -63,15 +63,11 @@ export const Booking = () => {
             >
               <div className="overflow-hidden rounded-2xl shadow-xl transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-2xl border border-gray-100">
                 
-                {/* PUT YOUR IMAGE PATH HERE */}
                 <img 
                   src={CalendarImage}
                   alt="Book a strategy call" 
                   className="w-full h-auto object-cover"
                 />
-
-                {/* Optional: Hover Overlay Hint */}
-              
 
               </div>
             </div>
@@ -102,15 +98,19 @@ export const Booking = () => {
                   </div>
                 </Reveal>
               ))}
+              
               <div className='translate-y-4'>
                 <Reveal>
-                <button className='bg-black text-white h-15 px-8 hover:bg-white hover:scale-105 cursor-pointer hover:text-black transition-all duration-300'>
-                  Book a Call
-                </button>
+                  <button 
+                    onClick={openCalendly}
+                    className='bg-black text-white h-15 px-8 hover:bg-white hover:scale-105 cursor-pointer hover:text-black transition-all duration-300'
+                  >
+                    Book a Call
+                  </button>
                 
-                <button className='border-black ml-2 border-2 h-15 px-8 hover:bg-white hover:scale-105 hover:border-0 cursor-pointer text-black transition-all duration-300'>
-                  How we Work
-                </button>
+                  <button className='border-black ml-2 border-2 h-15 px-8 hover:bg-white hover:scale-105 hover:border-0 cursor-pointer text-black transition-all duration-300'>
+                    How we Work
+                  </button>
                 </Reveal>
               </div>
             </div>
