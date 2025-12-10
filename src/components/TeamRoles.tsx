@@ -69,19 +69,17 @@ export const TeamRoles = () => {
                   {index + 1}
                 </span>
 
-                {/* Content Wrapper (z-10 ensures text is above number) */}
                 <div className="relative z-10 flex flex-col items-start gap-4 h-full min-h-[180px]">
                   
-                  {/* Note: I removed the small number circle here */}
 
                   <div>
                     {/* Title */}
-                    <h3 className="type-h2 text-[30px] text-text-main mb-3 group-hover:text-white transition-colors duration-500 leading-tight">
+                    <h3 className="type-h3 text-text-main mb-3 group-hover:text-white transition-colors duration-500 leading-tight">
                       {role.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="type-body-main text-[18px] text-gray-600 group-hover:text-gray-400 transition-colors duration-500 italic">
+                    <p className="type-body-main text-[18px] text-gray-600 group-hover:text-gray-400 transition-colors duration-500">
                       {role.description}
                     </p>
                   </div>

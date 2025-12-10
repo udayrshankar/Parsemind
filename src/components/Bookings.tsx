@@ -4,13 +4,13 @@ import { Check } from 'lucide-react';
 import { Reveal } from './Reveal';
 
 // Replace this with the actual path to your uploaded image
-import CalendarImage from '../assets/Calendar.png'; 
+import CalendarImage from '../assets/Calendar.png';
 
 const benefits = [
-  "Strategic AI Consulting",
-  "Custom Solution Driven Approach",
-  "AI System Integration",
-  "Ongoing Support & Optimization"
+  'Strategic AI Consulting',
+  'Custom Solution Driven Approach',
+  'AI System Integration',
+  'Ongoing Support & Optimization',
 ];
 
 declare global {
@@ -45,30 +45,26 @@ export const Booking = () => {
   const openCalendly = () => {
     if (!isScriptLoaded || !window.Calendly) return;
     window.Calendly.initPopupWidget({
-      url: 'https://calendly.com/udaymadavana40/30min'
+      url: 'https://calendly.com/udaymadavana40/30min',
     });
   };
 
   return (
-    <section id="booking" className="py-24 px-6 bg-white">
+    <section id="booking" className="bg-white px-4 md:px-6 py-16 md:py-24">
       <div className="max-w-7xl mx-auto">
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          
-          {/* --- Left Column: Your Image Trigger --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* --- Left Column: Image Trigger --- */}
           <Reveal>
-            <div 
+            <div
               onClick={openCalendly}
-              className="relative w-full max-w-md mx-auto group cursor-pointer"
+              className="relative w-full max-w-md mx-auto group cursor-pointer mb-8 lg:mb-0"
             >
               <div className="overflow-hidden rounded-2xl shadow-xl transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-2xl border border-gray-100">
-                
-                <img 
+                <img
                   src={CalendarImage}
-                  alt="Book a strategy call" 
+                  alt="Book a strategy call"
                   className="w-full h-auto object-cover"
                 />
-
               </div>
             </div>
           </Reveal>
@@ -76,47 +72,47 @@ export const Booking = () => {
           {/* --- Right Column: Text Content --- */}
           <div>
             <Reveal delay={0.2}>
-              <span className="text-text-main uppercase font-medium tracking-wider text-sm">
+              <span className="text-text-main uppercase font-medium tracking-wider text-xs md:text-sm">
                 Not the ordinary
               </span>
               <h2 className="type-h2 mb-5 text-text-main mt-2">
-                Let's talk about your AI Strategy
+                Let&apos;s talk about your AI Strategy
               </h2>
             </Reveal>
 
-            <div className="flex flex-col gap-6 mt-8">
+            <div className="flex flex-col gap-5 md:gap-6 mt-6 md:mt-8">
               {benefits.map((item, index) => (
-                <Reveal key={index} delay={0.3 + (index * 0.1)}>
+                <Reveal key={index} delay={0.3 + index * 0.1}>
                   <div className="flex items-center gap-4 group cursor-default">
                     <div className="w-8 h-8 rounded-full bg-functional flex items-center justify-center shrink-0 group-hover:bg-black transition-colors duration-300">
                       <Check size={16} className="text-white" strokeWidth={3} />
                     </div>
-                    
-                    <span className="text-xl text-text-body font-inter group-hover:text-black transition-colors duration-300">
+
+                    <span className="text-base md:text-lg text-text-body font-inter group-hover:text-black transition-colors duration-300">
                       {item}
                     </span>
                   </div>
                 </Reveal>
               ))}
-              
-              <div className='translate-y-4'>
+
+              <div className="mt-4 md:mt-6">
                 <Reveal>
-                  <button 
-                    onClick={openCalendly}
-                    className='bg-black text-white h-15 px-8 hover:bg-white hover:scale-105 cursor-pointer hover:text-black transition-all duration-300'
-                  >
-                    Book a Call
-                  </button>
-                
-                  <button className='border-black ml-2 border-2 h-15 px-8 hover:bg-white hover:scale-105 hover:border-0 cursor-pointer text-black transition-all duration-300'>
-                    How we Work
-                  </button>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      onClick={openCalendly}
+                      className="bg-black text-white px-8 py-3 md:py-3.5 hover:bg-white hover:text-black hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
+                    >
+                      Book a Call
+                    </button>
+
+                    <button className="border-black border-2 px-8 py-3 md:py-3.5 hover:bg-black hover:text-white hover:scale-105 hover:border-black cursor-pointer transition-all duration-300 inline-flex items-center justify-center">
+                      How we Work
+                    </button>
+                  </div>
                 </Reveal>
               </div>
             </div>
-            
           </div>
-
         </div>
       </div>
     </section>
