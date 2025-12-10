@@ -48,7 +48,7 @@ export const Features = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="px-4 md:px-6 py-16 md:py-24 overflow-hidden">
+    <section className="px-4 md:px-6 py-16 md:py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* --- Header --- */}
         <div className="text-center flex justify-center mb-8 md:mb-10">

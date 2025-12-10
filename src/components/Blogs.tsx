@@ -55,11 +55,11 @@ export const Blogs = () => {
             <Reveal key={index} delay={index * 0.1}>
               <motion.div 
                 whileHover={{ y: -10 }}
-                className="group cursor-pointer flex flex-col h-full shadow shadow-5xl shadow-black/25 bg-bg-card hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
+                className="group cursor-pointer flex flex-col h-full shadow shadow-5xl shadow-black/25 bg-card-gradient hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
               >
                 
                 {/* Image Container */}
-                <div className="overflow-hidden mb-6 aspect-4/3 relative">
+                <div className="overflow-hidden mb-6 p-2 aspect-[1.05] relative">
                   {/* Placeholder Image Block */}
                   <div className={`w-full h-full relative transition-transform duration-700 group-hover:scale-105`}>
                      <img src={`${blog.imageColor}`} alt="" className='h-full w-full object-cover'/>
@@ -81,10 +81,7 @@ export const Blogs = () => {
                     {blog.excerpt}
                   </p>
 
-                  {/* Read More Link */}
-                  <div className="mt-auto pt-4 flex items-center gap-2 text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    Read Article <ArrowRight size={16} />
-                  </div>
+        
                 </div>
 
               </motion.div>

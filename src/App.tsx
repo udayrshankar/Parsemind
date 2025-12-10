@@ -18,7 +18,6 @@ export default function App() {
       <Navbar/>
       <Hero/>
       <Concept/>
-      <Stats/>
       <Features/>
       <TeamRoles/>
       <CaseStudies/>

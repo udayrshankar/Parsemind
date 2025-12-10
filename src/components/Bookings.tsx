@@ -52,7 +52,7 @@ export const Booking = () => {
   return (
     <section id="booking" className="bg-white px-4 md:px-6 py-16 md:py-24">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0 items-center">
           {/* --- Left Column: Image Trigger --- */}
           <Reveal>
             <div

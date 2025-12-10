@@ -15,11 +15,11 @@ const roles = [
     description: "Turning raw unstructured data into actionable predictive insights."
   },
   {
-    title: "Solution Architects",
+    title: "AI Solution Architects",
     description: "Designing scalable, secure, and cloud-native AI infrastructure."
   },
   {
-    title: "Project Managers",
+    title: "Subject Matter Experts",
     description: "Ensuring agile delivery and seamless integration into your workflows."
   },
   {
