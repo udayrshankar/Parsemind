@@ -9,20 +9,24 @@ import { CaseStudies } from "./components/CaseStudies";
 import { Booking } from "./components/Bookings";
 import { Blogs } from "./components/Blogs";
 import { Footer } from "./components/Footer";
+import { TransitionProvider } from "./components/TransitionContext";
 
 export default function App() {
   return (
     <div className="w-full flex flex-col items-center gap-16">
+
       <GridDebug/>
-      <Navbar/>
-      <Hero/>
-      <Concept/>
-      <Features/>
-      <TeamRoles/>
-      <CaseStudies/>
-      <Booking/>
-      <Blogs/>
-      <Footer/>
+      <TransitionProvider>
+        <Navbar/>
+        <Hero/>
+        <Concept/>
+        <Features/>
+        <TeamRoles/>
+        <CaseStudies/>
+        <Booking/>
+        <Blogs/>
+        <Footer/>
+      </TransitionProvider>
     </div>
 
   );

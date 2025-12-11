@@ -54,7 +54,7 @@ export const Blogs = () => {
             <Reveal key={index} delay={index * 0.1}>
               <motion.div 
                 whileHover={{ y: -10 }}
-                className="group cursor-pointer flex flex-col h-full shadow shadow-5xl shadow-black/25 bg-card-gradient hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
+                className="group cursor-pointer flex flex-col h-full shadow shadow-5xl shadow-black/25 bg-linear-to-br from-bg-card to-blue-100 hover:from-black hover:to-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
               >
                 
                 {/* Image Container */}

@@ -1,14 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  User, 
-  ShieldCheck, 
-  Database, 
-  BadgeCheck, 
-  TrendingUp, 
-  DollarSign,
-  BrainCircuit 
-} from 'lucide-react';
+import { User, Database, Shield, TrendingUp, Server, Globe } from 'lucide-react';
 
 // --- Types & Interfaces ---
 
@@ -21,9 +13,16 @@ interface BeamProps {
   reverse?: boolean;
 }
 
-interface NodeProps {
+interface CentralNodeProps {
   label: string;
   icon?: React.ReactNode;
+}
+
+interface MiniNodeProps {
+  x: number;
+  y: number;
+  icon: React.ReactNode;
+  label: string;
 }
 
 // --- Configuration ---
@@ -31,28 +30,27 @@ interface NodeProps {
 const COLORS = {
   primary: '#FBBF24', // Amber-400
   secondary: '#D97706', // Amber-600
-  accent: '#10B981',    // Emerald-500
   glow: 'rgba(251, 191, 36, 0.5)',
   faint: 'rgba(251, 191, 36, 0.1)',
-  dark: '#0A0A0A',
+  bg: '#000000',
 };
 
 // --- Sub-components ---
 
-const Beam: React.FC<BeamProps> = ({ 
+function Beam({ 
   d, 
   delay = 0, 
   duration = 5, 
   strokeWidth = 1.5, 
   dashArray = "100 400", 
   reverse = false 
-}) => {
+}: BeamProps) {
   return (
     <g>
-      {/* Faint static path for track visibility */}
-      <path d={d} stroke={COLORS.faint} strokeWidth={1} fill="none" opacity="0.3" />
+      {/* Static Background Line */}
+      <path d={d} stroke={COLORS.faint} strokeWidth={1} fill="none" />
       
-      {/* Animated Beam */}
+      {/* Animated Data Packet */}
       <motion.path
         d={d}
         stroke={COLORS.primary}
@@ -74,165 +72,193 @@ const Beam: React.FC<BeamProps> = ({
       />
     </g>
   );
-};
+}
 
-const CentralNode: React.FC<NodeProps> = ({ label, icon }) => {
-    return (
-      <g>
-        {/* Ambient Glow */}
+function CentralNode({ label, icon }: CentralNodeProps) {
+  return (
+    <g>
+      {/* Ambient Glow */}
+      <motion.circle
+        r="80"
+        fill="url(#node-glow)"
+        initial={{ opacity: 0.4, scale: 0.9 }}
+        animate={{ opacity: [0.4, 0.6, 0.4], scale: [0.9, 1.1, 0.9] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Expanding Sonar Waves */}
+      {[0, 1].map((i) => (
         <motion.circle
-          r="60"
-          fill="url(#node-glow)"
-          initial={{ opacity: 0.3, scale: 0.9 }}
-          animate={{ opacity: [0.3, 0.5, 0.3], scale: [0.9, 1.1, 0.9] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          key={i}
+          r="30"
+          stroke={COLORS.primary}
+          strokeWidth="1"
+          fill="none"
+          initial={{ opacity: 0.6, scale: 0.5 }}
+          animate={{ opacity: 0, scale: 2.5 }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeOut",
+            delay: i * 1.5,
+          }}
         />
+      ))}
 
-        {/* Sonar Waves */}
-        {[0, 1].map((i) => (
-            <motion.circle
-            key={i}
-            r="35"
-            stroke={COLORS.primary}
-            strokeWidth="1"
-            fill="none"
-            initial={{ opacity: 0.5, scale: 0.8 }}
-            animate={{ opacity: 0, scale: 2.0 }}
-            transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeOut",
-                delay: i * 1.5,
-            }}
-            />
-        ))}
-  
-        {/* Core Ring */}
-        <circle r="30" fill={COLORS.dark} stroke={COLORS.primary} strokeWidth="2" />
-        
-        {/* Icon */}
+      {/* Rotating Technical Ring */}
+      <motion.circle
+        r="45"
+        stroke={COLORS.faint}
+        strokeWidth="1"
+        strokeDasharray="6 10"
+        fill="none"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      />
+
+      {/* Solid Center Core */}
+      <circle r="20" fill="#0A0A0A" stroke={COLORS.primary} strokeWidth="2" />
+      
+      {/* Icon or Dot */}
+      {icon ? (
         <g transform="translate(-12, -12)">{icon}</g>
+      ) : (
+        <motion.circle
+          r="6"
+          fill={COLORS.primary}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1, repeat: Infinity }}
+        />
+      )}
 
-        {/* Label */}
-        <foreignObject x="-60" y="45" width="120" height="50">
-            <div className="flex flex-col items-center justify-center overflow-visible">
-                <span className="text-[10px] font-bold tracking-[0.2em] text-amber-400 opacity-90 whitespace-nowrap uppercase">
-                    {label}
-                </span>
-            </div>
-        </foreignObject>
+      {/* Floating Label */}
+      <foreignObject x="-50" y="50" width="100" height="50">
+        <div className="flex flex-col items-center justify-center overflow-visible">
+          <span className="text-xs font-mono tracking-[0.2em] text-amber-400 opacity-90 whitespace-nowrap">
+            {label}
+          </span>
+          <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-amber-500 to-transparent mt-1"></div>
+        </div>
+      </foreignObject>
+    </g>
+  );
+}
+
+function IntegrationNode({ x, y, icon, label }: MiniNodeProps) {
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      <circle r="15" fill="#0A0A0A" stroke={COLORS.primary} strokeWidth="1" />
+      <g transform="translate(-8, -8) scale(0.8)">{icon}</g>
+      <text x="0" y="28" textAnchor="middle" fill={COLORS.primary} fontSize="10" fontFamily="monospace" opacity="0.8">
+        {label}
+      </text>
+    </g>
+  );
+}
+
+function SecurityBadge({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      {/* Shield Pulse */}
+      <motion.circle 
+        r="25" 
+        fill={COLORS.faint} 
+        animate={{ opacity: [0.2, 0.5, 0.2] }} 
+        transition={{ duration: 2, repeat: Infinity }} 
+      />
+      {/* Rotating Hexagon Border */}
+      <motion.path
+        d="M0,-24 L20.7,-12 L20.7,12 L0,24 L-20.7,12 L-20.7,-12 Z"
+        fill="none"
+        stroke={COLORS.primary}
+        strokeWidth="1"
+        strokeDasharray="4 4"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+      />
+      {/* Icon */}
+      <g transform="translate(-10, -10)">
+        <Shield color={COLORS.primary} size={20} />
       </g>
-    );
-};
+      {/* Scan Line */}
+      <motion.rect
+        x="-20" y="-20" width="40" height="2"
+        fill={COLORS.primary}
+        opacity="0.5"
+        animate={{ y: [-20, 20, -20] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+      />
+      <text x="35" y="5" fill={COLORS.primary} fontSize="10" fontFamily="monospace" letterSpacing="2">SECURE_LINK</text>
+    </g>
+  );
+}
 
-const SatelliteNode: React.FC<NodeProps & { color?: string }> = ({ label, icon, color = COLORS.secondary }) => {
-    return (
-        <g>
-            <motion.circle 
-                r="20" 
-                fill={COLORS.dark} 
-                stroke={color} 
-                strokeWidth="1.5"
-                whileHover={{ scale: 1.1 }}
-            />
-            <g transform="translate(-10, -10)">
-                {/* FIXED: Cast to 'any' to allow 'size' prop injection without TS error */}
-                {React.isValidElement(icon) 
-                  ? React.cloneElement(icon as React.ReactElement<any>, { size: 20, color: color }) 
-                  : icon}
-            </g>
-            
-            <foreignObject x="-50" y="25" width="100" height="40">
-                <div className="flex justify-center">
-                    <span className="text-[9px] font-mono tracking-widest uppercase bg-black/60 px-2 py-0.5 rounded text-gray-400">
-                        {label}
-                    </span>
-                </div>
-            </foreignObject>
-        </g>
-    );
-};
+function RoiPanel({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      {/* Panel Background */}
+      <rect x="-80" y="-40" width="160" height="80" rx="4" fill="rgba(10,10,10,0.8)" stroke={COLORS.faint} strokeWidth="1" />
+      
+      {/* Header */}
+      <text x="-70" y="-25" fill={COLORS.primary} fontSize="10" fontFamily="monospace" opacity="0.7">ROI PROJECTION</text>
+      
+      {/* Big Percentage */}
+      <text x="-70" y="5" fill={COLORS.primary} fontSize="24" fontWeight="bold" fontFamily="monospace">
+        +245%
+      </text>
 
-// Special ROI Card Component (The Outcome)
-const ROINode: React.FC = () => {
-    return (
-        <g>
-            <foreignObject x="-60" y="-30" width="140" height="80">
-                <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
-                    className="flex flex-col items-center justify-center p-2 rounded-xl border border-emerald-500/30 bg-emerald-950/40 backdrop-blur-md"
-                >
-                    <div className="flex items-center gap-2 mb-1">
-                        <DollarSign size={14} className="text-emerald-400" />
-                        <span className="text-emerald-400 font-bold text-sm tracking-wide">ROI</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <TrendingUp size={12} className="text-emerald-400" />
-                        <span className="text-xs font-mono text-emerald-300">+240%</span>
-                    </div>
-                </motion.div>
-            </foreignObject>
-            
-            {/* Pulsing Green Glow underneath */}
-            <motion.circle
-                r="40"
-                fill="url(#roi-glow)"
-                initial={{ opacity: 0.2 }}
-                animate={{ opacity: [0.2, 0.6, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity }}
-            />
-        </g>
-    );
-};
+      {/* Graph Line */}
+      <motion.path
+        d="M -70 20 L -40 20 L -10 10 L 20 15 L 60 -10"
+        fill="none"
+        stroke={COLORS.primary}
+        strokeWidth="2"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+      />
+      
+      {/* Trending Icon */}
+      <g transform="translate(50, -32)">
+        <TrendingUp color={COLORS.primary} size={16} />
+      </g>
+    </g>
+  );
+}
 
 // --- Main Component ---
 
-const DualNodeNetwork: React.FC = () => {
-  const width = 800;
-  const height = 400; // Slightly shorter for a panoramic view
+export default function AdvancedNetwork() {
+  // Dimensions
+  const width = 900;
+  const height = 600;
   const centerY = height / 2;
   
-  // -- Coordinate System --
-  
-  // 1. Data Source (Left)
-  const integrationsPos = { x: 100, y: centerY };
-  
-  // 2. Intelligence (Mid-Left)
-  const aiNodePos = { x: 300, y: centerY };
-  const securityPos = { x: 300, y: centerY + 100 }; // Security monitors AI from below
-  
-  // 3. Human Review (Mid-Right)
-  const expertNodePos = { x: 500, y: centerY };
-  
-  // 4. Outcomes (Right)
-  const trustPos = { x: 700, y: centerY - 60 };
-  const roiPos = { x: 700, y: centerY + 60 };
+  // Node Coordinates
+  const aiNodePos = { x: width * 0.4, y: centerY };
+  const expertNodePos = { x: width * 0.7, y: centerY };
 
-  // Path Definitions
+  // Integration Nodes (Left Side)
+  const integrations = [
+    { id: 1, label: 'DB_SYNC', icon: <Database color={COLORS.primary} />, x: 80, y: centerY - 100 },
+    { id: 2, label: 'API_GW', icon: <Server color={COLORS.primary} />, x: 80, y: centerY },
+    { id: 3, label: 'WEB_HOOK', icon: <Globe color={COLORS.primary} />, x: 80, y: centerY + 100 },
+  ];
+
+  // SVG Paths
   const paths = {
-    // Input Flow: Data -> AI
-    dataToAi: `M ${integrationsPos.x} ${integrationsPos.y} L ${aiNodePos.x} ${aiNodePos.y}`,
-    
-    // Security Check: Security -> AI (Dashed line / Vertical)
-    securityToAi: `M ${securityPos.x} ${securityPos.y} L ${aiNodePos.x} ${aiNodePos.y + 40}`,
-    
-    // Process Flow: AI -> Expert
-    aiToExpert: `M ${aiNodePos.x} ${aiNodePos.y} L ${expertNodePos.x} ${expertNodePos.y}`,
-    
-    // Output Flows: Expert -> Outcomes
-    expertToTrust: `M ${expertNodePos.x} ${expertNodePos.y} C ${expertNodePos.x + 50} ${expertNodePos.y}, ${trustPos.x - 50} ${trustPos.y}, ${trustPos.x} ${trustPos.y}`,
-    expertToRoi: `M ${expertNodePos.x} ${expertNodePos.y} C ${expertNodePos.x + 50} ${expertNodePos.y}, ${roiPos.x - 50} ${roiPos.y}, ${roiPos.x} ${roiPos.y}`,
+    topRightToExpert: `M ${width} 50 Q ${width - (width - expertNodePos.x) * 0.5} 50, ${expertNodePos.x} ${expertNodePos.y}`,
+    bottomRightToExpert: `M ${width} ${height - 50} Q ${width - (width - expertNodePos.x) * 0.5} ${height - 50}, ${expertNodePos.x} ${expertNodePos.y}`,
+    centerConnection: `M ${aiNodePos.x} ${aiNodePos.y} L ${expertNodePos.x} ${expertNodePos.y}`,
   };
 
   return (
-    <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center">
+    <div className="relative w-full h-[600px] overflow-hidden flex items-center justify-center">
       
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.05),transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 to-black pointer-events-none" />
 
-      <div className="relative w-full max-w-4xl h-full">
+      <div className="relative w-full max-w-5xl h-full perspective-1000">
         <svg
           className="absolute inset-0 w-full h-full overflow-visible"
           viewBox={`0 0 ${width} ${height}`}
@@ -243,68 +269,48 @@ const DualNodeNetwork: React.FC = () => {
               <stop stopColor={COLORS.primary} stopOpacity="0.3" />
               <stop offset="1" stopColor={COLORS.primary} stopOpacity="0" />
             </radialGradient>
-            <radialGradient id="roi-glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) rotate(90) scale(100)">
-              <stop stopColor={COLORS.accent} stopOpacity="0.3" />
-              <stop offset="1" stopColor={COLORS.accent} stopOpacity="0" />
-            </radialGradient>
           </defs>
 
-          {/* ---- Connecting Beams ---- */}
-          
-          {/* 1. Integration feeding AI */}
-          <Beam d={paths.dataToAi} delay={0} duration={2} />
-          
-          {/* 2. Security "Shielding" AI (Vertical beam) */}
-          <Beam d={paths.securityToAi} delay={0} duration={3} dashArray="10 10" />
-          
-          {/* 3. AI handing off to Expert */}
-          <Beam d={paths.aiToExpert} delay={0.5} duration={1.5} strokeWidth={3} dashArray="40 40" />
+          {/* --- INTEGRATION LAYER (Left) --- */}
+          {integrations.map((node, i) => (
+            <React.Fragment key={node.id}>
+               {/* Connecting Beam to AI */}
+               <Beam 
+                d={`M ${node.x + 15} ${node.y} C ${node.x + 50} ${node.y}, ${aiNodePos.x - 50} ${aiNodePos.y}, ${aiNodePos.x} ${aiNodePos.y}`} 
+                delay={i * 0.5} 
+                duration={3}
+              />
+              <IntegrationNode {...node} />
+            </React.Fragment>
+          ))}
 
-          {/* 4. Expert generating Outcomes */}
-          <Beam d={paths.expertToTrust} delay={1.0} duration={2} />
-          <Beam d={paths.expertToRoi} delay={1.2} duration={2} />
-
-          {/* ---- Nodes ---- */}
+          {/* --- EXPERT INPUTS (Right) --- */}
+          <Beam d={paths.topRightToExpert} delay={0.8} />
+          <Beam d={paths.bottomRightToExpert} delay={2.2} reverse />
           
-          {/* 1. Integrations (Input) */}
-          <g transform={`translate(${integrationsPos.x}, ${integrationsPos.y})`}>
-            <SatelliteNode label="INTEGRATION" icon={<Database />} />
-          </g>
+          {/* --- CENTRAL CONNECTION --- */}
+          <Beam d={paths.centerConnection} delay={0} duration={3} strokeWidth={3} dashArray="40 100" />
 
-          {/* 2. AI AGENT (The Processor) */}
+          {/* --- SECURITY LAYER (Center Top) --- */}
+          {/* We position this visually above the connection line */}
+          <SecurityBadge x={(aiNodePos.x + expertNodePos.x) / 2} y={centerY - 60} />
+
+          {/* --- ROI GAINS LAYER (Center Bottom) --- */}
+          <RoiPanel x={(aiNodePos.x + expertNodePos.x) / 2} y={centerY + 120} />
+
+          {/* --- MAIN NODES --- */}
+          {/* AI Node */}
           <g transform={`translate(${aiNodePos.x}, ${aiNodePos.y})`}>
-            <CentralNode 
-              label="AI AGENT" 
-              icon={<BrainCircuit size={24} color={COLORS.primary} />} 
-            />
+            <CentralNode label="AI AGENT" />
           </g>
 
-          {/* 3. Security (The Guard - below AI) */}
-          <g transform={`translate(${securityPos.x}, ${securityPos.y})`}>
-             {/* Simple Line connecting to AI visually */}
-             <line x1="0" y1="0" x2="0" y2="-60" stroke={COLORS.faint} strokeDasharray="4 4" />
-            <SatelliteNode label="Encrypted" icon={<ShieldCheck />} color="#ef4444" /> {/* Red/Amber tint for security */}
-          </g>
-
-          {/* 4. EXPERT (The Reviewer) */}
+          {/* Expert Node */}
           <g transform={`translate(${expertNodePos.x}, ${expertNodePos.y})`}>
             <CentralNode label="EXPERT" icon={<User size={24} color={COLORS.primary} />} />
-          </g>
-
-          {/* 5. Trust (Outcome Top) */}
-          <g transform={`translate(${trustPos.x}, ${trustPos.y})`}>
-            <SatelliteNode label="Verified" icon={<BadgeCheck />} color={COLORS.accent} />
-          </g>
-
-          {/* 6. ROI (Outcome Bottom) */}
-          <g transform={`translate(${roiPos.x}, ${roiPos.y})`}>
-            <ROINode />
           </g>
 
         </svg>
       </div>
     </div>
   );
-};
-
-export default DualNodeNetwork;
+}

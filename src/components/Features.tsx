@@ -2,9 +2,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
-import Lottie from 'lottie-react';
-
-import animdata from '../assets/CustomAI.json';
+import CustomAIAgent from './Animation/CustomAI';
+import { WavyBackground } from './WavyBackground';
 
 // Placeholders for images - replace with your real imports
 const feature2 =
@@ -23,6 +22,7 @@ const features = [
     description:
       'We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.',
     image: feature1,
+    anim: <CustomAIAgent/>,
   },
   {
     id: 1,
@@ -30,6 +30,7 @@ const features = [
     description:
       'Track ROI and efficiency gains with custom dashboards designed to visualize your AI impact in real-time.',
     image: feature2,
+    anim: <WavyBackground/>,
   },
   {
     id: 2,
@@ -130,9 +131,7 @@ export const Features = () => {
                 className="absolute inset-0 w-full h-full"
               >
                 <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                  <Lottie animationData={animdata}
-                  loop= {false}
-                  autoplay= {true}/>
+                  {features[activeIndex].anim}
                 </div>
               </motion.div>
             </AnimatePresence>

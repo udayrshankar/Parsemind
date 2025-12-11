@@ -2,10 +2,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { usePageTransition } from './TransitionContext';
 
 const links = [
   { name: "Home", href: "#" },
-  { name: "Our Products", href: "#solutions" },
+  { name: "Our Products", href: "#solutions" }, // This href acts as a fallback
   { name: "Industries", href: "#industries" },
   { name: "Pricing", href: "#pricing" },
   { name: "Case Studies", href: "#case-studies" },
@@ -14,10 +15,25 @@ const links = [
 ];
 
 export const Navbar = () => {
+  // 1. Get the trigger function from your Context
+  const { triggerTransition } = usePageTransition();
+  
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Detect scroll to change background style
+  // 2. The Logic to intercept the click
+  const handleNavClick = (e: React.MouseEvent, linkName: string) => {
+    // Always close mobile menu on click
+    setIsMobileMenuOpen(false);
+
+    if (linkName === "Our Products") {
+      // Stop the browser from jumping to "#solutions"
+      e.preventDefault(); 
+      // Trigger the Apple-style curtain
+      triggerTransition("https://anseru.ai");
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -37,7 +53,6 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         
         {/* --- Logo --- */}
-        {/* Lowercase bold sans-serif to match 'anseru' */}
         <div className="text-2xl font-bold text-white tracking-tight cursor-pointer">
           Parsemind
         </div>
@@ -48,7 +63,8 @@ export const Navbar = () => {
             <a 
               key={link.name} 
               href={link.href}
-              className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+              onClick={(e) => handleNavClick(e, link.name)} // Added Click Handler
+              className="text-sm font-medium text-gray-300 hover:text-white transition-colors cursor-pointer"
             >
               {link.name}
             </a>
@@ -89,8 +105,8 @@ export const Navbar = () => {
                 <a 
                   key={link.name} 
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium text-gray-300 hover:text-white"
+                  onClick={(e) => handleNavClick(e, link.name)} // Added Click Handler
+                  className="text-lg font-medium text-gray-300 hover:text-white cursor-pointer"
                 >
                   {link.name}
                 </a>
