@@ -3,7 +3,6 @@ import { Hero } from "./components/Hero";
 import { GridDebug } from "./components/GridDebug";
 import { Navbar } from "./components/Navbar";
 import Concept from "./components/Concept";
-import { Stats } from "./components/Stats";
 import { Features } from "./components/Features";
 import { TeamRoles } from "./components/TeamRoles";
 import { CaseStudies } from "./components/CaseStudies"; 

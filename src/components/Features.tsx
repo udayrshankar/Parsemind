@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
+import Lottie from 'lottie-react';
+
+import animdata from '../assets/CustomAI.json';
 
 // Placeholders for images - replace with your real imports
 const feature2 =
@@ -127,11 +130,11 @@ export const Features = () => {
                 className="absolute inset-0 w-full h-full"
               >
                 <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                  <img
-                    src={features[activeIndex].image}
-                    alt={features[activeIndex].title}
-                    className="w-full h-full object-cover"
-                  />
+                  <Lottie animationData={animdata}
+                  loop= {false}
+                  autoplay= {true}
+                  style={{ width: 610, height: 725 }}
+                  rendererSettings={{ preserveAspectRatio: 'xMidYMid meet' }}/>
                 </div>
               </motion.div>
             </AnimatePresence>

@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Reveal } from './Reveal';
-import { ArrowRight } from 'lucide-react';
 
 // Import images if you have them, otherwise use placeholders
 // import blog1 from '../assets/blog-1.png';

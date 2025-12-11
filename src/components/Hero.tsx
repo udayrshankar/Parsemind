@@ -7,7 +7,7 @@ export const Hero = () => {
   return (
     // Mobile: single column
     // md+: 12-column grid with content + visual
-    <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-16">
+    <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-30">
       {/* 1. The Interactive Wavy Background */}
       <WavyBackground />
 
