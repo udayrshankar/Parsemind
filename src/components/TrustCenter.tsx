@@ -141,7 +141,7 @@ export const TrustCenter = () => {
                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, scale: 0.97, filter: 'blur(8px)' }}
                 transition={{ duration: 0.4, delay: 0.1, ease: 'easeOut' }}
-                className="w-full aspect-[4/3] rounded-xl relative overflow-hidden bg-gray-50 border border-black/5 shadow-inner mt-4 lg:mt-0"
+                className="w-full aspect-4/3 rounded-xl relative overflow-hidden bg-gray-50 border border-black/5 shadow-inner mt-4 lg:mt-0"
               >
                 <img
                   src={tabContent[activeTab].image}

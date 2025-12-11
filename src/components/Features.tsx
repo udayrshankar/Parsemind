@@ -132,9 +132,7 @@ export const Features = () => {
                 <div className="w-full h-full flex items-center justify-center bg-gray-50">
                   <Lottie animationData={animdata}
                   loop= {false}
-                  autoplay= {true}
-                  style={{ width: 610, height: 725 }}
-                  rendererSettings={{ preserveAspectRatio: 'xMidYMid meet' }}/>
+                  autoplay= {true}/>
                 </div>
               </motion.div>
             </AnimatePresence>
