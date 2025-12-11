@@ -137,7 +137,7 @@ function CentralNode({ label, icon }: CentralNodeProps) {
           <span className="text-xs font-mono tracking-[0.2em] text-amber-400 opacity-90 whitespace-nowrap">
             {label}
           </span>
-          <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-amber-500 to-transparent mt-1"></div>
+          <div className="h-1px w-12 bg-linear-to-r from-transparent via-amber-500 to-transparent mt-1"></div>
         </div>
       </foreignObject>
     </g>
@@ -256,7 +256,7 @@ export default function AdvancedNetwork() {
     <div className="relative w-full h-[600px] overflow-hidden flex items-center justify-center">
       
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 to-black pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-neutral-900/50 to-black pointer-events-none" />
 
       <div className="relative w-full max-w-5xl h-full perspective-1000">
         <svg
