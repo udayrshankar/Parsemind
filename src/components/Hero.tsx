@@ -27,7 +27,7 @@ export const Hero = () => {
             <Reveal delay={0.1}>
               <h1 className="type-h1 mb-6 text-white tracking-tight">
                 We engineer intelligent <br />
-                AI Agentic Architectures
+                <span className='text-[#ffaa00]'>AI Agentic</span> Architectures
               </h1>
             </Reveal>
 
@@ -40,7 +40,7 @@ export const Hero = () => {
             <Reveal delay={0.3}>
               <div className="flex flex-wrap gap-4">
                 <button className="bg-white px-8 py-2 hover:bg-black hover:scale-105 cursor-pointer hover:text-white transition-all duration-300">
-                  Book a Call
+                  Book a Strategy Call
                 </button>
 
                 <button className="border-white border-2 px-8 py-2 hover:bg-black hover:scale-105 hover:border-0 cursor-pointer text-white transition-all duration-300">

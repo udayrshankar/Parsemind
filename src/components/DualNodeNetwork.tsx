@@ -40,7 +40,7 @@ const COLORS = {
 function Beam({ 
   d, 
   delay = 0, 
-  duration = 5, 
+  duration = 10, 
   strokeWidth = 1.5, 
   dashArray = "100 400", 
   reverse = false 
@@ -215,7 +215,7 @@ function RoiPanel({ x, y }: { x: number; y: number }) {
         strokeWidth="2"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+        transition={{ duration: 10, repeat: Infinity, repeatDelay: 1 }}
       />
       
       {/* Trending Icon */}
@@ -278,7 +278,7 @@ export default function AdvancedNetwork() {
                <Beam 
                 d={`M ${node.x + 15} ${node.y} C ${node.x + 50} ${node.y}, ${aiNodePos.x - 50} ${aiNodePos.y}, ${aiNodePos.x} ${aiNodePos.y}`} 
                 delay={i * 0.5} 
-                duration={3}
+                duration={8}
               />
               <IntegrationNode {...node} />
             </React.Fragment>
@@ -289,7 +289,7 @@ export default function AdvancedNetwork() {
           <Beam d={paths.bottomRightToExpert} delay={2.2} reverse />
           
           {/* --- CENTRAL CONNECTION --- */}
-          <Beam d={paths.centerConnection} delay={0} duration={3} strokeWidth={3} dashArray="40 100" />
+          <Beam d={paths.centerConnection} delay={0} duration={8} strokeWidth={3} dashArray="40 100" />
 
           {/* --- SECURITY LAYER (Center Top) --- */}
           {/* We position this visually above the connection line */}

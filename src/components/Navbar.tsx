@@ -3,15 +3,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { usePageTransition } from './TransitionContext';
+import { Link } from 'react-router-dom';
 
 const links = [
-  { name: "Home", href: "#" },
+  { name: "Home", href: "/" },
   { name: "Our Products", href: "#solutions" }, // This href acts as a fallback
-  { name: "Industries", href: "#industries" },
-  { name: "Pricing", href: "#pricing" },
-  { name: "Case Studies", href: "#case-studies" },
-  { name: "About", href: "#about" },
-  { name: "Partners", href: "#partners" },
+  { name: "Pricing", href: "/pricing" },
+  { name: "About", href: "/about" },
+  { name: "Partners", href: "/partners" },
 ];
 
 export const Navbar = () => {
@@ -47,7 +46,7 @@ export const Navbar = () => {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled 
           ? 'bg-black/80 backdrop-blur-xl py-4 shadow-md' 
-          : 'bg-transparent py-6'
+          : 'bg-black/80 py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -60,14 +59,14 @@ export const Navbar = () => {
         {/* --- Desktop Links --- */}
         <div className="hidden lg:flex items-center gap-8">
           {links.map((link) => (
-            <a 
+            <Link 
               key={link.name} 
-              href={link.href}
+              to={link.href}
               onClick={(e) => handleNavClick(e, link.name)} // Added Click Handler
               className="text-sm font-medium text-gray-300 hover:text-white transition-colors cursor-pointer"
             >
               {link.name}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -78,7 +77,7 @@ export const Navbar = () => {
             whileTap={{ scale: 0.95 }}
             className="bg-white text-black px-6 py-2.5 text-sm font-semibold hover:bg-black hover:text-white hover:cursor-pointer transition-colors"
           >
-            Book a Call
+            Book a Strategy Call
           </motion.button>
         </div>
 
@@ -102,17 +101,17 @@ export const Navbar = () => {
           >
             <div className="flex flex-col p-6 gap-6">
               {links.map((link) => (
-                <a 
+                <Link 
                   key={link.name} 
-                  href={link.href}
+                  to={link.href}
                   onClick={(e) => handleNavClick(e, link.name)} // Added Click Handler
                   className="text-lg font-medium text-gray-300 hover:text-white cursor-pointer"
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
               <button className="w-full bg-white text-black py-3 rounded-md font-semibold mt-4">
-                Book a Call
+                Book a Strategy Call
               </button>
             </div>
           </motion.div>
