@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Users, Flag, CheckSquare } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // AboutPage.tsx
 // Single-file React component (Tailwind CSS). White background, black hover states, NO rounded corners.
@@ -56,7 +57,7 @@ export default function AboutPage(): React.ReactElement {
 
             <div className="mt-8 flex gap-4 flex-wrap">
               <a className="inline-block py-3 px-6 font-medium cursor-pointer hover:bg-black hover:text-white transition-all border border-black/5">Work with us</a>
-              <a className="inline-block py-3 px-6 font-medium cursor-pointer hover:bg-black hover:text-white transition-all border border-black/5" href="#solution">See our work</a>
+              <Link className="inline-block py-3 px-6 font-medium cursor-pointer hover:bg-black hover:text-white transition-all border border-black/5" to="#solution">See our work</Link>
             </div>
           </div>
           <img src="https://www.ema.co/_next/image?url=https%3A%2F%2Fheroic-chocolate-319b05815e.media.strapiapp.com%2Fblog1_3a2ef6f843.png&w=1920&q=75" alt="" />

@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 const links = [
   { name: "Home", href: "/" },
   { name: "Our Products", href: "#solutions" }, // This href acts as a fallback
-  { name: "Pricing", href: "/pricing" },
   { name: "About", href: "/about" },
   { name: "Partners", href: "/partners" },
 ];
