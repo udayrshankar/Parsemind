@@ -1,7 +1,6 @@
 // Example usage in src/App.jsx
 import { Hero } from "../components/Hero";
 import { GridDebug } from "../components/GridDebug";
-import { Navbar } from "../components/Navbar";
 import Concept from "../components/Concept";
 import { Features } from "../components/Features";
 import { TeamRoles } from "../components/TeamRoles";

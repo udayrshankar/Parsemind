@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Users, Flag, CheckSquare, ArrowUpRight, Target } from "lucide-react";
+import { useState } from "react";
+import { Users, Flag, CheckSquare, Target } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from '../components/Reveal';
 import { Footer } from "../components/Footer";
@@ -235,7 +235,7 @@ export default function AboutPage() {
                     />
                     
                     {/* Overlay Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 
                     {/* Bottom Info (Superpowers) */}
                     <div className="absolute bottom-0 left-0 p-8 w-full">

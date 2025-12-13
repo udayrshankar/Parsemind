@@ -1,7 +1,6 @@
 // src/components/Hero.tsx
 import { useState, useEffect } from 'react';
 import { Reveal } from './Reveal';
-import { WavyBackground } from './WavyBackground';
 import DualNodeNetwork from './DualNodeNetwork';
 import { SignalBackground } from './SignalBackground';
 

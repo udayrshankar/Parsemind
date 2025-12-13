@@ -48,7 +48,7 @@ export const Footer: React.FC = () => {
   const year = new Date().getFullYear();
   const { triggerTransition } = usePageTransition();
 
-  const handleNavClick = (e: React.MouseEvent, linkName: string, href: string) => {
+  const handleNavClick = (e: React.MouseEvent, linkName: string) => {
     // Keep the same behavior as Navbar: intercept "Our Products"
     if (linkName === "Our Products") {
       e.preventDefault();
@@ -185,7 +185,7 @@ export const Footer: React.FC = () => {
                         // For Our Products we intercept and trigger the same transition
                         <a
                           href={link.href}
-                          onClick={(e) => handleNavClick(e, link.name, link.href)}
+                          onClick={(e) => handleNavClick(e, link.name)}
                           className="hover:text-gray-200 transition-colors cursor-pointer"
                         >
                           {link.name}
