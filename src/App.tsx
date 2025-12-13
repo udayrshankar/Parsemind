@@ -2,6 +2,7 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
+import BlogsPage from "./pages/Blogspg";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -18,6 +19,7 @@ export default function App(): React.ReactElement {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/partners" element={<Partners />} />
+            <Route path="/blogs" element={<BlogsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

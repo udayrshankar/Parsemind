@@ -54,7 +54,7 @@ export const Blogs = () => {
             <Reveal key={index} delay={index * 0.1}>
               <motion.div 
                 whileHover={{ y: -10 }}
-                className="group cursor-pointer flex flex-col h-full shadow shadow-5xl shadow-black/25 bg-linear-to-br from-bg-card to-blue-100 hover:from-black hover:to-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
+                className="group cursor-pointer flex flex-col h-full shadow shadow-5xl shadow-black/25 bg-bg-card hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
               >
                 
                 {/* Image Container */}
@@ -67,7 +67,7 @@ export const Blogs = () => {
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-col grow p-5">
+                <a className="flex flex-col grow p-5" href='/blogs'>
                   <h3 className="type-h2 text-[35px] mb-3 group-hover:text-white transition-colors duration-500">
                     {blog.title}
                   </h3>
@@ -81,7 +81,7 @@ export const Blogs = () => {
                   </p>
 
         
-                </div>
+                </a>
 
               </motion.div>
             </Reveal>

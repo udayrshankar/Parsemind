@@ -1,207 +1,114 @@
-// src/pages/Partners.tsx
-import { motion } from "framer-motion";
+import { ArrowUpRight } from 'lucide-react';
+import { Reveal } from '../components/Reveal';
+import { Footer } from '../components/Footer';
 
-const partnersData = [
-  {
-    name: "Vektor Labs",
-    tagline: "Real-time decision pipelines for logistics",
-    blurb:
-      "Vektor Labs integrates deterministic routing with predictive ETA models to reduce delivery times and costs.",
-  },
-  {
-    name: "Nimbus Health",
-    tagline: "Clinical workflow automation",
-    blurb:
-      "Nimbus automates administrative tasks in hospitals, improving throughput while maintaining compliance and privacy.",
-  },
-  {
-    name: "LedgerWave",
-    tagline: "Fintech reconciliation & insights",
-    blurb:
-      "LedgerWave powers transaction reconciliation with ML-aided anomaly detection for enterprise finance teams.",
-  },
-  {
-    name: "EchoAnalytics",
-    tagline: "Customer behavior intelligence",
-    blurb:
-      "EchoAnalytics helps teams understand product usage with clean event pipelines and interpretable models.",
-  },
-  {
-    name: "AstraNet",
-    tagline: "Edge AI for remote monitoring",
-    blurb:
-      "AstraNet deploys compact models to edge devices and offers secure update orchestration for IoT fleets.",
-  },
-  {
-    name: "StrataWorks",
-    tagline: "Dataops & platform engineering",
-    blurb:
-      "StrataWorks brings well-architected data platforms and CI for ML to enterprise engineering teams.",
-  },
+type Partner = {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  logoColor: string;
+  category: string;
+};
+
+const partners: Partner[] = [
+  { id: 'atlas', name: 'Atlas Labs', tagline: 'Enterprise Data', category: 'Infrastructure', description: 'Integration partner for secure data pipelines.', logoColor: '#F59E0B' },
+  { id: 'northstar', name: 'Northstar', tagline: 'Strategic Investor', category: 'Growth', description: 'Go-to-market and growth partner focused on AI products.', logoColor: '#3B82F6' },
+  { id: 'canvasworks', name: 'CanvasWorks', tagline: 'Design Systems', category: 'Creative', description: 'Design partner for product and brand systems.', logoColor: '#EF4444' },
+  { id: 'lumina', name: 'Lumina', tagline: 'Cloud Architecture', category: 'Infrastructure', description: 'Cloud-native architectures and SRE expertise.', logoColor: '#10B981' },
+  { id: 'zenith', name: 'Zenith AI', tagline: 'ML Operations', category: 'Intelligence', description: 'Model deployment, monitoring and governance.', logoColor: '#4F46E5' },
+  { id: 'quartz', name: 'Quartz', tagline: 'Knowledge Automation', category: 'Intelligence', description: 'Automating knowledge workflows at scale.', logoColor: '#D4AF37' },
 ];
 
-export default function Partners(): React.ReactElement {
+export default function PartnersPage() {
   return (
-    <div className="w-full bg-white text-black">
-      {/* HERO */}
-      <section className="max-w-6xl mx-auto px-6 pt-24 pb-12 border-b border-black/10">
-        <h1 className="text-5xl font-bold tracking-tight">Our Partners</h1>
-        <p className="mt-6 text-lg max-w-3xl leading-relaxed text-black/70">
-          We collaborate with an ecosystem of best-in-class partners to deliver full-stack,
-          production-ready intelligence. Together we design, build, and scale solutions that
-          transform operations and create measurable business impact.
-        </p>
-      </section>
+    <div className="min-h-screen bg-bg-main text-black font-sans antialiased selection:bg-black selection:text-white">
+      <main className="max-w-7xl mx-auto px-6 pt-32 pb-32">
+        
+        {/* --- Header Section --- */}
+        <section className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-gray-200 pb-12">
+          <div className="max-w-3xl">
+            <Reveal>
+              <span className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2 block">
+                Our Ecosystem
+              </span>
+              <h1 className="text-6xl md:text-8xl font-serif font-medium leading-[0.9] tracking-tight">
+                Global <br /> Alliances.
+              </h1>
+            </Reveal>
+          </div>
+          <div className="flex flex-col gap-4">
+             <Reveal delay={0.2}>
+               <p className="text-lg text-gray-600 max-w-xs leading-relaxed">
+                 We orchestrate a network of design shops, platform teams, and cloud providers to accelerate innovation.
+               </p>
+             </Reveal>
+          </div>
+        </section>
 
-      {/* PARTNER GRID */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-b border-black/10">
-        <h2 className="text-3xl font-semibold tracking-tight mb-10">Strategic Partners</h2>
+        {/* --- Partners Grid --- */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
+          {partners.map((p, index) => (
+            <Reveal key={p.id} delay={index * 0.1}>
+              <a href="#" className="group relative block h-full bg-bg-card border border-gray-100 p-8 
+                                   hover:bg-black transition-all duration-500 ease-out 
+                                   hover:shadow-2xl cursor-pointer overflow-hidden min-h-[340px] flex flex-col justify-between">
+                
+                {/* --- Watermark Number --- */}
+                <span className="absolute -bottom-6 -right-2 text-[8rem] font-bold leading-none 
+                               text-black opacity-[0.03] 
+                               group-hover:text-white group-hover:opacity-[0.1] 
+                               transition-all duration-500 pointer-events-none select-none z-0">
+                  0{index + 1}
+                </span>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {partnersData.map((p, idx) => (
-            <motion.article
-              key={p.name}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: idx * 0.06 }}
-              className="border border-black p-6 group hover:bg-black hover:text-white transition-colors duration-300"
-              style={{ borderRadius: 0 }}
-            >
-              <div className="flex items-start gap-6">
-                <div
-                  aria-hidden
-                  className="flex-none"
-                  style={{ width: 72, height: 72 }}
-                >
-                  <svg
-                    width="72"
-                    height="72"
-                    viewBox="0 0 72 72"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{ display: "block" }}
-                  >
-                    <rect width="72" height="72" fill="#000" />
-                    <text
-                      x="50%"
-                      y="50%"
-                      dominantBaseline="middle"
-                      textAnchor="middle"
-                      fontFamily="sans-serif"
-                      fontWeight="700"
-                      fontSize="18"
-                      fill="#fff"
-                    >
-                      {p.name.split(" ").map(w => w[0]).slice(0,2).join("")}
-                    </text>
-                  </svg>
+                {/* --- Top: Category & Icon --- */}
+                <div className="relative z-10 flex justify-between items-start mb-8">
+                  <div className="flex items-center gap-3">
+                     {/* Logo Chip */}
+                     <div className="w-10 h-10 flex items-center justify-center bg-gray-50 border border-gray-200 group-hover:bg-gray-900 group-hover:border-gray-700 transition-colors duration-500">
+                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: p.logoColor }}></div>
+                     </div>
+                     <div>
+                       <span className="block text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-gray-500 transition-colors">
+                         {p.category}
+                       </span>
+                     </div>
+                  </div>
+                  
+                  <ArrowUpRight className="w-6 h-6 text-gray-300 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500" />
                 </div>
 
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold group-hover:text-white">
+                {/* --- Middle: Main Content --- */}
+                <div className="relative z-10 mb-8">
+                  <h3 className="text-3xl font-serif font-medium mb-2 group-hover:text-white transition-colors duration-500">
                     {p.name}
                   </h3>
-                  <p className="mt-1 text-sm font-medium text-black/70 group-hover:text-white/80">
+                  <p className="text-sm font-bold uppercase tracking-widest text-blue-600 group-hover:text-blue-400 transition-colors duration-500">
                     {p.tagline}
                   </p>
-                  <p className="mt-4 text-sm leading-relaxed text-black/70 group-hover:text-white/90">
-                    {p.blurb}
-                  </p>
-
-                  <div className="mt-6 flex gap-4">
-                    <a
-                      className="inline-block text-sm font-semibold border border-black px-4 py-2 hover:bg-white/0 group-hover:bg-white/0 transition-colors"
-                      href="#"
-                      onClick={(e) => e.preventDefault()}
-                      style={{ borderRadius: 0 }}
-                      aria-label={`Visit ${p.name}`}
-                    >
-                      View profile
-                    </a>
-                    <a
-                      className="inline-block text-sm font-semibold px-4 py-2 hover:underline"
-                      href="#"
-                      onClick={(e) => e.preventDefault()}
-                      style={{ borderRadius: 0 }}
-                    >
-                      Contact partner
-                    </a>
-                  </div>
                 </div>
-              </div>
-            </motion.article>
+
+                {/* --- Bottom: Description --- */}
+                <div className="relative z-10">
+                  <p className="text-base text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors duration-500 border-t border-gray-100/50 group-hover:border-white/10 pt-6">
+                    {p.description}
+                  </p>
+                </div>
+
+                {/* Hover Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500" />
+
+              </a>
+            </Reveal>
           ))}
-        </div>
-      </section>
+        </section>
 
-      {/* TESTIMONIAL / CASE */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-b border-black/10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="border border-black p-8 hover:bg-black hover:text-white transition-colors duration-300"
-            style={{ borderRadius: 0 }}
-          >
-            <blockquote className="text-lg leading-relaxed text-black/80 group-hover:text-white/90">
-              “Working with Parsemind and their partner ecosystem accelerated our roadmap
-              by months. The integrated solution reduced manual reconciliation by 72%
-              and gave our product team real-time insights.”
-            </blockquote>
-            <cite className="mt-6 block font-semibold text-black/70 group-hover:text-white/80">
-              — Nikhil Rao, Head of Finance, Meridian Freight
-            </cite>
-          </motion.div>
+        {/* --- Stats / CTA --- */}
+        
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="border border-black p-8"
-            style={{ borderRadius: 0 }}
-          >
-            <h4 className="text-xl font-semibold mb-4">Partnership outcomes</h4>
-            <ul className="space-y-4 text-black/70">
-              <li>• 72% reduction in manual finance ops</li>
-              <li>• 3× faster feature delivery via integrated pipelines</li>
-              <li>• Improved observability and production stability</li>
-            </ul>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="max-w-6xl mx-auto px-6 py-24">
-        <div
-          className="border border-black p-12 text-center hover:bg-black hover:text-white transition-colors duration-300"
-          style={{ borderRadius: 0 }}
-        >
-          <h3 className="text-3xl font-semibold">Partner with Parsemind</h3>
-          <p className="mt-4 text-black/70">
-            If you’re building infrastructure, models, or enterprise software and want to
-            collaborate on product integrations — we’d love to talk.
-          </p>
-          <div className="mt-8 flex justify-center gap-6">
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="px-6 py-3 border border-black font-semibold text-sm hover:bg-white/0"
-              style={{ borderRadius: 0 }}
-            >
-              Become a partner
-            </a>
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="px-6 py-3 border border-black font-semibold text-sm hover:bg-white/0"
-              style={{ borderRadius: 0 }}
-            >
-              Explore integrations
-            </a>
-          </div>
-        </div>
-      </section>
+      </main>
+      <Footer />
     </div>
   );
 }

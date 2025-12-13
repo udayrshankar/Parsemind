@@ -7,7 +7,7 @@ export const Hero = () => {
   return (
     // Mobile: single column
     // md+: 12-column grid with content + visual
-    <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-30">
+    <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-20">
       {/* 1. The Interactive Wavy Background */}
       <WavyBackground />
 
@@ -43,9 +43,10 @@ export const Hero = () => {
                   Book a Strategy Call
                 </button>
 
-                <button className="border-white border-2 px-8 py-2 hover:bg-black hover:scale-105 hover:border-0 cursor-pointer text-white transition-all duration-300">
+                <a className="border-white border-2 px-8 py-2 hover:bg-black hover:scale-105 hover:border-0 cursor-pointer text-white transition-all duration-300"
+                href= "/#process">
                   How we Work
-                </button>
+                </a>
               </div>
             </Reveal>
           </div>

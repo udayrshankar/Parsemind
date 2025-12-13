@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
 import CustomAIAgent from './Animation/CustomAI';
 import { WavyBackground } from './WavyBackground';
+import animvideo from '../assets/AI_Engineering_Animation_Created.mp4'
 
 // Placeholders for images - replace with your real imports
 const feature2 =
@@ -22,7 +23,8 @@ const features = [
     description:
       'We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.',
     image: feature1,
-    anim: <CustomAIAgent/>,
+    anim: <video src={animvideo} autoPlay muted playsInline style={{width: '120%', transform: 'rotate(90deg)'}}
+    className='w-full h-full'></video>,
   },
   {
     id: 1,
@@ -130,9 +132,7 @@ export const Features = () => {
                 transition={{ duration: 0.5, ease: 'circOut' }}
                 className="absolute inset-0 w-full h-full"
               >
-                <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                  {features[activeIndex].anim}
-                </div>
+                  <video src={animvideo} muted autoPlay className='w-full h-full'></video>
               </motion.div>
             </AnimatePresence>
 

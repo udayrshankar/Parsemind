@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { usePageTransition } from './TransitionContext';
 import { Link } from 'react-router-dom';
 
+
 const links = [
   { name: "Home", href: "/" },
   { name: "Our Products", href: "#solutions" }, // This href acts as a fallback
@@ -40,6 +41,36 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    // 1. Load Calendly CSS
+    const link = document.createElement('link');
+    link.href = 'https://assets.calendly.com/assets/external/widget.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+
+    // 2. Load Calendly JS
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.async = true;
+    script.onload = () => setIsScriptLoaded(true);
+    document.body.appendChild(script);
+
+    return () => {
+      document.head.removeChild(link);
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const openCalendly = () => {
+    if (!isScriptLoaded || !window.Calendly) return;
+    window.Calendly.initPopupWidget({
+      url: 'https://calendly.com/kg-goutham-anseru/30min',
+    });
+  };
+
+
   return (
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
@@ -71,13 +102,13 @@ export const Navbar = () => {
 
         {/* --- CTA Button --- */}
         <div className="hidden lg:block">
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-white text-black px-6 py-2.5 text-sm font-semibold hover:bg-black hover:text-white hover:cursor-pointer transition-colors"
+          <button
+            onClick={openCalendly}
+            className="bg-white text-black px-2 py-3 md:py-3 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
           >
             Book a Strategy Call
-          </motion.button>
+          </button>
+
         </div>
 
         {/* --- Mobile Toggle --- */}

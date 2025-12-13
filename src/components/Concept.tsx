@@ -71,6 +71,7 @@ export default function Concept() {
       <section
             id="process"
             className="w-full px-4"
+            
           >
             <div
               className="max-w-7xl mx-auto"

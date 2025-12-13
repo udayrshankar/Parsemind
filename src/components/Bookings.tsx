@@ -45,7 +45,7 @@ export const Booking = () => {
   const openCalendly = () => {
     if (!isScriptLoaded || !window.Calendly) return;
     window.Calendly.initPopupWidget({
-      url: 'https://calendly.com/udaymadavana40/30min',
+      url: 'https://calendly.com/kg-goutham-anseru/30min',
     });
   };
 
@@ -102,12 +102,10 @@ export const Booking = () => {
                       onClick={openCalendly}
                       className="bg-black text-white px-8 py-3 md:py-3.5 hover:bg-white hover:text-black hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
                     >
-                      Book a Call
+                      Book a Strategy Call
                     </button>
 
-                    <button className="border-black border-2 px-8 py-3 md:py-3.5 hover:bg-black hover:text-white hover:scale-105 hover:border-black cursor-pointer transition-all duration-300 inline-flex items-center justify-center">
-                      How we Work
-                    </button>
+                  
                   </div>
                 </Reveal>
               </div>
