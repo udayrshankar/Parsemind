@@ -106,7 +106,7 @@ export default function Concept() {
                         h-full
                         hover:cursor-pointer
                       "
-                      onClick={() => setActiveTab(step.tableKey as TabKey)}
+                      onMouseEnter={() => setActiveTab(step.tableKey as TabKey)}
                     >
                       {/* Big background number */}
                       <span

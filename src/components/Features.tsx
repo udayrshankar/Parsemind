@@ -2,51 +2,65 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
-import CustomAIAgent from './Animation/CustomAI';
-import { WavyBackground } from './WavyBackground';
-import animvideo from '../assets/AI_Engineering_Animation_Created.mp4'
+import { Carousel } from './Carousel';
+import f11 from '../assets/1 (5).png';
+import f12 from '../assets/2.png';
+import f13 from '../assets/3.png';
+import f21 from '../assets/f21.png';
+import f22 from '../assets/f22.png';
+import f23 from '../assets/f23.png';
+import f31 from '../assets/f31.png';
+import f32 from '../assets/f32.png';
+import f33 from '../assets/f33.png';
+import f41 from '../assets/f41.png';
+import f42 from '../assets/f42.png';
+import f43 from '../assets/f43.png';
 
-// Placeholders for images - replace with your real imports
-const feature2 =
-  'https://images.unsplash.com/photo-1630091003936-aea522c1e8c3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-const feature1 =
-  'https://images.unsplash.com/photo-1763972456511-fc3cf9bdca83?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8';
-const feature3 =
-  'https://images.unsplash.com/photo-1764082497081-a023b72c9239?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxN3x8fGVufDB8fHx8fA%3D%3D';
-const feature4 =
-  'https://images.unsplash.com/photo-1764893215559-9de481fca0f5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzMXx8fGVufDB8fHx8fA%3D%3D';
 
+// --- Feature Data with 3 Images Each ---
 const features = [
   {
     id: 0,
     title: 'Custom AI Agent Engineering',
     description:
       'We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.',
-    image: feature1,
-    anim: <video src={animvideo} autoPlay muted playsInline style={{width: '120%', transform: 'rotate(90deg)'}}
-    className='w-full h-full'></video>,
+    images: [
+      // Tech/Engineering/Code
+      f11,
+      // AI Brain/Nodes
+      f12,
+      // Server/Infrastructure
+      f13,
+    ] as [string, string, string],
   },
   {
     id: 1,
     title: 'Achieve fast results',
     description:
       'Track ROI and efficiency gains with custom dashboards designed to visualize your AI impact in real-time.',
-    image: feature2,
-    anim: <WavyBackground/>,
+    images: [
+      // Dashboard/Analytics
+      f21,f22,f23
+    ] as [string, string, string],
   },
   {
     id: 2,
     title: 'Integrate With Tools You Use',
     description:
       'Seamlessly connect our agents with your existing stack—Slack, Salesforce, HubSpot, and proprietary databases.',
-    image: feature3,
+    images: [
+      f31,f32,f33
+    ] as [string, string, string],
   },
   {
     id: 3,
-    title: 'Use trusted AI solutions',
+    title: 'Trusted, Enterprise-Ready AI',
     description:
       'Deliver safe, reliable, and transparent generative AI that adheres to strict enterprise compliance standards.',
-    image: feature4,
+    images: [
+      // Security/Lock
+      f41,f42,f43
+    ] as [string, string, string],
   },
 ];
 
@@ -79,17 +93,26 @@ export const Features = () => {
                     onClick={() => setActiveIndex(index)}
                     className={`
                       relative p-6 md:p-8 cursor-pointer transition-all duration-500 ease-out border
-                      ${isActive
-                        ? 'bg-black border-black shadow-2xl scale-[1.02]'
-                        : 'bg-bg-card border-transparent hover:bg-gray-50 hover:border-gray-100'}
+                      ${
+                        isActive
+                          ? 'bg-blackZS border-black shadow-2xl scale-[1.02]'
+                          : 'bg-bg-card border-transparent hover:bg-gray-50 hover:border-gray-100'
+                      }
                     `}
                   >
+                    {/* Active State Background (Optional fix for bg-blackZS typo if needed, assuming bg-black) */}
+                    {isActive && <div className="absolute inset-0 bg-black -z-10" />}
+
                     <div className="flex gap-6 items-start relative z-10">
                       {/* Numbered Circle Indicator */}
                       <div
                         className={`
                           w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-colors duration-500 font-inter font-medium
-                          border-border text-text-button bg-functional
+                          ${
+                            isActive
+                              ? 'border-white/20 text-black bg-white'
+                              : 'border-border text-text-button bg-functional'
+                          }
                         `}
                       >
                         {index + 1}
@@ -121,23 +144,24 @@ export const Features = () => {
             })}
           </div>
 
-          {/* --- Right Column: Sticky Image Viewer (Desktop only) --- */}
-          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[725px] w-full overflow-hidden bg-bg-card border border-gray-100 shadow-lg relative">
+          {/* --- Right Column: Carousel Viewer --- */}
+        <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
-                initial={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
+                initial={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.5, ease: 'circOut' }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.4, ease: 'circOut' }}
                 className="absolute inset-0 w-full h-full"
               >
-                  <video src={animvideo} muted autoPlay className='w-full h-full'></video>
+              
+                <Carousel 
+                  images={features[activeIndex].images} 
+                  interval={3500} 
+                />
               </motion.div>
             </AnimatePresence>
-
-            {/* Optional: Glossy overlay for depth */}
-            <div className="absolute inset-0 bg-linear-to-tr from-white/10 to-transparent pointer-events-none" />
           </div>
         </div>
       </div>

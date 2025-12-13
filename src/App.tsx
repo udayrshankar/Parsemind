@@ -14,7 +14,7 @@ export default function App(): React.ReactElement {
     <div className="min-h-screen bg-black">
       <Navbar />
       <main>
-        <Suspense fallback={<div className="p-8 text-center text-gray-300">Loading…</div>}>
+        <Suspense fallback={<div className="p-50 text-center text-gray-300">Loading…</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

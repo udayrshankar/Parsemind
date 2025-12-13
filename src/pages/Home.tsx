@@ -17,7 +17,6 @@ export default function App() {
 
       <GridDebug/>
       <TransitionProvider>
-        <Navbar/>
         <Hero/>
         <Concept/>
         <Features/>

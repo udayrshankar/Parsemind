@@ -2,29 +2,29 @@
 import { Reveal } from './Reveal';
 
 const roles = [
-    {
+   {
     title: "AI Business Consultants",
-    description: "Bridging the gap between technical capability and business ROI."
+    description: "Bridging the gap between business strategy, operational reality, and AI execution."
   },
   {
-    title: "AI ML Engineers",
-    description: "Experts in building and fine-tuning state-of-the-art neural networks."
+    title: "AI/ML Engineers",
+    description: "Experts in building and fine-tuning production-grade AI and agentic systems."
   },
   {
     title: "Data Scientists",
-    description: "Turning raw unstructured data into actionable predictive insights."
+    description: "Turning raw, unstructured data into actionable and predictive insights."
   },
   {
     title: "AI Solution Architects",
-    description: "Designing scalable, secure, and cloud-native AI infrastructure."
+    description: "Designing scalable, secure, and cloud-native AI architectures."
   },
   {
     title: "Subject Matter Experts",
-    description: "Ensuring agile delivery and seamless integration into your workflows."
+    description: "Ensuring domain-aligned AI systems that integrate seamlessly into real workflows."
   },
   {
     title: "UI/UX Specialists",
-    description: "Crafting intuitive interfaces for complex agentic interactions."
+    description: "Crafting intuitive interfaces for complex agentic and human-in-the-loop systems."
   }
 ];
 

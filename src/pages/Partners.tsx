@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Reveal } from '../components/Reveal';
 import { Footer } from '../components/Footer';
+import { PartnerFormModal } from '../components/PartnerForModal';
 
 type Partner = {
   id: string;
@@ -21,6 +23,8 @@ const partners: Partner[] = [
 ];
 
 export default function PartnersPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-bg-main text-black font-sans antialiased selection:bg-black selection:text-white">
       <main className="max-w-7xl mx-auto px-6 pt-32 pb-32">
@@ -104,11 +108,34 @@ export default function PartnersPage() {
           ))}
         </section>
 
-        {/* --- Stats / CTA --- */}
-        
+        {/* --- Join CTA --- */}
+        <section className="bg-black text-white rounded-2xl p-12 md:p-16 relative overflow-hidden text-center">
+           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
+           
+           <div className="relative z-10 max-w-2xl mx-auto">
+             <Reveal>
+                <h2 className="text-4xl md:text-5xl font-serif mb-6">Join the Alliance</h2>
+                <p className="text-gray-400 text-lg mb-8">
+                  We are always looking for visionary partners to expand our ecosystem. If you are building the future of AI infrastructure, let's talk.
+                </p>
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-white text-black px-8 py-4 text-lg font-medium rounded-full hover:scale-105 transition-transform cursor-pointer"
+                >
+                  Become a Partner
+                </button>
+             </Reveal>
+           </div>
+        </section>
 
       </main>
       <Footer />
+
+      {/* --- Form Modal --- */}
+      <PartnerFormModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 }

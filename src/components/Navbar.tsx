@@ -11,6 +11,7 @@ const links = [
   { name: "Our Products", href: "#solutions" }, // This href acts as a fallback
   { name: "About", href: "/about" },
   { name: "Partners", href: "/partners" },
+  { name: "Blogs", href: "/blogs" },
 ];
 
 export const Navbar = () => {
@@ -75,8 +76,8 @@ export const Navbar = () => {
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-black/80 backdrop-blur-xl py-4 shadow-md' 
-          : 'bg-black/80 py-6'
+          ? 'bg-black backdrop-blur-xl py-4 shadow-md' 
+          : 'bg-black py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -104,7 +105,7 @@ export const Navbar = () => {
         <div className="hidden lg:block">
           <button
             onClick={openCalendly}
-            className="bg-white text-black px-2 py-3 md:py-3 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
+            className="bg-white text-black px-2 py-2 md:py-2 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
           >
             Book a Strategy Call
           </button>
@@ -140,7 +141,7 @@ export const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <button className="w-full bg-white text-black py-3 rounded-md font-semibold mt-4">
+              <button className="w-full bg-white text-black py-3 font-semibold mt-4">
                 Book a Strategy Call
               </button>
             </div>
