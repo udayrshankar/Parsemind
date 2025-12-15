@@ -84,7 +84,7 @@ export const Hero = () => {
             <Reveal delay={0.1}>
               {/* H1 Main Headline - Font: Fraunces */}
               <h1 
-                className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-4"
+                className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-4"
                 style={{ fontFamily: '"Fraunces", serif' }}
               >
                 We engineer intelligent <br />
@@ -135,16 +135,7 @@ export const Hero = () => {
           {/* Right: DualNodeNetwork (Visual) */}
           <div className="hidden md:block md:col-span-5 w-full relative">
              {/* Added height/width wrapper to ensure the network has space to render */}
-            <EmaAnimation secondaryScale={0.7} 
-            centerScale={0.8}
-            height={350} 
-            primaryColor='#0f0f0f'
-            secondaryColor='#ffffff'
-            textColor='#ffffff'
-            themeColor='#ffaa00'
-            centers={center}
-            outputs={output}
-            inputs={input}/>
+            <EmaAnimation />
           </div>
         </div>
       </div>

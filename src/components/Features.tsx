@@ -17,6 +17,10 @@ import {
   DollarSign,
   Users,
 } from "lucide-react";
+import AgentSystemVisual from './Animation/CustomAI';
+import FastResultsVisual from './Animation/FastResultsVisual';
+import IntegrationsVisual from './Animation/IntegrationVisual';
+import EnterpriseTrustVisual from './Animation/EnterpriceTrustVisual';
 
 
 // --- Feature Data with 3 Images Each ---
@@ -26,16 +30,7 @@ const features = [
     title: "Custom AI Agent Engineering",
     description:
       "We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.",
-    input: [
-      { id: "in-1", label: "Email", icon: <Mail /> },
-      { id: "in-2", label: "Internal Data", icon: <Database /> },
-    ],
-    center: [
-      { id: "c-1", label: "Custom AI Agent", icon: <BrainCircuit /> },
-    ],
-    output: [
-      { id: "out-1", label: "Automated Actions", icon: <Bot /> },
-    ],
+    animation: <AgentSystemVisual/>
   },
 
   {
@@ -43,16 +38,7 @@ const features = [
     title: "Achieve Fast Results",
     description:
       "Track ROI and efficiency gains with custom dashboards designed to visualize your AI impact in real-time.",
-    input: [
-      { id: "in-1", label: "System Metrics", icon: <Server /> },
-    ],
-    center: [
-      { id: "c-1", label: "Analytics Engine", icon: <BarChart3 /> },
-    ],
-    output: [
-      { id: "out-1", label: "ROI Growth", icon: <TrendingUp /> },
-      { id: "out-2", label: "Revenue Impact", icon: <DollarSign /> },
-    ],
+    animation: <FastResultsVisual/>
   },
 
   {
@@ -60,17 +46,7 @@ const features = [
     title: "Integrate With Tools You Use",
     description:
       "Seamlessly connect our agents with your existing stack—Slack, Salesforce, HubSpot, and proprietary databases.",
-    input: [
-      { id: "in-1", label: "Slack", icon: <Slack /> },
-      { id: "in-2", label: "Web Apps", icon: <Globe /> },
-      { id: "in-3", label: "Databases", icon: <Database /> },
-    ],
-    center: [
-      { id: "c-1", label: "Integration Layer", icon: <Server /> },
-    ],
-    output: [
-      { id: "out-1", label: "Unified Workflow", icon: <Users /> },
-    ],
+    animation: <IntegrationsVisual/>
   },
 
   {
@@ -78,15 +54,7 @@ const features = [
     title: "Trusted, Enterprise-Ready AI",
     description:
       "Deliver safe, reliable, and transparent generative AI that adheres to strict enterprise compliance standards.",
-    input: [
-      { id: "in-1", label: "Enterprise Policies", icon: <ShieldCheck /> },
-    ],
-    center: [
-      { id: "c-1", label: "Governed AI System", icon: <Bot /> },
-    ],
-    output: [
-      { id: "out-1", label: "Compliant Decisions", icon: <ShieldCheck /> },
-    ],
+    animation: <EnterpriseTrustVisual/>
   },
 ];
 
@@ -172,6 +140,14 @@ export const Features = () => {
 
           
           <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative">
+            <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+             backgroundPosition: "center center",
+             backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
+             backgroundSize: "40px 40px"
+        }}
+      />
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
@@ -181,13 +157,7 @@ export const Features = () => {
                 transition={{ duration: 0.4, ease: 'circOut' }}
                 className="absolute inset-0 w-full h-full"
               >
-                <EmaAnimation
-                  stacking="v"
-                  height={730}
-                  inputs={features[activeIndex].input}
-                  centers={features[activeIndex].center}
-                  outputs={features[activeIndex].output}
-                />
+                {features[activeIndex].animation}
               </motion.div>
             </AnimatePresence>
           </div>

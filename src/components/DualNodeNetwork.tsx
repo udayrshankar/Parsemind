@@ -1,369 +1,222 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import {
-  User,
-  Database,
-  Shield,
-  TrendingUp,
-  Server,
-  Globe,
-} from 'lucide-react';
+import { Box, Layers, Zap } from 'lucide-react';
 
-/* ---------------- CONFIG ---------------- */
+// --- Types ---
 
-const COLORS = {
-  primary: '#FBBF24',
-  secondary: '#D97706',
-  glow: 'rgba(251,191,36,0.5)',
-  faint: 'rgba(251,191,36,0.12)',
-  bg: '#000000',
-};
-
-const TEXT_SIZE = 12;
-
-/** 🔒 SINGLE SOURCE OF TRUTH */
-const NODE_RADIUS = 26; // ALL nodes use this
-
-/* ---------------- TYPES ---------------- */
-
-interface BeamProps {
-  d: string;
-  delay?: number;
-  duration?: number;
-  strokeWidth?: number;
-  dashArray?: string;
-  reverse?: boolean;
-}
-
-interface CenteredIconProps {
-  scale?: number;
+interface FloatingNodeProps {
   children: React.ReactNode;
+  className?: string;
+  delay?: number;
 }
 
-interface CentralNodeProps {
-  label: string;
-  icon?: React.ReactNode;
-  variant?: 'circle' | 'hex';
+interface ConnectingLineProps {
+  path: string;
+  delay?: number;
 }
 
-interface IntegrationNodeProps {
-  x: number;
-  y: number;
-  icon: React.ReactNode;
-  label: string;
+interface SkeletonLineProps {
+  width: string;
 }
 
-interface SecurityBadgeProps {
-  x: number;
-  y: number;
-}
+// --- Components ---
 
-interface RoiPanelProps {
-  x: number;
-  y: number;
-}
-
-/* ---------------- UTILS ---------------- */
-
-/** Perfect regular hexagon path */
-function hexPath(r: number) {
-  const a = Math.PI / 3;
-  return Array.from({ length: 6 })
-    .map((_, i) => {
-      const x = r * Math.cos(a * i - Math.PI / 6);
-      const y = r * Math.sin(a * i - Math.PI / 6);
-      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-    })
-    .join(' ') + ' Z';
-}
-
-/* ---------------- BEAM ---------------- */
-
-const Beam: React.FC<BeamProps> = ({
-  d,
-  delay = 0,
-  duration = 8,
-  strokeWidth = 1.5,
-  dashArray = '60 160',
-  reverse = false,
-}) => (
-  <g>
-    <path d={d} stroke={COLORS.faint} strokeWidth={1} fill="none" />
-    <motion.path
-      d={d}
-      fill="none"
-      stroke={COLORS.primary}
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeDasharray={dashArray}
-      initial={{ strokeDashoffset: reverse ? -300 : 300, opacity: 0 }}
-      animate={{
-        strokeDashoffset: reverse ? 300 : -300,
-        opacity: [0, 1, 0],
+const FloatingNode: React.FC<FloatingNodeProps> = ({ children, className = "", delay = 0 }) => {
+  return (
+    <motion.div
+      className={`absolute bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center ${className}`}
+      initial={{ opacity: 0, scale: 0.8, y: 10 }}
+      animate={{ 
+        opacity: 1, 
+        scale: 1, 
+        y: [0, -15, 0] // Floating effect
       }}
       transition={{
-        duration,
-        repeat: Infinity,
-        ease: 'linear',
-        delay,
+        y: {
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: delay,
+        },
+        opacity: { duration: 0.5, delay: delay }
       }}
-    />
-  </g>
-);
-
-/* ---------------- ICON WRAPPER ---------------- */
-
-const CenteredIcon: React.FC<CenteredIconProps> = ({
-  scale = 1,
-  children,
-}) => (
-  <g transform={`scale(${scale})`}>
-    <g transform="translate(-12,-12)">{children}</g>
-  </g>
-);
-
-/* ---------------- CENTRAL NODE ---------------- */
-
-const CentralNode: React.FC<CentralNodeProps> = ({
-  label,
-  icon,
-  variant = 'circle',
-}) => {
-  const shape =
-    variant === 'hex' ? (
-      <path d={hexPath(NODE_RADIUS)} />
-    ) : (
-      <circle r={NODE_RADIUS} />
-    );
-
-  return (
-    <g>
-      {/* Glow */}
-      <motion.circle
-        r={NODE_RADIUS * 2}
-        fill="url(#nodeGlow)"
-        animate={{ opacity: [0.35, 0.55, 0.35] }}
-        transition={{ duration: 5, repeat: Infinity }}
-      />
-
-      {/* Outer rotating ring */}
-      <motion.circle
-        r={NODE_RADIUS * 1.6}
-        fill="none"
-        stroke={COLORS.faint}
-        strokeDasharray="6 10"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
-      />
-
-      {/* Core shape */}
-      <g
-        fill="#0A0A0A"
-        stroke={COLORS.primary}
-        strokeWidth={2}
-      >
-        {shape}
-      </g>
-
-      {/* Icon */}
-      {icon && (
-        <CenteredIcon scale={1}>
-          {icon}
-        </CenteredIcon>
-      )}
-
-      {/* Label */}
-      <foreignObject
-        x={-70}
-        y={NODE_RADIUS + 26}
-        width={140}
-        height={40}
-      >
-        <div className="flex flex-col items-center">
-          <span
-            style={{
-              fontSize: TEXT_SIZE,
-              fontFamily: 'monospace',
-              letterSpacing: '0.2em',
-              color: COLORS.primary,
-            }}
-          >
-            {label}
-          </span>
-          <div
-            style={{
-              marginTop: 6,
-              height: 1,
-              width: 48,
-              background:
-                'linear-gradient(90deg, transparent, #D97706, transparent)',
-            }}
-          />
-        </div>
-      </foreignObject>
-    </g>
+    >
+      {children}
+    </motion.div>
   );
 };
 
-/* ---------------- INTEGRATION NODE ---------------- */
-
-const IntegrationNode: React.FC<IntegrationNodeProps> = ({
-  x,
-  y,
-  icon,
-  label,
-}) => (
-  <g transform={`translate(${x},${y})`}>
-    <circle
-      r={NODE_RADIUS}
-      fill="#0A0A0A"
-      stroke={COLORS.primary}
-      strokeWidth={2}
-    />
-
-    <CenteredIcon scale={1}>
-      {icon}
-    </CenteredIcon>
-
-    <text
-      y={NODE_RADIUS + 22}
-      textAnchor="middle"
-      fill={COLORS.primary}
-      fontSize={TEXT_SIZE}
-      fontFamily="monospace"
-      opacity={0.9}
-    >
-      {label}
-    </text>
-  </g>
-);
-
-/* ---------------- SECURITY ---------------- */
-
-const SecurityBadge: React.FC<SecurityBadgeProps> = ({ x, y }) => (
-  <g transform={`translate(${x},${y})`}>
-    <motion.circle
-      r={NODE_RADIUS}
-      fill={COLORS.faint}
-      animate={{ opacity: [0.2, 0.45, 0.2] }}
-      transition={{ duration: 3, repeat: Infinity }}
-    />
-
-    <motion.path
-      d={hexPath(NODE_RADIUS * 0.9)}
-      fill="none"
-      stroke={COLORS.primary}
-      strokeDasharray="4 4"
-      animate={{ rotate: -360 }}
-      transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-    />
-
-    <CenteredIcon scale={0.9}>
-      <Shield size={24} color={COLORS.primary} />
-    </CenteredIcon>
-  </g>
-);
-
-/* ---------------- ROI ---------------- */
-
-const RoiPanel: React.FC<RoiPanelProps> = ({ x, y }) => (
-  <g transform={`translate(${x},${y})`}>
-    <rect
-      x={-90}
-      y={-40}
-      width={180}
-      height={80}
-      rx={4}
-      fill="rgba(10,10,10,0.85)"
-      stroke={COLORS.faint}
-    />
-    <text
-      x={-74}
-      y={-18}
-      fill={COLORS.primary}
-      fontSize={TEXT_SIZE}
-      fontFamily="monospace"
-    >
-      ROI PROJECTION
-    </text>
-    <text
-      x={-74}
-      y={8}
-      fill={COLORS.primary}
-      fontSize={TEXT_SIZE}
-      fontWeight="bold"
-      fontFamily="monospace"
-    >
-      +245%
-    </text>
-
-    <g transform="translate(64,-24)">
-      <CenteredIcon scale={0.6}>
-        <TrendingUp size={24} color={COLORS.primary} />
-      </CenteredIcon>
-    </g>
-  </g>
-);
-
-/* ---------------- MAIN ---------------- */
-
-const AdvancedNetwork: React.FC = () => {
-  const width = 1100;
-  const height = 660;
-  const cy = height / 2;
-
-  const ai = { x: width * 0.38, y: cy };
-  const expert = { x: width * 0.62, y: cy };
-  const roi = { x: expert.x + 260, y: cy };
-
-  const integrations: IntegrationNodeProps[] = [
-    { x: 140, y: cy - 120, label: 'DB_SYNC', icon: <Database color={COLORS.primary} /> },
-    { x: 140, y: cy, label: 'API_GW', icon: <Server color={COLORS.primary} /> },
-    { x: 140, y: cy + 120, label: 'WEB_HOOK', icon: <Globe color={COLORS.primary} /> },
-  ];
-
+const ConnectingLine: React.FC<ConnectingLineProps> = ({ path, delay = 0 }) => {
   return (
-    <div className="relative w-full h-[660px]">
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
-        <defs>
-          <radialGradient id="nodeGlow">
-            <stop offset="0%" stopColor={COLORS.primary} stopOpacity={0.35} />
-            <stop offset="100%" stopColor={COLORS.primary} stopOpacity={0} />
-          </radialGradient>
-        </defs>
+    <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-0">
+      <motion.path
+        d={path}
+        fill="none"
+        stroke="#10b981" // Green-500
+        strokeWidth="1.5"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ 
+          duration: 1.5, 
+          ease: "easeInOut",
+          delay: delay 
+        }}
+      />
+    </svg>
+  );
+};
 
-        {integrations.map((n, i) => (
-          <React.Fragment key={n.label}>
-            <Beam
-              d={`M 140 ${n.y} C 220 ${n.y}, ${ai.x - 90} ${ai.y}, ${ai.x} ${ai.y}`}
-              delay={i * 0.4}
-            />
-            <IntegrationNode {...n} />
-          </React.Fragment>
-        ))}
+const SkeletonLine: React.FC<SkeletonLineProps> = ({ width }) => (
+  <div className={`h-3 bg-slate-200 rounded-full mb-2 ${width}`} />
+);
 
-        <Beam d={`M ${ai.x} ${ai.y} L ${expert.x} ${expert.y}`} strokeWidth={3} />
-        <SecurityBadge x={(ai.x + expert.x) / 2} y={cy - 80} />
-        <Beam
-          d={`M ${expert.x} ${expert.y} C ${expert.x + 90} ${cy}, ${expert.x + 180} ${cy}, ${roi.x} ${cy}`}
-          strokeWidth={2.5}
-        />
+// --- Main Component ---
 
-        <RoiPanel x={roi.x} y={roi.y} />
+const ExchangeAnimation: React.FC = () => {
+  return (
+    <div className="relative w-full h-[800px] bg-slate-50 flex items-center justify-center overflow-hidden font-sans text-slate-600">
+      
+      {/* 1. Background Nodes (Floating) */}
+      
+      {/* Top Left: Agent Assist */}
+      <FloatingNode className="top-24 left-[20%] w-24 h-24 flex-col gap-2" delay={0}>
+        <div className="flex gap-1">
+            <div className="w-4 h-4 rounded-full bg-emerald-200" />
+            <div className="w-4 h-4 rounded-full bg-emerald-500" />
+        </div>
+        <span className="text-xs text-slate-500 font-medium text-center">Agent<br/>Assist</span>
+      </FloatingNode>
 
-        <g transform={`translate(${ai.x},${ai.y})`}>
-          <CentralNode label="AI AGENT" variant="hex" />
-        </g>
+      {/* Top Center: Logo */}
+      <FloatingNode className="top-32 left-[50%] -translate-x-1/2 !p-0 overflow-hidden w-16 h-16 bg-emerald-700 border-none shadow-lg" delay={0.5}>
+        <div className="w-full h-full flex items-center justify-center">
+           <div className="w-8 h-8 bg-white rounded-full opacity-90" />
+        </div>
+      </FloatingNode>
+      
+      {/* Right Side: Geometric */}
+      <FloatingNode className="top-1/2 right-[15%] w-20 h-20" delay={1.2}>
+         <Layers className="text-slate-300 w-8 h-8" strokeWidth={1} />
+      </FloatingNode>
 
-        <g transform={`translate(${expert.x},${expert.y})`}>
-          <CentralNode
-            label="EXPERT"
-            icon={<User size={24} color={COLORS.primary} />}
+       {/* Bottom Left: Geometric */}
+       <FloatingNode className="bottom-32 left-[15%] w-20 h-20" delay={0.8}>
+         <Box className="text-slate-300 w-8 h-8" strokeWidth={1} />
+      </FloatingNode>
+
+
+      {/* 2. Connecting Lines */}
+      <div className="absolute inset-0 z-0">
+          {/* Line from Agent Assist to Card */}
+          <ConnectingLine 
+            path="M 350 220 Q 350 350, 450 400" 
+            delay={0.8} 
           />
-        </g>
-      </svg>
+           {/* Line from Right Node to Card */}
+          <ConnectingLine 
+            path="M 1000 400 Q 900 400, 800 450" 
+            delay={1.5} 
+          />
+      </div>
+
+
+      {/* 3. Central "Exchange" Card */}
+      <motion.div 
+        className="relative z-10 bg-white w-[400px] rounded-3xl shadow-xl border border-slate-100 p-8"
+        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-start mb-2">
+          <div>
+            <h2 className="text-3xl font-semibold text-emerald-800 tracking-tight">Exchange</h2>
+            <motion.p 
+              className="text-slate-500 text-sm mt-1"
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ delay: 1 }}
+            >
+              Pulling order Information.
+            </motion.p>
+          </div>
+          <span className="bg-slate-900 text-white text-xs px-2 py-1 rounded font-mono"># 1237</span>
+        </div>
+
+        {/* Product Card Inside */}
+        <motion.div 
+          className="mt-6 border border-slate-200 rounded-xl p-4 flex items-center justify-between bg-slate-50/50"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.2 }}
+        >
+          <div>
+            <div className="w-6 h-6 bg-slate-800 rounded mb-2 flex items-center justify-center">
+                <Zap className="text-white w-3 h-3" />
+            </div>
+            <p className="text-xs font-semibold text-slate-700">Eligible for exchange.</p>
+            <p className="text-xs text-slate-500">You can issue $25 refund</p>
+          </div>
+          <div className="w-16 h-12 bg-blue-100 rounded-lg relative overflow-hidden shadow-sm">
+             <div className="absolute inset-0 flex items-center justify-center text-[10px] text-blue-400">IMG</div>
+          </div>
+        </motion.div>
+
+        {/* Skeleton Loader Lines */}
+        <div className="mt-6 space-y-3">
+          <motion.div 
+            initial={{ width: "0%" }} 
+            animate={{ width: "100%" }} 
+            transition={{ duration: 1, delay: 1.5 }}
+          >
+             <SkeletonLine width="w-full" />
+             <SkeletonLine width="w-5/6" />
+             <SkeletonLine width="w-1/4" />
+          </motion.div>
+        </div>
+
+        {/* Transaction Details */}
+        <div className="mt-8 flex justify-between items-end">
+            <div className="text-xs text-slate-400">
+                <p>Transaction</p>
+                <p>Details</p>
+            </div>
+            <div className="space-y-2">
+                <div className="flex gap-2 justify-end">
+                    <div className="w-12 h-3 bg-slate-200 rounded-full"/>
+                    <div className="w-20 h-3 bg-slate-200 rounded-full"/>
+                </div>
+                <div className="flex gap-2 justify-end">
+                    <div className="w-10 h-3 bg-slate-200 rounded-full"/>
+                    <div className="w-16 h-3 bg-slate-200 rounded-full"/>
+                </div>
+            </div>
+        </div>
+
+        {/* Action Button */}
+        <motion.button 
+            className="w-full mt-8 py-3 border border-slate-800 rounded-lg text-xs font-bold text-slate-800 hover:bg-slate-50 transition-colors uppercase tracking-wider"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.5 }}
+        >
+            Send to Customer
+        </motion.button>
+
+      </motion.div>
+
+      {/* Text label above card */}
+      <motion.div 
+        className="absolute top-[28%] text-center text-slate-400 text-sm"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        Response to exchange request Ticket..
+      </motion.div>
+
     </div>
   );
 };
 
-export default AdvancedNetwork;
+export default ExchangeAnimation;
