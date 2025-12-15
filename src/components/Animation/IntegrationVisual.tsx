@@ -5,56 +5,58 @@ import {
   Cloud, 
   Slack,
   Github,
-  Bot
+  Workflow,
+  Radio
 } from "lucide-react";
 
 /* ------------------------------
    CONSTANTS & MATH
 -------------------------------- */
-const SIZE = 700;
+const SIZE = 640;
 const CENTER = SIZE / 2;
-const RADIUS = 240; 
-const CARD_WIDTH = 160;
-const CARD_HEIGHT = 80;
+const RADIUS = 220; 
+const CARD_WIDTH = 150;
+const CARD_HEIGHT = 110;
 
-// The Signature Swiss Ease
-const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
+// The "Swiss" ease from CustomAI for consistency
+const EASE_SWISS = { ease: [0.25, 1, 0.5, 1] as const };
 
 const ITEMS = [
   { 
     id: "slack", 
     label: "MESSAGING", 
-    subLabel: "Team Sync",
+    subLabel: "Slack / Teams",
     angle: 315, 
     icon: Slack, 
-    color: "#E01E5A" 
+    color: "#411cf5" 
   },
   { 
     id: "db", 
     label: "KNOWLEDGE", 
-    subLabel: "Vector Store",
+    subLabel: "Postgres / Vector",
     angle: 45, 
     icon: Database, 
-    color: "#336791" 
+    color: "#411cf5" 
   },
   { 
     id: "crm", 
-    label: "COMMERCE", 
-    subLabel: "Sales Pipeline",
+    label: "CRM SYNC", 
+    subLabel: "Salesforce / Hubspot",
     angle: 135, 
     icon: Cloud, 
-    color: "#00A1E0" 
+    color: "#411cf5" 
   },
   { 
     id: "git", 
-    label: "DEPLOYMENT", 
-    subLabel: "CI/CD Pipeline",
+    label: "CI/CD", 
+    subLabel: "Github Actions",
     angle: 225, 
     icon: Github, 
-    color: "#171515" 
+    color: "#411cf5" 
   },
 ];
 
+// Helper: Convert Polar (angle, radius) to Cartesian (x, y)
 const toCartesian = (angle: number, r: number) => {
   const rad = (angle - 90) * (Math.PI / 180);
   return {
@@ -67,7 +69,7 @@ const toCartesian = (angle: number, r: number) => {
    SUB-COMPONENTS
 -------------------------------- */
 
-// 1. The Data Beam (Background Layer)
+// 1. The Data Beam (Radial Vector)
 const DataBeam = ({ 
   angle, 
   isActive, 
@@ -77,12 +79,14 @@ const DataBeam = ({
   isActive: boolean; 
   color: string 
 }) => {
-  const start = toCartesian(angle, 60); // Edge of Core
-  const end = toCartesian(angle, RADIUS - 90); // Edge of Card
+  // Calculate start (Core edge) and end (Card edge)
+  // Core radius ~40px, Card distance ~RADIUS minus visual padding
+  const start = toCartesian(angle, 40); 
+  const end = toCartesian(angle, RADIUS - 65); 
 
   return (
     <g>
-      {/* Base Connector */}
+      {/* Passive Base Line */}
       <line
         x1={start.x} y1={start.y}
         x2={end.x} y2={end.y}
@@ -91,28 +95,45 @@ const DataBeam = ({
         strokeDasharray="4 4"
       />
       
-      {/* Active Data Packet */}
-      <motion.circle
-        r="4"
-        fill={color}
-        initial={{ cx: start.x, cy: start.y, opacity: 0 }}
-        animate={isActive ? { 
-            cx: [start.x, end.x],
-            cy: [start.y, end.y],
-            opacity: [0, 1, 0]
-        } : { opacity: 0 }}
-        transition={{
-            duration: 0.8,
-            repeat: Infinity,
-            ease: EASE_SWISS,
-            repeatDelay: 0.2
+      {/* Active Pulse Line */}
+      <motion.line
+        x1={start.x} y1={start.y}
+        x2={end.x} y2={end.y}
+        stroke={color}
+        strokeWidth="2"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ 
+            pathLength: isActive ? 1 : 0, 
+            opacity: isActive ? 1 : 0 
         }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        strokeLinecap="round"
       />
+
+      {/* Data Packet Particle (Ingress/Egress) */}
+      {isActive && (
+        <motion.circle
+            r="3"
+            fill={color}
+            initial={{ cx: start.x, cy: start.y }}
+            animate={{ 
+                cx: [start.x, end.x],
+                cy: [start.y, end.y],
+                opacity: [0, 1, 0]
+            }}
+            transition={{
+                duration: 1.2,
+                repeat: Infinity,
+                ease: "linear",
+                repeatDelay: 0.1
+            }}
+        />
+      )}
     </g>
   );
 };
 
-// 2. The Integration Card (Satellite)
+// 2. The Integration Node
 const IntegrationCard = ({ 
     item, 
     isActive, 
@@ -127,7 +148,7 @@ const IntegrationCard = ({
 
   return (
     <motion.div
-        className="absolute z-20"
+        className="absolute flex items-center justify-center cursor-pointer z-20"
         style={{
             left: pos.x - CARD_WIDTH / 2,
             top: pos.y - CARD_HEIGHT / 2,
@@ -136,50 +157,41 @@ const IntegrationCard = ({
         }}
         onMouseEnter={() => onHover(item.id)}
         onMouseLeave={() => onHover(null)}
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.4, ease: EASE_SWISS }}
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
     >
         <motion.div
             className={`
-                w-full h-full bg-white border cursor-pointer relative overflow-hidden group
-                transition-all duration-500 flex items-center px-4 gap-4
+                w-full h-full border flex flex-col items-center justify-center gap-2 p-3 text-center
+                backdrop-blur-md transition-all duration-500
                 ${isActive 
-                    ? 'border-transparent shadow-[0_15px_40px_-15px_rgba(0,0,0,0.15)]' 
-                    : 'border-neutral-200 shadow-[0_5px_15px_-5px_rgba(0,0,0,0.05)] hover:border-neutral-300'
+                    ? 'bg-white/90 shadow-xl shadow-indigo-500/5' 
+                    : 'bg-white/40 border-neutral-200 shadow-sm hover:border-neutral-300'
                 }
             `}
-            // Dynamic border color via box-shadow to avoid layout shift
-            style={{ 
-                boxShadow: isActive ? `0 0 0 1px ${item.color}, 0 15px 40px -15px rgba(0,0,0,0.15)` : undefined 
+            animate={{
+                borderColor: isActive ? item.color : "rgba(229, 229, 229, 1)", 
+                y: isActive ? -4 : 0
             }}
         >
-            {/* Icon Box */}
             <div 
-                className={`w-10 h-10 flex items-center justify-center border transition-colors duration-500
-                    ${isActive ? 'bg-white border-transparent' : 'bg-neutral-50 border-neutral-100'}
-                `}
+                className={`p-2.5 rounded-lg transition-colors duration-500 ${isActive ? 'text-white' : 'text-neutral-400 bg-neutral-100'}`}
+                style={{ backgroundColor: isActive ? item.color : undefined }}
             >
-                <Icon 
-                    size={18} 
-                    color={isActive ? item.color : "#737373"} 
-                    strokeWidth={1.5}
-                />
+                <Icon size={20} strokeWidth={1.5} />
             </div>
-
-            {/* Labels */}
-            <div className="flex flex-col">
-                <span className={`text-[10px] font-bold tracking-widest uppercase transition-colors duration-300 ${isActive ? 'text-neutral-900' : 'text-neutral-500'}`}>
+            
+            <div>
+                <span className={`block text-[10px] font-bold tracking-widest uppercase ${isActive ? 'text-neutral-900' : 'text-neutral-500'}`}>
                     {item.label}
                 </span>
-                <span className="text-[9px] text-neutral-400 font-medium uppercase tracking-wider">
+                <span className="block text-[9px] text-neutral-400 font-medium mt-0.5">
                     {item.subLabel}
                 </span>
             </div>
 
-            {/* Status Dot */}
-            <div className={`absolute top-3 right-3 w-1.5 h-1.5 rounded-full transition-all duration-500 ${isActive ? 'scale-100' : 'scale-0'}`}
-                style={{ backgroundColor: item.color }}
-            />
+            {/* Live Indicator */}
+            <div className={`absolute top-2 right-2 w-1.5 h-1.5 rounded-full transition-colors duration-300 ${isActive ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-neutral-200'}`} />
         </motion.div>
     </motion.div>
   );
@@ -192,7 +204,7 @@ export default function IntegrationVisual() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [autoCycle, setAutoCycle] = useState(true);
 
-  // Cycle logic
+  // Autonomous Behavior: Cycle through integrations if user isn't interacting
   useEffect(() => {
     if (!autoCycle) return;
     const interval = setInterval(() => {
@@ -201,27 +213,37 @@ export default function IntegrationVisual() {
             const nextIndex = (currentIndex + 1) % ITEMS.length;
             return ITEMS[nextIndex].id;
         });
-    }, 2000); 
+    }, 2000); // 2-second heartbeat
     return () => clearInterval(interval);
   }, [autoCycle]);
 
+  // User Override: Pause automation on hover
+  const handleHover = (id: string | null) => {
+    if (id) {
+        setAutoCycle(false);
+        setActiveId(id);
+    } else {
+        setAutoCycle(true);
+    }
+  };
+
   return (
-    <div className="relative w-full h-[700px] flex items-center justify-center font-sans overflow-hidden bg-neutral-50/50">
+    <div className="relative w-full h-[640px] flex items-center justify-center font-sans overflow-hidden bg-white/50">
       
-      {/* 1. Background Grid */}
+      {/* 1. Background Grid & Ambient Noise */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
              backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
-             backgroundSize: "60px 60px"
+             backgroundSize: "40px 40px"
         }}
       />
 
-      {/* 2. Radial Connection Layer */}
+      {/* 2. Connection Layer (SVG) */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
         <circle 
-            cx={CENTER} cy={CENTER} r={RADIUS - 50} 
-            fill="none" stroke="#E5E5E5" strokeWidth="1" strokeDasharray="4 4" opacity="0.5"
+            cx={CENTER} cy={CENTER} r={RADIUS} 
+            fill="none" stroke="#F5F5F5" strokeWidth="1" 
         />
         {ITEMS.map((item) => (
           <DataBeam 
@@ -233,45 +255,41 @@ export default function IntegrationVisual() {
         ))}
       </svg>
 
-      {/* 3. The Orchestration Core (Center) */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
+      {/* 3. The Orchestration Core (Agent) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-8 -translate-y-1/2 z-30">
         <motion.div
-            className="w-28 h-28 bg-white border border-neutral-200 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center relative z-20"
-            animate={{ 
-                borderColor: activeId ? "rgba(79, 70, 229, 0.4)" : "rgba(229, 229, 229, 1)"
-            }}
-            transition={{ duration: 0.5 }}
+            className="w-24 h-24 bg-neutral-900 border-4 border-white shadow-2xl flex items-center justify-center relative overflow-hidden"
+            animate={{ scale: activeId ? 1.05 : 1 }}
+            transition={EASE_SWISS}
         >
-            {/* Header Strip */}
-            <div className="absolute top-0 inset-x-0 h-1 bg-neutral-100 flex justify-center overflow-hidden">
-                <motion.div 
-                    className="w-full h-full bg-indigo-500"
-                    animate={{ x: ["-100%", "100%"] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                />
-            </div>
-
-            <div className="w-10 h-10 bg-neutral-900 flex items-center justify-center text-white mb-2">
-                <Bot size={20} strokeWidth={1.5} />
+            <div className="relative z-10 text-white">
+                <Workflow size={32} strokeWidth={1.5} />
             </div>
             
-            <div className="flex flex-col items-center">
-                <span className="text-[10px] font-bold tracking-widest text-neutral-900 uppercase">
-                    Agent Core
-                </span>
-                <div className="flex items-center gap-1 mt-1">
-                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                     <span className="text-[9px] font-medium text-neutral-400 uppercase tracking-wide">Online</span>
-                </div>
-            </div>
+            {/* Inner Processing Pulse */}
+            <motion.div 
+               className="absolute inset-0 bg-indigo-500/30 blur-xl"
+               animate={{ opacity: [0.3, 0.6, 0.3] }}
+               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
         </motion.div>
 
-        {/* Pulse Effect Behind Core */}
+        {/* Outer Ripple Ring */}
         <motion.div
-            className="absolute inset-0 bg-indigo-500/5 z-10"
-            animate={{ scale: [1, 1.4], opacity: [1, 0] }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-indigo-500/20 rounded-full -z-10"
+            animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
         />
+        
+        {/* Core Label */}
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-white border border-neutral-200 shadow-sm">
+                <Radio size={10} className="text-indigo-600 animate-pulse" />
+                <span className="text-[9px] font-bold tracking-widest text-neutral-600">
+                    AI Agent
+                </span>
+            </div>
+        </div>
       </div>
 
       {/* 4. Satellite Nodes */}
@@ -280,10 +298,7 @@ export default function IntegrationVisual() {
             key={item.id} 
             item={item} 
             isActive={activeId === item.id} 
-            onHover={(id) => {
-                setAutoCycle(!id);
-                if(id) setActiveId(id);
-            }}
+            onHover={handleHover}
         />
       ))}
 

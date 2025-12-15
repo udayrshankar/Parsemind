@@ -119,7 +119,7 @@ const AgentModule = ({
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
             >
-                <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                <div className="w-2 h-2 bg-indigo-500 animate-pulse" />
             </motion.div>
         )}
     </motion.div>

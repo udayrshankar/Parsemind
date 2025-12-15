@@ -4,36 +4,61 @@ import {
   BrainCircuit, 
   LineChart, 
   LayoutDashboard, 
-  ArrowDown, 
   TrendingUp, 
-  Timer
+  Timer,
+  Zap,
 } from "lucide-react";
 
 /* ------------------------------
    CONSTANTS & CONFIG
 -------------------------------- */
-const BASE_WIDTH = 400;  // Fixed base width for calculation
-const BASE_HEIGHT = 640; // Fixed base height for calculation
+// Internal base dimensions for the scaler
+const BASE_WIDTH = 400; 
+const BASE_HEIGHT = 800;
 
-const CARD_WIDTH = 280;
-const DASHBOARD_WIDTH = 340; 
-const DELAY_STEP = 0.5; 
+const CARD_WIDTH = 300;
+const DASHBOARD_WIDTH = 340;
+const DELAY_STEP = 0.4;
 
 const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
 
 /* ------------------------------
+   VISUAL ASSETS
+-------------------------------- */
+const FlowLine = () => (
+    <div className="absolute inset-0 flex justify-center pointer-events-none z-0">
+        <svg className="h-full w-px overflow-visible">
+            <line 
+                x1="0" y1="0" 
+                x2="0" y2="100%" 
+                stroke="#262626" strokeWidth="1" strokeDasharray="4 4" 
+            />
+            <motion.circle
+                r="3" fill="#6366f1" 
+                initial={{ cy: 0, opacity: 0 }}
+                animate={{ cy: "100%", opacity: [0, 1, 1, 0] }}
+                transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "linear",
+                    repeatDelay: 0.5
+                }}
+            />
+        </svg>
+    </div>
+);
+
+/* ------------------------------
    VARIANTS
 -------------------------------- */
-const itemVariants = {
+const cardVariants = {
   hidden: { 
     opacity: 0, 
-    scale: 1.15, 
-    y: 20,       
-    filter: "blur(10px)"
+    y: 20,
+    filter: "blur(8px)"
   },
   visible: (i: number) => ({
     opacity: 1,
-    scale: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
@@ -44,23 +69,10 @@ const itemVariants = {
   })
 };
 
-const arrowVariants = {
-  hidden: { opacity: 0, height: 0 },
-  visible: (i: number) => ({
-    opacity: 1, 
-    height: "auto",
-    transition: {
-      delay: (i * DELAY_STEP) - 0.2, 
-      duration: 0.4
-    }
-  })
-};
-
 /* ------------------------------
    SUB-COMPONENTS
 -------------------------------- */
 
-// 1. Standard Pipeline Step
 const PipelineStep = ({ 
   icon: Icon, 
   label, 
@@ -74,116 +86,114 @@ const PipelineStep = ({
 }) => (
   <motion.div
     custom={index}
-    variants={itemVariants}
+    variants={cardVariants}
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin: "-50px" }}
-    className="relative z-10 bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-center gap-4 shadow-xl shadow-black/20 w-full"
+    className="relative z-10 bg-neutral-900 border border-neutral-800 p-4 flex items-center gap-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] w-full mb-8 group"
     style={{ maxWidth: CARD_WIDTH }}
   >
-    <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400 border border-zinc-700/50">
+    <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-neutral-900 border border-neutral-800 rounded-full z-20 flex items-center justify-center">
+        <div className="w-1 h-1 bg-neutral-600 rounded-full group-hover:bg-indigo-500 transition-colors" />
+    </div>
+
+    <div className="w-10 h-10 bg-neutral-800/50 border border-neutral-800 flex items-center justify-center text-neutral-500 group-hover:text-indigo-400 group-hover:bg-indigo-500/20 transition-colors duration-500">
       <Icon size={18} strokeWidth={1.5} />
     </div>
+
     <div className="flex flex-col">
-      <span className="text-xs font-bold text-zinc-100 tracking-wide uppercase">
+      <span className="text-xs font-bold text-white tracking-wide uppercase">
         {label}
       </span>
-      <span className="text-[10px] text-zinc-500 font-medium">
+      <span className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider">
         {subLabel}
       </span>
     </div>
+
+    <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-neutral-900 border border-neutral-800 rounded-full z-20 flex items-center justify-center">
+         <div className="w-1 h-1 bg-neutral-600 rounded-full group-hover:bg-indigo-500 transition-colors" />
+    </div>
   </motion.div>
 );
 
-// 2. The Connecting Arrow
-const Connector = ({ index }: { index: number }) => (
-  <motion.div 
-    custom={index}
-    variants={arrowVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-    className="flex justify-center py-2 text-zinc-600"
-  >
-    <ArrowDown size={16} strokeWidth={1.5} />
-  </motion.div>
-);
-
-// 3. The Sophisticated Dashboard (Final Step)
 const RoiDashboard = ({ index }: { index: number }) => (
   <motion.div
     custom={index}
-    variants={itemVariants}
+    variants={cardVariants}
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true }}
-    className="relative z-20 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden"
+    className="relative z-20 bg-neutral-900 border border-neutral-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
     style={{ width: DASHBOARD_WIDTH }}
   >
-    {/* Dashboard Header */}
-    <div className="bg-zinc-800/30 px-5 py-3 border-b border-zinc-800 flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <LayoutDashboard size={14} className="text-indigo-400" />
-        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-          Live ROI Dashboard
-        </span>
+    <div className="bg-black px-5 py-3 flex items-center justify-between border-b border-neutral-800">
+      <div className="flex items-center gap-3">
+        <div className="p-1 bg-neutral-800 rounded">
+            <LayoutDashboard size={14} className="text-neutral-300" />
+        </div>
+        <div className="flex flex-col">
+            {/* Updated: text-[10px] -> text-xs */}
+            <span className="text-xs font-bold text-white uppercase tracking-widest leading-none">
+            ROI Dashboard
+            </span>
+            {/* Updated: text-[9px] -> text-[10px] */}
+            <span className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider mt-0.5">
+                Live Analysis
+            </span>
+        </div>
       </div>
-      <div className="flex gap-1.5">
-        <div className="w-2 h-2 rounded-full bg-zinc-700" />
-        <div className="w-2 h-2 rounded-full bg-zinc-700" />
-        <div className="w-2 h-2 rounded-full bg-zinc-700" />
+      <div className="flex items-center gap-1">
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="text-[10px] text-emerald-500 font-bold uppercase tracking-wide">Active</span>
       </div>
     </div>
 
-    {/* Dashboard Body - The Metrics */}
-    <div className="p-6 grid grid-cols-2 gap-6">
+    <div className="p-6 grid grid-cols-2 gap-8 bg-neutral-900">
       
       {/* Metric A */}
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-1.5 mb-1">
-          <TrendingUp size={12} className="text-zinc-500" />
-          <span className="text-[9px] font-semibold text-zinc-500 uppercase tracking-wider">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <TrendingUp size={14} className="text-neutral-500" />
+          {/* Updated: text-[10px] -> text-xs */}
+          <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
             Efficiency
           </span>
         </div>
-        <span className="text-4xl font-bold text-white tracking-tighter">
-          32%
-        </span>
-        <div className="flex items-center gap-1 text-[9px] font-medium text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full w-fit mt-1 border border-emerald-500/20">
-          <span>+12.5%</span>
-          <span className="text-emerald-400/60">vs last mo</span>
+        <div>
+            <span className="text-4xl font-bold text-white tracking-tighter block">
+            32%
+            </span>
+            <div className="flex items-center gap-1 mt-1 text-emerald-500">
+                <Zap size={10} fill="currentColor" />
+                {/* Updated: text-[10px] to match standard */}
+                <span className="text-[10px] font-bold uppercase tracking-wide">+12.5% vs Last Mo</span>
+            </div>
         </div>
       </div>
 
-      {/* Metric B (Separator Line) */}
-      <div className="flex flex-col gap-1 border-l border-zinc-800 pl-6">
-        <div className="flex items-center gap-1.5 mb-1">
-          <Timer size={12} className="text-zinc-500" />
-          <span className="text-[9px] font-semibold text-zinc-500 uppercase tracking-wider">
-            Manual Work
+      {/* Metric B */}
+      <div className="flex flex-col gap-2 relative">
+        <div className="absolute -left-4 top-2 bottom-2 w-px bg-neutral-800" />
+        
+        <div className="flex items-center gap-2">
+          <Timer size={14} className="text-neutral-500" />
+          {/* Updated: text-[10px] -> text-xs */}
+          <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
+            Workload
           </span>
         </div>
-        <span className="text-4xl font-bold text-white tracking-tighter">
-          -41%
-        </span>
-        <div className="flex items-center gap-1 text-[9px] font-medium text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded-full w-fit mt-1 border border-indigo-500/20">
-          <span>Saved 120hrs</span>
+        <div>
+            <span className="text-4xl font-bold text-white tracking-tighter block">
+            -41%
+            </span>
+             <div className="inline-block mt-1 px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 rounded-sm">
+                {/* Updated: text-[10px] to match standard */}
+                <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-wide">
+                    120hrs Saved
+                </span>
+            </div>
         </div>
       </div>
-
-    </div>
-
-    {/* Dashboard Footer / Graph Placeholder */}
-    <div className="h-12 bg-zinc-800/20 border-t border-zinc-800 relative flex items-end px-6 pb-0 gap-1 overflow-hidden">
-       {[40, 60, 45, 70, 50, 80, 65, 90, 75, 100].map((h, i) => (
-          <motion.div 
-            key={i}
-            className="flex-1 bg-indigo-500/30 rounded-t-sm"
-            initial={{ height: 0 }}
-            whileInView={{ height: `${h}%` }}
-            transition={{ delay: (i * 0.05), duration: 0.5 }}
-          />
-       ))}
     </div>
   </motion.div>
 );
@@ -191,70 +201,59 @@ const RoiDashboard = ({ index }: { index: number }) => (
 /* ------------------------------
    MAIN COMPONENT
 -------------------------------- */
-interface FastResultsDarkProps {
-  scale?: number;
+interface FastResultsVisualDarkProps {
+    scale?: number;
 }
 
-export default function FastResultsDark({ scale = 1 }: FastResultsDarkProps) {
+export default function FastResultsVisualDark({ scale = 1 }: FastResultsVisualDarkProps) {
   return (
-    // Outer bounding box reserves the correct Scaled space in the layout
+    // 1. Bounding Box
     <div 
+        className="relative mx-auto overflow-hidden"
         style={{ 
             width: BASE_WIDTH * scale, 
             height: BASE_HEIGHT * scale 
-        }} 
-        className="relative mx-auto"
-    >
-      {/* Scaler Wrapper: Transforms the internal coordinate system */}
-      <div
-        style={{
-            width: BASE_WIDTH,
-            height: BASE_HEIGHT,
-            transform: `scale(${scale})`,
-            transformOrigin: 'top left'
         }}
-        className="relative flex flex-col items-center justify-center font-sans overflow-hidden"
-      >
-        
-        {/* Background decoration line */}
-        <div className="absolute inset-0 flex justify-center pointer-events-none">
-          <div className="w-px h-full bg-linear-to-b from-transparent via-zinc-800 to-transparent" />
+    >
+        {/* 2. Scaler Container */}
+        <div 
+            style={{ 
+                width: BASE_WIDTH,
+                height: BASE_HEIGHT,
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left', 
+            }}
+            className="relative font-sans flex flex-col items-center justify-center py-12"
+        >
+            <FlowLine />
+
+            <div className="flex flex-col items-center w-full">
+                <PipelineStep 
+                    index={0}
+                    icon={Database}
+                    label="Raw Activity"
+                    subLabel="Ingesting events"
+                />
+
+                <PipelineStep 
+                    index={1}
+                    icon={BrainCircuit}
+                    label="Agent Decisions"
+                    subLabel="Chain-of-thought"
+                />
+
+                <PipelineStep 
+                    index={2}
+                    icon={LineChart}
+                    label="Metrics Engine"
+                    subLabel="Quality Analysis"
+                />
+
+                <div className="mt-4">
+                    <RoiDashboard index={3} />
+                </div>
+            </div>
         </div>
-
-        {/* 1. Raw Activity */}
-        <PipelineStep 
-          index={0}
-          icon={Database}
-          label="Raw Activity"
-          subLabel="Ingesting unstructured events"
-        />
-
-        <Connector index={1} />
-
-        {/* 2. Agent Decisions */}
-        <PipelineStep 
-          index={1}
-          icon={BrainCircuit}
-          label="Agent Decisions"
-          subLabel="Chain-of-thought processing"
-        />
-
-        <Connector index={2} />
-
-        {/* 3. Metrics Engine */}
-        <PipelineStep 
-          index={2}
-          icon={LineChart}
-          label="Metrics Engine"
-          subLabel="Quantifying output quality"
-        />
-
-        <Connector index={3} />
-
-        {/* 4. The Dashboard */}
-        <RoiDashboard index={3} />
-
-      </div>
     </div>
   );
 }

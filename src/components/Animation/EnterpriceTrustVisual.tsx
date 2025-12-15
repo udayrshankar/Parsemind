@@ -4,14 +4,15 @@ import { useState } from "react";
 /* ------------------------------
    CONSTANTS
 -------------------------------- */
-const SIZE = 700; // Increased from 600 to allow larger radii
+const SIZE = 700;
 const CENTER = SIZE / 2;
+const CORE_RADIUS = 88; // Half of the w-44 (176px) core
 
 const LAYERS = [
   { 
     id: "compliance",
     label: "COMPLIANCE", 
-    radius: 310, // Increased from 240
+    radius: 310, 
     speed: 50, 
     dashArray: "4 8", 
     width: 1,
@@ -20,7 +21,7 @@ const LAYERS = [
   { 
     id: "security",
     label: "DATA SECURITY", 
-    radius: 245, // Increased from 190
+    radius: 245, 
     speed: 35, 
     dashArray: "40 120", 
     width: 1.5,
@@ -29,7 +30,7 @@ const LAYERS = [
   { 
     id: "observability",
     label: "OBSERVABILITY", 
-    radius: 180, // Increased from 140
+    radius: 180, 
     speed: 25, 
     dashArray: "10 10", 
     width: 1,
@@ -38,7 +39,7 @@ const LAYERS = [
   { 
     id: "oversight",
     label: "HUMAN OVERSIGHT", 
-    radius: 115, // Increased from 90
+    radius: 115, 
     speed: 20, 
     dashArray: "80 180", 
     width: 2,
@@ -70,11 +71,36 @@ export default function EnterpriseTrustVisual() {
         className="relative" 
         style={{ width: SIZE, height: SIZE }}
       >
-        {/* A. SVG LAYER (Rings) */}
+        {/* A. SVG LAYER (Rings & Radiation) */}
         <svg 
             className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
             viewBox={`0 0 ${SIZE} ${SIZE}`}
         >
+            {/* 1. Radiating Radar Waves (Background) */}
+            {[0, 1, 2].map((i) => (
+              <motion.circle
+                key={`wave-${i}`}
+                cx={CENTER}
+                cy={CENTER}
+                r={CORE_RADIUS}
+                fill="none"
+                stroke="#3b82f6" // Blue-500
+                strokeWidth="1"
+                initial={{ opacity: 0.3, scale: 1 }}
+                animate={{ 
+                  opacity: 0,
+                  r: SIZE / 2, // Expand to full edge
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 1.3,
+                }}
+              />
+            ))}
+
+            {/* 2. Existing Rotating Layers */}
             {LAYERS.map((layer) => {
                 const isHovered = hoveredId === layer.id;
                 const isDimmed = hoveredId !== null && !isHovered;
@@ -86,20 +112,19 @@ export default function EnterpriseTrustVisual() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: layer.radius * 0.002 }}
                     >
-                         {/* ROTATING GROUP */}
                          <motion.g
-                            style={{ originX: "50%", originY: "50%" }} // SVG origin is center
+                            style={{ originX: "50%", originY: "50%" }}
                             animate={{ rotate: 360 }}
                             transition={{ duration: layer.speed, repeat: Infinity, ease: "linear" }}
                          >
-                            {/* Invisible Hit Area (Thicker for easier interaction) */}
+                            {/* Hit Area */}
                             <circle
                                 cx={CENTER}
                                 cy={CENTER}
                                 r={layer.radius}
                                 fill="none"
                                 stroke="transparent"
-                                strokeWidth="40" // Increased hit area
+                                strokeWidth="40"
                                 className="pointer-events-auto cursor-pointer"
                                 onMouseEnter={() => setHoveredId(layer.id)}
                                 onMouseLeave={() => setHoveredId(null)}
@@ -136,11 +161,9 @@ export default function EnterpriseTrustVisual() {
                     key={`label-${layer.id}`}
                     className="absolute top-1/2 left-1/2 pointer-events-none" 
                     style={{ 
-                        // Move up by radius.
                         transform: `translate(-50%, calc(-50% - ${layer.radius}px))` 
                     }} 
                 >
-                    {/* Interactive wrapper for label */}
                     <div 
                         className="pointer-events-auto cursor-pointer p-2"
                         onMouseEnter={() => setHoveredId(layer.id)}
@@ -171,7 +194,6 @@ export default function EnterpriseTrustVisual() {
         {/* C. CENTER CORE */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <motion.div
-                // Scaled up core: w-32 -> w-40
                 className="w-44 h-44 bg-white rounded-full border border-neutral-100 shadow-2xl flex flex-col items-center justify-center gap-3"
                 animate={{
                     borderColor: hoveredId ? "rgba(37, 99, 235, 0.2)" : "rgba(245, 245, 245, 1)",

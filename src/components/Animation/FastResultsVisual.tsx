@@ -201,20 +201,7 @@ const RoiDashboard = ({ index }: { index: number }) => (
 
     </div>
 
-    {/* Graph Footer */}
-    <div className="h-16 bg-neutral-50 border-t border-neutral-100 relative flex items-end px-6 gap-1 overflow-hidden">
-       {[30, 45, 35, 60, 50, 75, 55, 80, 70, 95].map((h, i) => (
-          <motion.div 
-            key={i}
-            className="flex-1 bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors"
-            initial={{ height: 0 }}
-            whileInView={{ height: `${h}%` }}
-            transition={{ delay: 1 + (i * 0.05), duration: 0.5, ease: EASE_SWISS }}
-          >
-             <div className="w-full h-0.5 bg-indigo-500 absolute top-0 opacity-50" />
-          </motion.div>
-       ))}
-    </div>
+  
   </motion.div>
 );
 
@@ -223,7 +210,7 @@ const RoiDashboard = ({ index }: { index: number }) => (
 -------------------------------- */
 export default function FastResultsVisual() {
   return (
-    <div className="relative w-full h-[800px] bg-neutral-50/30 flex flex-col items-center justify-center font-sans overflow-hidden py-12">
+    <div className="relative w-full h-[800px] flex flex-col items-center justify-center font-sans overflow-hidden py-12">
       
       {/* 0. Background Flow Line */}
       <FlowLine />

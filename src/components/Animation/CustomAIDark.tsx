@@ -1,17 +1,16 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { 
-  Database, 
-  Globe, 
+  
   Zap, 
   BrainCircuit, 
   HardDrive, 
   ListTodo, 
   Bot, 
   CheckCircle2,
-  ArrowUpRight // Added for affordance
+  ArrowUpRight 
 } from "lucide-react";
-import { usePageTransition } from "../TransitionContext"; // Import Context
+import { usePageTransition } from "../TransitionContext"; 
 
 /* ------------------------------
    CONSTANTS & DIMENSIONS
@@ -97,7 +96,7 @@ const AgentModule = ({
             animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
         />
 
-        <div className={`p-2 rounded-md transition-colors duration-500 ${isActive ? 'text-indigo-400 bg-indigo-500/20' : 'text-neutral-500 bg-neutral-800/50'}`}>
+        <div className={`p-2 transition-colors duration-500 ${isActive ? 'text-indigo-400 bg-indigo-500/20' : 'text-neutral-500 bg-neutral-800/50'}`}>
             <Icon size={18} strokeWidth={1.5} />
         </div>
         
@@ -116,7 +115,7 @@ const AgentModule = ({
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
             >
-                <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
+                <div className="w-2 h-2 bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
             </motion.div>
         )}
     </motion.div>
@@ -132,7 +131,6 @@ interface SwissAgentSystemProps {
 export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
   const [activeStep, setActiveStep] = useState(0);
   
-  // 1. Access the Transition Context
   const { triggerTransition } = usePageTransition();
 
   useEffect(() => {
@@ -143,28 +141,24 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
   }, []);
 
   return (
-    // 2. INTERACTIVE CONTAINER
-    // We wrap the scaler in a motion.div that handles the layout and the click event.
     <motion.div 
         onClick={() => triggerTransition("https://anseru.ai")}
-        className="group relative mx-auto bg-neutral-950 border border-neutral-800 rounded-2xl cursor-pointer overflow-hidden transition-all duration-500 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-900/20"
+        className="group relative mx-auto cursor-pointer overflow-hidden transition-all duration-500 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-900/20"
         style={{ 
             width: BASE_WIDTH * scale, 
             height: BASE_HEIGHT * scale 
         }}
     >
-        {/* 3. CTA OVERLAY (Text) */}
-        {/* Positioned absolutely at the top to sit above the animation layer */}
+        {/* CTA OVERLAY */}
         <div className="absolute top-6 left-0 right-0 z-30 flex flex-col items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-800 group-hover:border-indigo-500/30 transition-colors duration-300">
+            <div className="flex items-center gap-2 px-4 py-2 bg-neutral-900/80 backdrop-blur-md border border-neutral-800 group-hover:border-indigo-500/30 transition-colors duration-300">
                 <span className="text-xs font-medium text-neutral-300">
-                    Check Out our first Product <span className="text-white font-bold">Anseru.ai</span>
+                    Our First <span className="text-white font-bold">B2B SAAS</span>
                 </span>
                 <ArrowUpRight size={14} className="text-indigo-400" />
             </div>
         </div>
 
-        {/* 4. SCALER: Internal coordinate system */}
         <div 
             style={{ 
                 width: BASE_WIDTH,
@@ -175,33 +169,10 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
             className="relative font-sans"
         >
       
-            {/* Connectors */}
             <FlowLine startY={TOP_Y + INPUT_HEIGHT} endY={MAIN_Y} />
             <FlowLine startY={MAIN_Y + MAIN_HEIGHT} endY={BOTTOM_Y} />
 
-            {/* --- TOP INPUTS --- */}
-            <motion.div
-                variants={fadeUp}
-                initial="hidden"
-                animate="show"
-                style={{ top: TOP_Y, height: INPUT_HEIGHT }}
-                className="absolute w-full z-10 flex justify-center gap-3"
-            >
-                {[
-                    { label: "DATA", icon: Database },
-                    { label: "WEB", icon: Globe },
-                    { label: "EVENTS", icon: Zap }
-                ].map((item) => (
-                     <div 
-                        key={item.label}
-                        className="bg-neutral-900 border border-neutral-800 rounded-full px-4 flex items-center gap-2 shadow-lg shadow-black/50 text-xs font-semibold text-neutral-400 tracking-wide"
-                     >
-                        <item.icon size={12} className="text-neutral-500" />
-                        {item.label}
-                     </div>
-                ))}
-            </motion.div>
-
+           
 
             {/* --- CENTER AGENT --- */}
             <motion.div
@@ -223,7 +194,8 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                             <Bot size={18} />
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold text-white leading-tight">
+                            {/* Updated: text-sm -> text-xs (12px) */}
+                            <h3 className="text-xs font-bold text-white leading-tight">
                                 AGENT CORE
                             </h3>
                             <p className="text-[10px] text-neutral-500 font-medium tracking-wide uppercase">
@@ -232,8 +204,8 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                         </div>
                     </div>
                     <div className="flex gap-1">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
+                        <div className="w-2 h-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                        <div className="w-2 h-2 bg-neutral-700" />
                     </div>
                 </div>
 
@@ -285,7 +257,7 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                 className="absolute w-full z-10 flex justify-center"
             >
                 <div className="bg-black text-white px-6 py-3 flex items-center gap-3 shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)]">
-                    <div className="p-1 bg-neutral-950/10 rounded-full">
+                    <div className="p-1 bg-neutral-950/10">
                         <CheckCircle2 size={14} className="text-emerald-600" />
                     </div>
                     <div className="flex flex-col">

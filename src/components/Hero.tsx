@@ -30,7 +30,7 @@ const FlickeringGrid = () => {
           backgroundPosition: "0 0", // Fixed alignment
           // Changed #000 to rgba(255, 255, 255, 0.1) for subtle light lines
           backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)",
+            "linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         }}
       />
@@ -106,7 +106,7 @@ export const Hero = () => {
 
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-20 bg-black">
+    <section className="relative min-h-screen w-full overflow-hidden isolate px-4 bg-black">
       
       <div
         className="absolute inset-0 z-0"
