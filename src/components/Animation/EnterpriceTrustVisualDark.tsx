@@ -8,10 +8,6 @@ import { Shield, Lock, Eye, FileCheck, UserCheck } from "lucide-react";
 const BASE_SIZE = 600;
 const CENTER = BASE_SIZE / 2;
 
-// Swiss Motion Ease
-const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
-
-// Layer Configuration
 const LAYERS = [
   { 
     id: "compliance",
@@ -292,7 +288,7 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
                                 className="flex flex-col items-center"
                             >
                                 <span 
-                                    className="text-[8px] font-bold tracking-widest uppercase truncate max-w-[80px]"
+                                    className="text-[8px] font-bold tracking-widest uppercase truncate max-w-20"
                                     style={{ color: LAYERS.find(l => l.id === hoveredId)?.color }}
                                 >
                                     ACTIVE
