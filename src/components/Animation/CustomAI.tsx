@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 // Import Lucide Icons for visual storytelling
 import { 
   Database, 
@@ -10,7 +10,6 @@ import {
   ListTodo, 
   Bot, 
   CheckCircle2,
-  ArrowDown
 } from "lucide-react";
 
 /* ------------------------------
@@ -161,7 +160,7 @@ export default function SwissAgentSystem() {
             { label: "DATA", icon: Database },
             { label: "WEB", icon: Globe },
             { label: "EVENTS", icon: Zap }
-        ].map((item, i) => (
+        ].map((item) => (
              <div 
                 key={item.label}
                 className="bg-white border border-neutral-200 rounded-full px-4 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide"

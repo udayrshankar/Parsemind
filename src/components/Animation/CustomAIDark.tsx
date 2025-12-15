@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { 
   Database, 
   Globe, 
@@ -12,10 +12,13 @@ import {
 } from "lucide-react";
 
 /* ------------------------------
-   CONSTANTS
+   CONSTANTS & DIMENSIONS
 -------------------------------- */
-const CONTAINER_HEIGHT = 640;
-const CONTAINER_WIDTH = 400; // Defined width for scaling calculations
+// The internal coordinate system is fixed. 
+// We scale the VIEW, not the math.
+const BASE_WIDTH = 400; 
+const BASE_HEIGHT = 640;
+
 const MAIN_WIDTH = 320; 
 const MAIN_HEIGHT = 380;
 const INPUT_HEIGHT = 48;
@@ -24,7 +27,7 @@ const GAP = 48;
 
 // Vertical Layout Calculations
 const TOTAL_STACK = INPUT_HEIGHT + GAP + MAIN_HEIGHT + GAP + OUTPUT_HEIGHT;
-const STACK_TOP = (CONTAINER_HEIGHT - TOTAL_STACK) / 2;
+const STACK_TOP = (BASE_HEIGHT - TOTAL_STACK) / 2;
 
 const TOP_Y = STACK_TOP;
 const MAIN_Y = TOP_Y + INPUT_HEIGHT + GAP;
@@ -45,21 +48,18 @@ const fadeUp = {
 };
 
 /* ------------------------------
-   COMPONENTS
+   SUB-COMPONENTS
 -------------------------------- */
 
-// 1. FLOWING DATA PARTICLES (Dark Theme Adapted)
 const FlowLine = ({ startY, endY }: { startY: number; endY: number }) => (
     <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-        {/* Base Line - Darker gray for dark mode */}
         <line 
             x1="50%" y1={startY} 
             x2="50%" y2={endY} 
             stroke="#262626" strokeWidth="1" strokeDasharray="4 4" 
         />
-        {/* Animated Particle - Bright cyan/white for visibility */}
         <motion.circle
-            r="3" fill="#6366f1" // Indigo-500
+            r="3" fill="#6366f1"
             initial={{ cy: startY, cx: "50%", opacity: 0 }}
             animate={{ cy: endY, opacity: [0, 1, 1, 0] }}
             transition={{
@@ -72,7 +72,6 @@ const FlowLine = ({ startY, endY }: { startY: number; endY: number }) => (
     </svg>
 );
 
-// 2. AGENT MODULE ROW (Dark Theme Adapted)
 const AgentModule = ({ 
     icon: Icon, 
     label, 
@@ -92,7 +91,6 @@ const AgentModule = ({
             }
         `}
     >
-        {/* Active Indicator Bar */}
         <motion.div 
             className="absolute left-0 top-3 bottom-3 w-0.5 bg-indigo-500 shadow-[0_0_10px_2px_rgba(99,102,241,0.5)]"
             initial={{ height: 0, opacity: 0 }}
@@ -112,7 +110,6 @@ const AgentModule = ({
             </span>
         </div>
 
-        {/* Processing Spinner (Only when active) */}
         {isActive && (
             <motion.div 
                 className="ml-auto"
@@ -126,7 +123,7 @@ const AgentModule = ({
 );
 
 /* ------------------------------
-   MAIN EXPORT
+   MAIN COMPONENT
 -------------------------------- */
 interface SwissAgentSystemProps {
     scale?: number;
@@ -135,7 +132,6 @@ interface SwissAgentSystemProps {
 export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
   const [activeStep, setActiveStep] = useState(0);
 
-  // Cycle through the steps to simulate processing
   useEffect(() => {
     const interval = setInterval(() => {
         setActiveStep((prev) => (prev + 1) % 4);
@@ -144,50 +140,43 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
   }, []);
 
   return (
-    // Outer container handles the DOM space based on scale
+    // 1. BOUNDING BOX: Reserves the correct physical space in the DOM
     <div 
         style={{ 
-            width: CONTAINER_WIDTH * scale, 
-            height: CONTAINER_HEIGHT * scale 
+            width: BASE_WIDTH * scale, 
+            height: BASE_HEIGHT * scale 
         }} 
-        className="relative flex justify-center overflow-hidden bg-neutral-950 rounded-xl" // Dark background added here
+        className="relative overflow-hiddenrounded-xl mx-auto"
     >
-        {/* Inner container handles the Visual scaling using transform */}
+        {/* 2. SCALER: Scales the content from the top-left corner */}
         <div 
             style={{ 
-                transform: `scale(${scale})`, 
-                transformOrigin: 'top center',
-                width: CONTAINER_WIDTH,
-                height: CONTAINER_HEIGHT
+                width: BASE_WIDTH,
+                height: BASE_HEIGHT,
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left', // CRITICAL for alignment
             }}
             className="relative font-sans"
         >
       
-            {/* --- BACKGROUND GRID (Subtle Dark Mode) --- */}
-            <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" 
-                style={{ 
-                    backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)', 
-                    backgroundSize: '20px 20px' 
-                }} 
-            />
-
-            {/* --- CONNECTORS --- */}
+            {/* Connectors */}
             <FlowLine startY={TOP_Y + INPUT_HEIGHT} endY={MAIN_Y} />
             <FlowLine startY={MAIN_Y + MAIN_HEIGHT} endY={BOTTOM_Y} />
 
-            {/* --- 1. INPUTS (TOP) --- */}
+            {/* --- TOP INPUTS --- */}
             <motion.div
                 variants={fadeUp}
                 initial="hidden"
                 animate="show"
                 style={{ top: TOP_Y, height: INPUT_HEIGHT }}
-                className="absolute z-10 flex gap-3 w-full justify-center"
+                // Flex centering ensures these stay middle regardless of absolute positioning quirks
+                className="absolute w-full z-10 flex justify-center gap-3"
             >
                 {[
                     { label: "DATA", icon: Database },
                     { label: "WEB", icon: Globe },
                     { label: "EVENTS", icon: Zap }
-                ].map((item, i) => (
+                ].map((item) => (
                      <div 
                         key={item.label}
                         className="bg-neutral-900 border border-neutral-800 rounded-full px-4 flex items-center gap-2 shadow-lg shadow-black/50 text-xs font-semibold text-neutral-400 tracking-wide"
@@ -199,18 +188,19 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
             </motion.div>
 
 
-            {/* --- 2. THE AGENT (CENTER) --- */}
+            {/* --- CENTER AGENT --- */}
             <motion.div
                 style={{ 
                     top: MAIN_Y, 
                     height: MAIN_HEIGHT,
                     width: MAIN_WIDTH,
-                    left: (CONTAINER_WIDTH - MAIN_WIDTH) / 2 // Centering manually since we are absolute
+                    // Robust centering: Start at 50% left, subtract 50% of own width
+                    left: "50%" 
                 }}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+                initial={{ y: 20, opacity: 0, x: "-50%" }}
+                animate={{ y: 0, opacity: 1, x: "-50%" }}
                 transition={{ duration: 0.8, ease: EASE_SWISS }}
-                className="absolute z-20 bg-neutral-900/80 backdrop-blur-xl border border-neutral-800 shadow-[0_0_50px_-15px_rgba(0,0,0,0.5)] flex flex-col"
+                className="absolute z-20 bg-neutral-900/90 backdrop-blur-xl border border-neutral-800 shadow-[0_0_50px_-15px_rgba(0,0,0,0.5)] flex flex-col"
             >
                 {/* Header */}
                 <div className="px-5 py-4 border-b border-neutral-800 flex items-center justify-between">
@@ -233,7 +223,7 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                     </div>
                 </div>
 
-                {/* Modules Stack */}
+                {/* Modules */}
                 <div className="flex-1 p-4 flex flex-col gap-2 justify-center">
                     <AgentModule 
                         icon={ListTodo} 
@@ -261,7 +251,7 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                     />
                 </div>
                 
-                {/* Footer decoration */}
+                {/* Loading Bar */}
                 <div className="h-1 w-full bg-neutral-800 overflow-hidden flex">
                      <motion.div 
                         className="h-full bg-indigo-500 shadow-[0_0_10px_2px_rgba(99,102,241,0.5)]" 
@@ -272,13 +262,13 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
             </motion.div>
 
 
-            {/* --- 3. OUTPUT (BOTTOM) --- */}
+            {/* --- BOTTOM OUTPUT --- */}
             <motion.div
                 variants={fadeUp}
                 initial="hidden"
                 animate="show"
                 style={{ top: BOTTOM_Y, height: OUTPUT_HEIGHT }}
-                className="absolute z-10 w-full flex justify-center"
+                className="absolute w-full z-10 flex justify-center"
             >
                 <div className="bg-neutral-100 text-neutral-900 px-6 py-3 flex items-center gap-3 shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)]">
                     <div className="p-1 bg-neutral-950/10 rounded-full">

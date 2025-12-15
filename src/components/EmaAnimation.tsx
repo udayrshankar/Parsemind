@@ -1,40 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Layers, Box, Search, Code, Rocket } from 'lucide-react';
+import { Layers, Box,  } from 'lucide-react';
 import AgentSystemVisual from './Animation/CustomAIDark';
 
-// --- Configuration ---
-
-// All steps now use the "ParseMind Orange" (#ffaa00)
-// using Tailwind's arbitrary value syntax: text-[#ffaa00]
-const STEPS = [
-  {
-    id: 'discover',
-    label: 'Discover',
-    title: 'Problem Discovery',
-    description: 'We analyze your current workflow bottlenecks.',
-    subtext: 'Identifying friction points...',
-    icon: Search,
-  },
-  {
-    id: 'develop',
-    label: 'Develop',
-    title: 'Solution Architecture',
-    description: 'Building custom agents to automate tasks.',
-    subtext: 'Writing robust integration code...',
-    icon: Code,
-  },
-  {
-    id: 'deploy',
-    label: 'Deploy',
-    title: 'Live Deployment',
-    description: 'Seamless integration into your ecosystem.',
-    subtext: 'Monitoring real-time performance...',
-    icon: Rocket,
-  }
-];
-
-// --- Sub-Components ---
 
 const FloatingNode = ({ children, className, delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) => {
   return (
@@ -55,16 +23,13 @@ const FloatingNode = ({ children, className, delay = 0 }: { children: React.Reac
 // --- Main Component ---
 
 const EmaAnimation = () => {
-  const [activeStepIndex, setActiveStepIndex] = useState(0);
-
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveStepIndex((prev) => (prev + 1) % STEPS.length);
+      // Step cycling logic removed as activeStepIndex is not used
     }, 4500);
     return () => clearInterval(interval);
   }, []);
 
-  const activeStep = STEPS[activeStepIndex];
 
   return (
     // Container

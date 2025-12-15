@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { Reveal } from './Reveal';
 import { SignalBackground } from './SignalBackground';
 import EmaAnimation from './EmaAnimation';
-import { User, BrainCircuit, DollarSign, Mail, Slack, MessagesSquare, Globe, Database, Webhook, FileText } from 'lucide-react';
 
 // --- Custom Hook for Typewriter Effect (No external dependency needed) ---
 const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) => {
@@ -45,22 +44,7 @@ const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) 
 
 export const Hero = () => {
   const typedText = useTypewriter("AI Agentic", 150, 2000);
-  const center = [
-    { id: '1', label: 'AI Agent', icon: <BrainCircuit /> },
-  { id: '2', label: 'Human Expert', icon: <User /> }
-  ];
-  const output = [
-    { id: '3', label: 'Increased ROI', icon: <DollarSign /> },
-  ]
-  const input = [
-  { id: "1", label: "", icon: <Mail /> },
-  { id: "2", label: "", icon: <Slack /> },
-  { id: "3", label: "", icon: <MessagesSquare /> },
-  { id: "4", label: "", icon: <Globe /> },
-  { id: "5", label: "", icon: <Database /> },
-  { id: "6", label: "", icon: <FileText /> },
-  { id: "7", label: "", icon: <Webhook /> },
-];
+
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-20 bg-black">

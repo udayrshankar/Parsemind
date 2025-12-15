@@ -88,7 +88,7 @@ const ExchangeAnimation: React.FC = () => {
       </FloatingNode>
 
       {/* Top Center: Logo */}
-      <FloatingNode className="top-32 left-[50%] -translate-x-1/2 !p-0 overflow-hidden w-16 h-16 bg-emerald-700 border-none shadow-lg" delay={0.5}>
+      <FloatingNode className="top-32 left-[50%] -translate-x-1/2 overflow-hidden w-16 h-16 bg-emerald-700 border-none shadow-lg" delay={0.5}>
         <div className="w-full h-full flex items-center justify-center">
            <div className="w-8 h-8 bg-white rounded-full opacity-90" />
         </div>

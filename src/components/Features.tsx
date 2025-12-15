@@ -2,21 +2,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
-import EmaAnimation from './EmaAnimation';
-import {
-  Mail,
-  Slack,
-  Database,
-  Bot,
-  BrainCircuit,
-  TrendingUp,
-  BarChart3,
-  Globe,
-  ShieldCheck,
-  Server,
-  DollarSign,
-  Users,
-} from "lucide-react";
 import AgentSystemVisual from './Animation/CustomAI';
 import FastResultsVisual from './Animation/FastResultsVisual';
 import IntegrationsVisual from './Animation/IntegrationVisual';

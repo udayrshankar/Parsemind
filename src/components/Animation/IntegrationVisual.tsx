@@ -1,12 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState } from "react";
+import { useState } from "react";
 // 1. Import Lucide Icons
 import { 
   Database, 
   Terminal, 
   Cloud, 
   Sparkles, 
-  MessageSquare,
   Slack 
 } from "lucide-react";
 
@@ -167,7 +166,7 @@ export default function SwissIntegrationsLucide() {
             transition={TRANSITION}
         >
             <motion.div 
-               className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500 via-neutral-900 to-neutral-900"
+               className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-500 via-neutral-900 to-neutral-900"
                animate={{ opacity: activeId ? 0.8 : 0.4 }}
             />
 
@@ -211,7 +210,7 @@ export default function SwissIntegrationsLucide() {
       </div>
 
       {/* 4. SATELLITE CARDS */}
-      {ITEMS.map((item, i) => {
+      {ITEMS.map((item) => {
         const pos = polarToCartesian(item.angle, RADIUS);
         const isActive = activeId === item.id;
         const isDimmed = activeId && !isActive;
