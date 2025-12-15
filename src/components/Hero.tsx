@@ -60,18 +60,18 @@ export const Hero = () => {
       />
 
       {/* 3. Content Layer */}
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center mt-25">
+    <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center mt-23">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-12 md:items-center">
           
           {/* Left: Text content */}
-          <div className="md:col-span-7 pt-16 md:pt-0">
+          <div className="md:col-span-7 pt-16 -translate-y-20">
             <Reveal delay={0.1}>
               {/* H1 Main Headline - Font: Fraunces */}
               <h1 
-                className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-4"
+                className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-10"
                 style={{ fontFamily: '"Fraunces", serif' }}
               >
-                We engineer intelligent <br />
+                We Engineer Intelligent <br />
                 <span className='text-[#ffaa00] inline-block min-w-[280px]'>
                   {typedText}
                   <span className="animate-pulse text-white">|</span>
@@ -92,7 +92,7 @@ export const Hero = () => {
               >
                 <p>
                   We don’t just build AI bots or prototypes. 
-                  <span className="text-gray-200 font-medium"> ParseMind</span> designs and deploys fully managed, secure agentic AI systems that operate reliably across enterprise environments.
+                  <span className="text-gray-200 font-medium"> ParseMind</span> designs and deploys fully managed, secure agentic AI systems that operate.
                 </p>
                 
                 

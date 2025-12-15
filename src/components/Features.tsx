@@ -1,14 +1,77 @@
-// src/components/Features.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
+// Added AI-specific icons
+
+
 import AgentSystemVisual from './Animation/CustomAI';
 import FastResultsVisual from './Animation/FastResultsVisual';
 import IntegrationsVisual from './Animation/IntegrationVisual';
 import EnterpriseTrustVisual from './Animation/EnterpriceTrustVisual';
 
+/* ------------------------------
+   1. FLOATING PARTICLES (Top Layer)
+-------------------------------- */
 
-// --- Feature Data with 3 Images Each ---
+
+/* ------------------------------
+   2. FLICKERING GRID (Background Layer)
+-------------------------------- */
+const FlickeringGrid = () => {
+  const [squares, setSquares] = useState<{ id: number; r: number; c: number; delay: number }[]>([]);
+
+  useEffect(() => {
+    // Generate ~25 random "active" cells
+    const count = 25; 
+    const newSquares = Array.from({ length: count }).map((_, i) => ({
+      id: i,
+      r: Math.floor(Math.random() * 20), // Row index (assuming max ~20 rows)
+      c: Math.floor(Math.random() * 20), // Col index
+      delay: Math.random() * 5,
+    }));
+    setSquares(newSquares);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0">
+      {/* A. The Static Lines */}
+      <div 
+        className="absolute inset-0 opacity-[0.08]" 
+        style={{
+            backgroundPosition: "0 0", // Fixed alignment
+            backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
+            backgroundSize: "40px 40px"
+        }}
+      />
+
+      {/* B. The Flickering Cells */}
+      {squares.map((sq) => (
+        <motion.div
+          key={sq.id}
+          className="absolute bg-indigo-500/5 border border-indigo-500/10"
+          style={{
+            width: 40,
+            height: 40,
+            top: sq.r * 40, // Snap to grid row
+            left: sq.c * 40, // Snap to grid col
+          }}
+          animate={{
+            opacity: [0, 1, 0], // Flash on and off
+            scale: [0.9, 1, 0.9],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 4, // Random pulse speed
+            repeat: Infinity,
+            delay: sq.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// --- Feature Data ---
 const features = [
   {
     id: 0,
@@ -17,7 +80,6 @@ const features = [
       "We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.",
     animation: <AgentSystemVisual/>
   },
-
   {
     id: 1,
     title: "Achieve Fast Results",
@@ -25,7 +87,6 @@ const features = [
       "Track ROI and efficiency gains with custom dashboards designed to visualize your AI impact in real-time.",
     animation: <FastResultsVisual/>
   },
-
   {
     id: 2,
     title: "Integrate With Tools You Use",
@@ -33,7 +94,6 @@ const features = [
       "Seamlessly connect our agents with your existing stack—Slack, Salesforce, HubSpot, and proprietary databases.",
     animation: <IntegrationsVisual/>
   },
-
   {
     id: 3,
     title: "Trusted, Enterprise-Ready AI",
@@ -61,7 +121,7 @@ export const Features = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
           {/* --- Left Column: Interactive List --- */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 relative z-10">
             {features.map((feature, index) => {
               const isActive = activeIndex === index;
 
@@ -74,16 +134,15 @@ export const Features = () => {
                       relative p-6 md:p-8 cursor-pointer transition-all duration-500 ease-out border
                       ${
                         isActive
-                          ? 'bg-blackZS border-black shadow-2xl scale-[1.02]'
+                          ? 'bg-black border-black shadow-2xl scale-[1.02]'
                           : 'bg-bg-card border-transparent hover:bg-gray-50 hover:border-gray-100'
                       }
                     `}
                   >
-                    {/* Active State Background (Optional fix for bg-blackZS typo if needed, assuming bg-black) */}
+                    {/* Active State Background */}
                     {isActive && <div className="absolute inset-0 bg-black -z-10" />}
 
                     <div className="flex gap-6 items-start relative z-10">
-                      {/* Numbered Circle Indicator */}
                       <div
                         className={`
                           w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-colors duration-500 font-inter font-medium
@@ -123,28 +182,28 @@ export const Features = () => {
             })}
           </div>
 
-          
-          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative">
-            <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-             backgroundPosition: "center center",
-             backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
-             backgroundSize: "40px 40px"
-        }}
-      />
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.4, ease: 'circOut' }}
-                className="absolute inset-0 w-full h-full"
-              >
-                {features[activeIndex].animation}
-              </motion.div>
-            </AnimatePresence>
+          {/* --- Right Column: Visuals --- */}
+          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative rounded-2xl border border-gray-100 bg-white/50 backdrop-blur-sm">
+            
+            {/* 1. The Active Grid Background */}
+            <FlickeringGrid />
+
+
+            {/* 3. Main Animation Content */}
+            <div className="relative z-30 w-full h-full">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.4, ease: 'circOut' }}
+                  className="absolute inset-0 w-full h-full flex items-center justify-center"
+                >
+                  {features[activeIndex].animation}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
         </div>

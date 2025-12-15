@@ -200,8 +200,8 @@ export default function SwissAgentSystem() {
                 </div>
             </div>
             <div className="flex gap-1">
-                <div className="w-2 h-2 bg-green-500" />
-                <div className="w-2 h-2 bg-neutral-200" />
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+                <div className="w-2 h-2 rounded-full bg-neutral-200" />
             </div>
         </div>
 

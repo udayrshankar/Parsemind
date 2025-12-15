@@ -218,8 +218,8 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                         </div>
                     </div>
                     <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                        <div className="w-2 h-2 bg-neutral-700" />
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
                     </div>
                 </div>
 
@@ -270,7 +270,7 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                 style={{ top: BOTTOM_Y, height: OUTPUT_HEIGHT }}
                 className="absolute w-full z-10 flex justify-center"
             >
-                <div className="bg-neutral-100 text-neutral-900 px-6 py-3 flex items-center gap-3 shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)]">
+                <div className="bg-black text-white px-6 py-3 flex items-center gap-3 shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)]">
                     <div className="p-1 bg-neutral-950/10 rounded-full">
                         <CheckCircle2 size={14} className="text-emerald-600" />
                     </div>

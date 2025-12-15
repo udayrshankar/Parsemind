@@ -1,259 +1,306 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-// 1. Import Lucide Icons
+import { useState, useEffect } from "react";
 import { 
   Database, 
-  Terminal, 
   Cloud, 
-  Sparkles, 
-  Slack 
+  Slack,
+  Github,
+  Workflow,
+  Radio
 } from "lucide-react";
 
 /* ------------------------------
-   CONSTANTS
+   CONSTANTS & MATH
 -------------------------------- */
 const SIZE = 640;
 const CENTER = SIZE / 2;
-const RADIUS = 200; 
-const CARD_SIZE = 100;
+const RADIUS = 220; 
+const CARD_WIDTH = 150;
+const CARD_HEIGHT = 110;
 
-const TRANSITION = { 
-  duration: 0.4, 
-  ease: [0.25, 1, 0.5, 1] as const 
-};
+// The "Swiss" ease from CustomAI for consistency
+const EASE_SWISS = { ease: [0.25, 1, 0.5, 1] as const };
 
-/* ------------------------------
-   MATH UTILS
--------------------------------- */
-const polarToCartesian = (angleDeg: number, radius: number) => {
-  const angleRad = (angleDeg - 90) * (Math.PI / 180);
-  return {
-    x: CENTER + radius * Math.cos(angleRad),
-    y: CENTER + radius * Math.sin(angleRad),
-  };
-};
-
-/* ------------------------------
-   DATA MAPPING
--------------------------------- */
 const ITEMS = [
   { 
     id: "slack", 
-    label: "SLACK", 
-    angle: 0, 
-    // Lucide Icon Component
+    label: "MESSAGING", 
+    subLabel: "Slack / Teams",
+    angle: 315, 
     icon: Slack, 
-    status: "LISTENING" 
+    color: "#E01E5A" 
   },
   { 
     id: "db", 
-    label: "DATABASE", 
-    angle: 90, 
+    label: "KNOWLEDGE", 
+    subLabel: "Postgres / Vector",
+    angle: 45, 
     icon: Database, 
-    status: "INDEXING" 
-  },
-  { 
-    id: "tools", 
-    label: "INTERNAL TOOLS", 
-    angle: 180, 
-    icon: Terminal, 
-    status: "EXECUTING" 
+    color: "#336791" 
   },
   { 
     id: "crm", 
     label: "CRM SYNC", 
-    angle: 270, 
+    subLabel: "Salesforce / Hubspot",
+    angle: 135, 
     icon: Cloud, 
-    status: "UPDATING" 
+    color: "#00A1E0" 
+  },
+  { 
+    id: "git", 
+    label: "CI/CD", 
+    subLabel: "Github Actions",
+    angle: 225, 
+    icon: Github, 
+    color: "#181717" 
   },
 ];
 
+// Helper: Convert Polar (angle, radius) to Cartesian (x, y)
+const toCartesian = (angle: number, r: number) => {
+  const rad = (angle - 90) * (Math.PI / 180);
+  return {
+    x: CENTER + r * Math.cos(rad),
+    y: CENTER + r * Math.sin(rad),
+  };
+};
+
 /* ------------------------------
-   CONNECTION COMPONENT
+   SUB-COMPONENTS
 -------------------------------- */
-const Connection = ({ 
-    angle, 
-    isActive 
+
+// 1. The Data Beam (Radial Vector)
+const DataBeam = ({ 
+  angle, 
+  isActive, 
+  color 
 }: { 
-    angle: number; 
-    isActive: boolean; 
+  angle: number; 
+  isActive: boolean; 
+  color: string 
 }) => {
-  const end = polarToCartesian(angle, RADIUS - CARD_SIZE / 2 - 10);
-  
+  // Calculate start (Core edge) and end (Card edge)
+  // Core radius ~40px, Card distance ~RADIUS minus visual padding
+  const start = toCartesian(angle, 40); 
+  const end = toCartesian(angle, RADIUS - 65); 
+
   return (
     <g>
+      {/* Passive Base Line */}
       <line
-        x1={CENTER}
-        y1={CENTER}
-        x2={end.x}
-        y2={end.y}
+        x1={start.x} y1={start.y}
+        x2={end.x} y2={end.y}
         stroke="#E5E5E5"
         strokeWidth="1"
         strokeDasharray="4 4"
       />
+      
+      {/* Active Pulse Line */}
       <motion.line
-        x1={CENTER}
-        y1={CENTER}
-        x2={end.x}
-        y2={end.y}
-        stroke="#2563eb"
-        strokeWidth="1.5"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: isActive ? 1 : 0 }}
-        transition={TRANSITION}
+        x1={start.x} y1={start.y}
+        x2={end.x} y2={end.y}
+        stroke={color}
+        strokeWidth="2"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ 
+            pathLength: isActive ? 1 : 0, 
+            opacity: isActive ? 1 : 0 
+        }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
         strokeLinecap="round"
       />
-      <motion.circle
-        r="3"
-        fill={isActive ? "#2563eb" : "#a3a3a3"}
-        animate={isActive ? {
-            cx: [CENTER, end.x],
-            cy: [CENTER, end.y],
-            opacity: [0, 1, 0],
-            scale: [0.5, 1, 0.5]
-        } : {
-            cx: [CENTER, end.x],
-            cy: [CENTER, end.y],
-            opacity: [0, 0.4, 0],
-        }}
-        transition={{
-          duration: isActive ? 1 : 3,
-          repeat: Infinity,
-          ease: "linear",
-          delay: Math.random()
-        }}
-      />
+
+      {/* Data Packet Particle (Ingress/Egress) */}
+      {isActive && (
+        <motion.circle
+            r="3"
+            fill={color}
+            initial={{ cx: start.x, cy: start.y }}
+            animate={{ 
+                cx: [start.x, end.x],
+                cy: [start.y, end.y],
+                opacity: [0, 1, 0]
+            }}
+            transition={{
+                duration: 1.2,
+                repeat: Infinity,
+                ease: "linear",
+                repeatDelay: 0.1
+            }}
+        />
+      )}
     </g>
   );
 };
 
-/* ------------------------------
-   MAIN COMPONENT
--------------------------------- */
-export default function SwissIntegrationsLucide() {
-  const [activeId, setActiveId] = useState<string | null>(null);
+// 2. The Integration Node
+const IntegrationCard = ({ 
+    item, 
+    isActive, 
+    onHover 
+}: { 
+    item: typeof ITEMS[0]; 
+    isActive: boolean;
+    onHover: (id: string | null) => void;
+}) => {
+  const pos = toCartesian(item.angle, RADIUS);
+  const Icon = item.icon;
 
   return (
-    <div className="relative w-full h-[640px] bg-white flex items-center justify-center font-sans overflow-hidden">
- 
+    <motion.div
+        className="absolute flex items-center justify-center cursor-pointer z-20"
+        style={{
+            left: pos.x - CARD_WIDTH / 2,
+            top: pos.y - CARD_HEIGHT / 2,
+            width: CARD_WIDTH,
+            height: CARD_HEIGHT,
+        }}
+        onMouseEnter={() => onHover(item.id)}
+        onMouseLeave={() => onHover(null)}
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+    >
+        <motion.div
+            className={`
+                w-full h-full rounded-xl border flex flex-col items-center justify-center gap-2 p-3 text-center
+                backdrop-blur-md transition-all duration-500
+                ${isActive 
+                    ? 'bg-white/90 shadow-xl shadow-indigo-500/5' 
+                    : 'bg-white/40 border-neutral-200 shadow-sm hover:border-neutral-300'
+                }
+            `}
+            animate={{
+                borderColor: isActive ? item.color : "rgba(229, 229, 229, 1)", 
+                y: isActive ? -4 : 0
+            }}
+        >
+            <div 
+                className={`p-2.5 rounded-lg transition-colors duration-500 ${isActive ? 'text-white' : 'text-neutral-400 bg-neutral-100'}`}
+                style={{ backgroundColor: isActive ? item.color : undefined }}
+            >
+                <Icon size={20} strokeWidth={1.5} />
+            </div>
+            
+            <div>
+                <span className={`block text-[10px] font-bold tracking-widest uppercase ${isActive ? 'text-neutral-900' : 'text-neutral-500'}`}>
+                    {item.label}
+                </span>
+                <span className="block text-[9px] text-neutral-400 font-medium mt-0.5">
+                    {item.subLabel}
+                </span>
+            </div>
 
-      {/* 2. SVG LAYER */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none">
+            {/* Live Indicator */}
+            <div className={`absolute top-2 right-2 w-1.5 h-1.5 rounded-full transition-colors duration-300 ${isActive ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-neutral-200'}`} />
+        </motion.div>
+    </motion.div>
+  );
+};
+
+/* ------------------------------
+   MAIN EXPORT
+-------------------------------- */
+export default function IntegrationVisual() {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [autoCycle, setAutoCycle] = useState(true);
+
+  // Autonomous Behavior: Cycle through integrations if user isn't interacting
+  useEffect(() => {
+    if (!autoCycle) return;
+    const interval = setInterval(() => {
+        setActiveId(prev => {
+            const currentIndex = ITEMS.findIndex(i => i.id === prev);
+            const nextIndex = (currentIndex + 1) % ITEMS.length;
+            return ITEMS[nextIndex].id;
+        });
+    }, 2000); // 2-second heartbeat
+    return () => clearInterval(interval);
+  }, [autoCycle]);
+
+  // User Override: Pause automation on hover
+  const handleHover = (id: string | null) => {
+    if (id) {
+        setAutoCycle(false);
+        setActiveId(id);
+    } else {
+        setAutoCycle(true);
+    }
+  };
+
+  return (
+    <div className="relative w-full h-[640px] flex items-center justify-center font-sans overflow-hidden bg-white/50">
+      
+      {/* 1. Background Grid & Ambient Noise */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+             backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
+             backgroundSize: "40px 40px"
+        }}
+      />
+
+      {/* 2. Connection Layer (SVG) */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
         <circle 
-            cx={CENTER} 
-            cy={CENTER} 
-            r={RADIUS} 
-            fill="none" 
-            stroke="#f5f5f5" 
-            strokeWidth="1" 
+            cx={CENTER} cy={CENTER} r={RADIUS} 
+            fill="none" stroke="#F5F5F5" strokeWidth="1" 
         />
         {ITEMS.map((item) => (
-          <Connection 
-            key={item.id} 
+          <DataBeam 
+            key={item.id}
             angle={item.angle} 
             isActive={activeId === item.id} 
+            color={item.color}
           />
         ))}
       </svg>
 
-      {/* 3. CENTER CORE (AI AGENT) */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+      {/* 3. The Orchestration Core (Agent) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
         <motion.div
-            className="w-32 h-32 bg-neutral-900 rounded-full border-4 border-white shadow-2xl flex flex-col items-center justify-center relative overflow-hidden"
-            animate={{
-                scale: activeId ? 1.05 : 1,
-            }}
-            transition={TRANSITION}
+            className="w-24 h-24 bg-neutral-900 rounded-full border-4 border-white shadow-2xl flex items-center justify-center relative overflow-hidden"
+            animate={{ scale: activeId ? 1.05 : 1 }}
+            transition={EASE_SWISS}
         >
-            <motion.div 
-               className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-500 via-neutral-900 to-neutral-900"
-               animate={{ opacity: activeId ? 0.8 : 0.4 }}
-            />
-
-            <div className="relative z-10 flex flex-col items-center gap-1">
-                <div className="text-white mb-1">
-                     {/* Lucide Sparkles for AI */}
-                     <Sparkles size={24} strokeWidth={1.5} />
-                </div>
-                
-                <div className="flex flex-col items-center h-6">
-                    <AnimatePresence mode="wait">
-                        {activeId ? (
-                             <motion.div
-                                key="active"
-                                initial={{ y: 5, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                exit={{ y: -5, opacity: 0 }}
-                                className="flex flex-col items-center"
-                            >
-                                <span className="text-[9px] font-bold tracking-widest text-indigo-300 uppercase">
-                                    {ITEMS.find(i => i.id === activeId)?.status}
-                                </span>
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key="idle"
-                                initial={{ y: 5, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                exit={{ y: -5, opacity: 0 }}
-                                className="flex flex-col items-center"
-                            >
-                                <span className="text-[9px] font-bold tracking-widest text-neutral-400 uppercase">
-                                    AI AGENT
-                                </span>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
+            <div className="relative z-10 text-white">
+                <Workflow size={32} strokeWidth={1.5} />
             </div>
+            
+            {/* Inner Processing Pulse */}
+            <motion.div 
+               className="absolute inset-0 bg-indigo-500/30 blur-xl"
+               animate={{ opacity: [0.3, 0.6, 0.3] }}
+               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
         </motion.div>
+
+        {/* Outer Ripple Ring */}
+        <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-indigo-500/20 rounded-full -z-10"
+            animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+        />
+        
+        {/* Core Label */}
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-white border border-neutral-200 rounded-full shadow-sm">
+                <Radio size={10} className="text-indigo-600 animate-pulse" />
+                <span className="text-[9px] font-bold tracking-widest text-neutral-600">
+                    AI Agent
+                </span>
+            </div>
+        </div>
       </div>
 
-      {/* 4. SATELLITE CARDS */}
-      {ITEMS.map((item) => {
-        const pos = polarToCartesian(item.angle, RADIUS);
-        const isActive = activeId === item.id;
-        const isDimmed = activeId && !isActive;
-        const Icon = item.icon; // Get the Lucide component
-
-        return (
-          <motion.div
-            key={item.id}
-            className="absolute flex items-center justify-center cursor-pointer"
-            style={{
-                top: 0, left: 0,
-                width: CARD_SIZE, height: CARD_SIZE,
-                x: pos.x - CARD_SIZE / 2,
-                y: pos.y - CARD_SIZE / 2,
-            }}
-            onMouseEnter={() => setActiveId(item.id)}
-            onMouseLeave={() => setActiveId(null)}
-            animate={{
-                opacity: isDimmed ? 0.5 : 1,
-                scale: isActive ? 1.1 : 1,
-            }}
-            transition={TRANSITION}
-          >
-            <motion.div 
-                className="w-full h-full bg-white rounded-2xl border border-neutral-100 flex flex-col items-center justify-center gap-3 relative overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
-                animate={{
-                    borderColor: isActive ? "rgba(37, 99, 235, 1)" : "rgba(229, 229, 229, 1)"
-                }}
-            >
-                <div className={`absolute top-3 right-3 w-1.5 h-1.5 rounded-full ${isActive ? 'bg-blue-600' : 'bg-neutral-200'}`} />
-
-                <div className={`${isActive ? 'text-blue-600' : 'text-neutral-800'} transition-colors duration-300`}>
-                    {/* Render Lucide Icon with consistent stroke width */}
-                    <Icon size={24} strokeWidth={1.5} />
-                </div>
-                
-                <span className={`text-[10px] font-bold tracking-wider ${isActive ? 'text-blue-600' : 'text-neutral-500'} transition-colors duration-300`}>
-                    {item.label}
-                </span>
-            </motion.div>
-          </motion.div>
-        );
-      })}
+      {/* 4. Satellite Nodes */}
+      {ITEMS.map((item) => (
+        <IntegrationCard 
+            key={item.id} 
+            item={item} 
+            isActive={activeId === item.id} 
+            onHover={handleHover}
+        />
+      ))}
 
     </div>
   );

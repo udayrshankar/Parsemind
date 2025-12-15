@@ -1,250 +1,236 @@
-import { 
-  motion, 
-  type Variants, 
-  type TargetAndTransition 
-} from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   Database, 
   BrainCircuit, 
   LineChart, 
-  LayoutDashboard,
-  ArrowDown,
-  TrendingUp,
-  ArrowRight
+  LayoutDashboard, 
+  ArrowDown, 
+  TrendingUp, 
+  Timer
 } from "lucide-react";
 
 /* ------------------------------
-   TYPES & CONFIG
+   CONSTANTS & CONFIG
 -------------------------------- */
+const CARD_WIDTH = 280;
+const DASHBOARD_WIDTH = 340; // Wider to accommodate metrics
+const DELAY_STEP = 0.5; // Seconds between each step
+
+// The "Swiss" ease: Sharp start, smooth end
 const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
 
 /* ------------------------------
    VARIANTS
 -------------------------------- */
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
+const itemVariants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 1.15, // Start slightly larger
+    y: 20,       // Start slightly lower
+    filter: "blur(10px)"
   },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
+  visible: (i: number) => ({
     opacity: 1,
+    scale: 1,
     y: 0,
-    transition: { duration: 0.8, ease: EASE_SWISS },
-  },
+    filter: "blur(0px)",
+    transition: {
+      delay: i * DELAY_STEP,
+      duration: 0.8,
+      ease: EASE_SWISS
+    }
+  })
 };
 
-const float = (delay = 0): TargetAndTransition => ({
-  y: [0, -4, 0],
-  transition: {
-    duration: 6,
-    repeat: Infinity,
-    delay,
-    ease: "easeInOut",
-  },
-});
+const arrowVariants = {
+  hidden: { opacity: 0, height: 0 },
+  visible: (i: number) => ({
+    opacity: 1, 
+    height: "auto",
+    transition: {
+      delay: (i * DELAY_STEP) - 0.2, // Appear slightly before the next card
+      duration: 0.4
+    }
+  })
+};
 
 /* ------------------------------
-   COMPONENTS
+   SUB-COMPONENTS
 -------------------------------- */
 
-const MetricItem = ({ 
-    value, 
-    label, 
-    trend,
-    delay 
+// 1. Standard Pipeline Step
+const PipelineStep = ({ 
+  icon: Icon, 
+  label, 
+  subLabel,
+  index 
 }: { 
-    value: string; 
-    label: string; 
-    trend?: string;
-    delay: number;
+  icon: any, 
+  label: string, 
+  subLabel: string, 
+  index: number 
 }) => (
-  <motion.div variants={itemVariants} className="flex flex-col group cursor-default">
-    {/* Animated Number */}
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, ease: EASE_SWISS, delay }}
-      className="relative"
-    >
-        <span className="text-7xl font-bold text-neutral-900 tracking-tighter leading-none">
-            {value}
-        </span>
-        {/* Decorative Trend Badge */}
-        {trend && (
-            <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: delay + 0.5 }}
-                className="absolute -top-4 -right-12 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1"
-            >
-                <TrendingUp size={12} />
-                {trend}
-            </motion.div>
-        )}
-    </motion.div>
-
-    {/* Label */}
-    <div className="flex items-center gap-3 mt-4">
-        <div className="h-px w-8 bg-neutral-300" />
-        <span className="text-xs font-bold text-neutral-500 tracking-[0.2em] uppercase">
-            {label}
-        </span>
+  <motion.div
+    custom={index}
+    variants={itemVariants}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-50px" }}
+    className="relative z-10 bg-white border border-neutral-200 rounded-xl p-4 flex items-center gap-4 shadow-sm w-full"
+    style={{ maxWidth: CARD_WIDTH }}
+  >
+    <div className="w-10 h-10 bg-neutral-50 rounded-lg flex items-center justify-center text-neutral-500 border border-neutral-100">
+      <Icon size={18} strokeWidth={1.5} />
+    </div>
+    <div className="flex flex-col">
+      <span className="text-xs font-bold text-neutral-900 tracking-wide uppercase">
+        {label}
+      </span>
+      <span className="text-[10px] text-neutral-500 font-medium">
+        {subLabel}
+      </span>
     </div>
   </motion.div>
 );
 
-
-const PipelineCard = ({ 
-  icon: Icon, 
-  label, 
-  sublabel, 
-  isLast = false 
-}: { 
-  icon: any; 
-  label: string; 
-  sublabel?: string; 
-  isLast?: boolean; 
-}) => (
-  <motion.div
-    variants={itemVariants}
-    className="relative z-10 flex justify-center w-full"
+// 2. The Connecting Arrow
+const Connector = ({ index }: { index: number }) => (
+  <motion.div 
+    custom={index}
+    variants={arrowVariants}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    className="flex justify-center py-2 text-neutral-300"
   >
-    <motion.div
-      animate={float(0.5)} 
-      className={`
-        relative w-[280px] flex items-center px-5 py-4 gap-4 rounded-xl transition-all duration-300 group
-        ${isLast 
-            ? 'bg-neutral-900 border border-neutral-900 shadow-xl shadow-neutral-900/20' 
-            : 'bg-white border border-neutral-200 shadow-sm hover:border-indigo-200 hover:shadow-md'
-        }
-      `}
-    >
-      {/* Icon Box */}
-      <div className={`
-        p-2.5 rounded-lg flex items-center justify-center transition-colors
-        ${isLast ? 'bg-indigo-600 text-white' : 'bg-neutral-100 text-neutral-500 group-hover:bg-indigo-50 group-hover:text-indigo-600'}
-      `}>
-        <Icon size={isLast ? 20 : 18} strokeWidth={1.5} />
-      </div>
-
-      {/* Text Content */}
-      <div className="flex flex-col">
-        <span className={`text-sm font-bold tracking-wide ${isLast ? 'text-white' : 'text-neutral-900'}`}>
-          {label}
-        </span>
-        {sublabel && (
-          <span className={`text-[10px] font-medium mt-0.5 ${isLast ? 'text-neutral-400' : 'text-neutral-500'}`}>
-            {sublabel}
-          </span>
-        )}
-      </div>
-
-      {/* Active Pulse Dot (Only on hover/active) */}
-      {!isLast && (
-          <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      )}
-    </motion.div>
+    <ArrowDown size={16} strokeWidth={1.5} color="blue"/>
   </motion.div>
 );
 
+// 3. The Sophisticated Dashboard (Final Step)
+const RoiDashboard = ({ index }: { index: number }) => (
+  <motion.div
+    custom={index}
+    variants={itemVariants}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    className="relative z-20 bg-white border border-neutral-200 rounded-xl shadow-2xl overflow-hidden"
+    style={{ width: DASHBOARD_WIDTH }}
+  >
+    {/* Dashboard Header */}
+    <div className="bg-neutral-50 px-5 py-3 border-b border-neutral-100 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <LayoutDashboard size={14} className="text-indigo-600" />
+        <span className="text-[10px] font-bold text-neutral-700 uppercase tracking-widest">
+          Live ROI Dashboard
+        </span>
+      </div>
+      <div className="flex gap-1.5">
+        <div className="w-2 h-2 rounded-full bg-red-400/20 border border-red-400" />
+        <div className="w-2 h-2 rounded-full bg-yellow-400/20 border border-yellow-400" />
+        <div className="w-2 h-2 rounded-full bg-green-400/20 border border-green-400" />
+      </div>
+    </div>
+
+    {/* Dashboard Body - The Metrics */}
+    <div className="p-6 grid grid-cols-2 gap-6 bg-white/50 backdrop-blur-sm">
+      
+      {/* Metric A */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-1.5 mb-1">
+          <TrendingUp size={12} className="text-neutral-400" />
+          <span className="text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">
+            Efficiency
+          </span>
+        </div>
+        <span className="text-4xl font-bold text-neutral-900 tracking-tighter">
+          32%
+        </span>
+        <div className="flex items-center gap-1 text-[9px] font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full w-fit mt-1">
+          <span>+12.5%</span>
+          <span>vs last mo</span>
+        </div>
+      </div>
+
+      {/* Metric B (Separator Line) */}
+      <div className="flex flex-col gap-1 border-l border-neutral-100 pl-6">
+        <div className="flex items-center gap-1.5 mb-1">
+          <Timer size={12} className="text-neutral-400" />
+          <span className="text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">
+            Manual Work
+          </span>
+        </div>
+        <span className="text-4xl font-bold text-neutral-900 tracking-tighter">
+          -41%
+        </span>
+        <div className="flex items-center gap-1 text-[9px] font-medium text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-full w-fit mt-1">
+          <span>Saved 120hrs</span>
+        </div>
+      </div>
+
+    </div>
+
+    {/* Dashboard Footer / Graph Placeholder */}
+    <div className="h-12 bg-neutral-50/50 border-t border-neutral-100 relative flex items-end px-6 pb-0 gap-1 overflow-hidden">
+       {[40, 60, 45, 70, 50, 80, 65, 90, 75, 100].map((h, i) => (
+          <motion.div 
+            key={i}
+            className="flex-1 bg-indigo-100 rounded-t-sm"
+            initial={{ height: 0 }}
+            whileInView={{ height: `${h}%` }}
+            transition={{ delay: 1 + (i * 0.05), duration: 0.5 }}
+          />
+       ))}
+    </div>
+  </motion.div>
+);
 
 /* ------------------------------
    MAIN COMPONENT
 -------------------------------- */
-export default function SwissResultsVisual() {
+export default function FastResultsVisual() {
   return (
-    <div className="relative w-full h-[640px] overflow-hidden flex font-sans antialiased">
+    <div className="relative w-full h-[640px] flex flex-col items-center justify-center font-sans overflow-hidden">
       
-     
+      {/* Background decoration line */}
+      <div className="absolute inset-0 flex justify-center pointer-events-none">
+        <div className="w-px h-full bg-linear-to-b from-transparent via-neutral-200 to-transparent" />
+      </div>
 
-      <motion.div
-        className="w-full h-full max-w-5xl mx-auto flex items-center justify-between px-16"
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-      >
-        {/* LEFT: METRICS */}
-        <div className="flex flex-col gap-16 z-10">
-          <MetricItem 
-            value="32%" 
-            label="Efficiency Gain" 
-            trend="MONTHLY"
-            delay={0} 
-          />
-          <MetricItem 
-            value="41%" 
-            label="Manual Work" 
-            trend="REDUCED"
-            delay={0.2} 
-          />
-        </div>
+      {/* 1. Raw Activity */}
+      <PipelineStep 
+        index={0}
+        icon={Database}
+        label="Raw Activity"
+        subLabel="Ingesting unstructured events"
+      />
 
-        {/* CENTER: ARROW */}
-        <div className="text-neutral-200">
-            <ArrowRight size={48} strokeWidth={1} />
-        </div>
+      <Connector index={1} />
 
-        {/* RIGHT: PIPELINE */}
-        <div className="relative flex flex-col items-center py-10 h-full justify-center">
+      {/* 2. Agent Decisions */}
+      <PipelineStep 
+        index={1}
+        icon={BrainCircuit}
+        label="Agent Decisions"
+        subLabel="Chain-of-thought processing"
+      />
 
-          {/* Vertical Connecting Line */}
-          <div className="absolute top-[15%] bottom-[15%] left-1/2 -translate-x-1/2 w-px bg-neutral-200">
-              <motion.div 
-                 className="absolute top-0 left-0 w-full bg-indigo-500 h-[20%]"
-                 animate={{ top: ["0%", "100%"], opacity: [0, 1, 0] }}
-                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              />
-          </div>
+      <Connector index={2} />
 
-          <div className="flex flex-col gap-6 relative z-10">
-            <PipelineCard 
-              icon={Database} 
-              label="Raw Activity" 
-              sublabel="Ingest unstructured data" 
-            />
-            
-            <div className="flex justify-center py-1">
-                <ArrowDown size={14} className="text-neutral-300" />
-            </div>
+      {/* 3. Metrics Engine */}
+      <PipelineStep 
+        index={2}
+        icon={LineChart}
+        label="Metrics Engine"
+        subLabel="Quantifying output quality"
+      />
 
-            <PipelineCard 
-              icon={BrainCircuit} 
-              label="Agent Decisions" 
-              sublabel="AI reasoning & processing" 
-            />
+      <Connector index={3} />
 
-            <div className="flex justify-center py-1">
-                <ArrowDown size={14} className="text-neutral-300" />
-            </div>
+      {/* 4. The Dashboard */}
+      <RoiDashboard index={3} />
 
-            <PipelineCard 
-              icon={LineChart} 
-              label="Metrics Engine" 
-              sublabel="Quantify outcomes" 
-            />
-
-            <div className="flex justify-center py-1">
-                <ArrowDown size={14} className="text-neutral-300" />
-            </div>
-
-            <PipelineCard
-              icon={LayoutDashboard}
-              isLast={true}
-              label="ROI Dashboard"
-              sublabel="Real-time impact realization"
-            />
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 }
