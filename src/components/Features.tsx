@@ -2,65 +2,91 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
-import { Carousel } from './Carousel';
-import f11 from '../assets/1 (5).png';
-import f12 from '../assets/2.png';
-import f13 from '../assets/3.png';
-import f21 from '../assets/f21.png';
-import f22 from '../assets/f22.png';
-import f23 from '../assets/f23.png';
-import f31 from '../assets/f31.png';
-import f32 from '../assets/f32.png';
-import f33 from '../assets/f33.png';
-import f41 from '../assets/f41.png';
-import f42 from '../assets/f42.png';
-import f43 from '../assets/f43.png';
+import EmaAnimation from './EmaAnimation';
+import {
+  Mail,
+  Slack,
+  Database,
+  Bot,
+  BrainCircuit,
+  TrendingUp,
+  BarChart3,
+  Globe,
+  ShieldCheck,
+  Server,
+  DollarSign,
+  Users,
+} from "lucide-react";
 
 
 // --- Feature Data with 3 Images Each ---
 const features = [
   {
     id: 0,
-    title: 'Custom AI Agent Engineering',
+    title: "Custom AI Agent Engineering",
     description:
-      'We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.',
-    images: [
-      // Tech/Engineering/Code
-      f11,
-      // AI Brain/Nodes
-      f12,
-      // Server/Infrastructure
-      f13,
-    ] as [string, string, string],
+      "We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.",
+    input: [
+      { id: "in-1", label: "Email", icon: <Mail /> },
+      { id: "in-2", label: "Internal Data", icon: <Database /> },
+    ],
+    center: [
+      { id: "c-1", label: "Custom AI Agent", icon: <BrainCircuit /> },
+    ],
+    output: [
+      { id: "out-1", label: "Automated Actions", icon: <Bot /> },
+    ],
   },
+
   {
     id: 1,
-    title: 'Achieve fast results',
+    title: "Achieve Fast Results",
     description:
-      'Track ROI and efficiency gains with custom dashboards designed to visualize your AI impact in real-time.',
-    images: [
-      // Dashboard/Analytics
-      f21,f22,f23
-    ] as [string, string, string],
+      "Track ROI and efficiency gains with custom dashboards designed to visualize your AI impact in real-time.",
+    input: [
+      { id: "in-1", label: "System Metrics", icon: <Server /> },
+    ],
+    center: [
+      { id: "c-1", label: "Analytics Engine", icon: <BarChart3 /> },
+    ],
+    output: [
+      { id: "out-1", label: "ROI Growth", icon: <TrendingUp /> },
+      { id: "out-2", label: "Revenue Impact", icon: <DollarSign /> },
+    ],
   },
+
   {
     id: 2,
-    title: 'Integrate With Tools You Use',
+    title: "Integrate With Tools You Use",
     description:
-      'Seamlessly connect our agents with your existing stack—Slack, Salesforce, HubSpot, and proprietary databases.',
-    images: [
-      f31,f32,f33
-    ] as [string, string, string],
+      "Seamlessly connect our agents with your existing stack—Slack, Salesforce, HubSpot, and proprietary databases.",
+    input: [
+      { id: "in-1", label: "Slack", icon: <Slack /> },
+      { id: "in-2", label: "Web Apps", icon: <Globe /> },
+      { id: "in-3", label: "Databases", icon: <Database /> },
+    ],
+    center: [
+      { id: "c-1", label: "Integration Layer", icon: <Server /> },
+    ],
+    output: [
+      { id: "out-1", label: "Unified Workflow", icon: <Users /> },
+    ],
   },
+
   {
     id: 3,
-    title: 'Trusted, Enterprise-Ready AI',
+    title: "Trusted, Enterprise-Ready AI",
     description:
-      'Deliver safe, reliable, and transparent generative AI that adheres to strict enterprise compliance standards.',
-    images: [
-      // Security/Lock
-      f41,f42,f43
-    ] as [string, string, string],
+      "Deliver safe, reliable, and transparent generative AI that adheres to strict enterprise compliance standards.",
+    input: [
+      { id: "in-1", label: "Enterprise Policies", icon: <ShieldCheck /> },
+    ],
+    center: [
+      { id: "c-1", label: "Governed AI System", icon: <Bot /> },
+    ],
+    output: [
+      { id: "out-1", label: "Compliant Decisions", icon: <ShieldCheck /> },
+    ],
   },
 ];
 
@@ -144,8 +170,8 @@ export const Features = () => {
             })}
           </div>
 
-          {/* --- Right Column: Carousel Viewer --- */}
-        <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative">
+          
+          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
@@ -155,14 +181,17 @@ export const Features = () => {
                 transition={{ duration: 0.4, ease: 'circOut' }}
                 className="absolute inset-0 w-full h-full"
               >
-              
-                <Carousel 
-                  images={features[activeIndex].images} 
-                  interval={3500} 
+                <EmaAnimation
+                  stacking="v"
+                  height={730}
+                  inputs={features[activeIndex].input}
+                  centers={features[activeIndex].center}
+                  outputs={features[activeIndex].output}
                 />
               </motion.div>
             </AnimatePresence>
           </div>
+
         </div>
       </div>
     </section>

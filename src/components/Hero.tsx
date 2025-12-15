@@ -1,8 +1,9 @@
 // src/components/Hero.tsx
 import { useState, useEffect } from 'react';
 import { Reveal } from './Reveal';
-import DualNodeNetwork from './DualNodeNetwork';
 import { SignalBackground } from './SignalBackground';
+import EmaAnimation from './EmaAnimation';
+import { User, BrainCircuit, DollarSign, Mail, Slack, MessagesSquare, Globe, Database, Webhook, FileText } from 'lucide-react';
 
 // --- Custom Hook for Typewriter Effect (No external dependency needed) ---
 const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) => {
@@ -44,6 +45,22 @@ const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) 
 
 export const Hero = () => {
   const typedText = useTypewriter("AI Agentic", 150, 2000);
+  const center = [
+    { id: '1', label: 'AI Agent', icon: <BrainCircuit /> },
+  { id: '2', label: 'Human Expert', icon: <User /> }
+  ];
+  const output = [
+    { id: '3', label: 'Increased ROI', icon: <DollarSign /> },
+  ]
+  const input = [
+  { id: "1", label: "", icon: <Mail /> },
+  { id: "2", label: "", icon: <Slack /> },
+  { id: "3", label: "", icon: <MessagesSquare /> },
+  { id: "4", label: "", icon: <Globe /> },
+  { id: "5", label: "", icon: <Database /> },
+  { id: "6", label: "", icon: <FileText /> },
+  { id: "7", label: "", icon: <Webhook /> },
+];
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-20 bg-black">
@@ -59,7 +76,7 @@ export const Hero = () => {
       />
 
       {/* 3. Content Layer */}
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center mt-25">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-12 md:items-center">
           
           {/* Left: Text content */}
@@ -76,7 +93,7 @@ export const Hero = () => {
                   <span className="animate-pulse text-white">|</span>
                 </span>
                 
-                Architectures
+                <span className='ml-1'>Architectures</span>
               </h1>
             </Reveal>
 
@@ -116,12 +133,21 @@ export const Hero = () => {
           </div>
 
           {/* Right: DualNodeNetwork (Visual) */}
-          <div className="hidden md:block md:col-span-5 h-[600px] w-full relative">
+          <div className="hidden md:block md:col-span-5 w-full relative">
              {/* Added height/width wrapper to ensure the network has space to render */}
-            <DualNodeNetwork />
+            <EmaAnimation secondaryScale={0.7} 
+            centerScale={0.8}
+            height={350} 
+            primaryColor='#0f0f0f'
+            secondaryColor='#ffffff'
+            textColor='#ffffff'
+            themeColor='#ffaa00'
+            centers={center}
+            outputs={output}
+            inputs={input}/>
           </div>
         </div>
       </div>
     </section>
   );
-};
+}; 

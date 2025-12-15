@@ -4,6 +4,9 @@ import { Reveal } from '../components/Reveal';
 import { Footer } from '../components/Footer';
 import { PartnerFormModal } from '../components/PartnerForModal';
 
+// --------------------
+// Types
+// --------------------
 type Partner = {
   id: string;
   name: string;
@@ -13,6 +16,9 @@ type Partner = {
   category: string;
 };
 
+// --------------------
+// Data
+// --------------------
 const partners: Partner[] = [
   { id: 'atlas', name: 'Atlas Labs', tagline: 'Enterprise Data', category: 'Infrastructure', description: 'Integration partner for secure data pipelines.', logoColor: '#F59E0B' },
   { id: 'northstar', name: 'Northstar', tagline: 'Strategic Investor', category: 'Growth', description: 'Go-to-market and growth partner focused on AI products.', logoColor: '#3B82F6' },
@@ -22,119 +28,151 @@ const partners: Partner[] = [
   { id: 'quartz', name: 'Quartz', tagline: 'Knowledge Automation', category: 'Intelligence', description: 'Automating knowledge workflows at scale.', logoColor: '#D4AF37' },
 ];
 
+// --------------------
+// Page
+// --------------------
 export default function PartnersPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg-main text-black font-sans antialiased selection:bg-black selection:text-white">
-      <main className="max-w-7xl mx-auto px-6 pt-32 pb-32">
-        
-        {/* --- Header Section --- */}
-        <section className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-gray-200 pb-12">
-          <div className="max-w-3xl">
+    <div className="min-h-screen bg-bg-main text-black font-sans selection:bg-black selection:text-white">
+
+      {/* =========================
+          HERO / LANDING CTA
+      ========================= */}
+      <section className="px-6 pt-32 pb-24 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+
+          {/* Left */}
+          <div>
             <Reveal>
-              <span className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3 block">
                 Our Ecosystem
               </span>
-              <h1 className="text-6xl md:text-8xl font-serif font-medium leading-[0.9] tracking-tight">
-                Global <br /> Alliances.
+              <h1 className="text-6xl md:text-8xl font-serif font-medium leading-[0.95] tracking-tight">
+                Global <br /> Alliances
               </h1>
             </Reveal>
-          </div>
-          <div className="flex flex-col gap-4">
-             <Reveal delay={0.2}>
-               <p className="text-lg text-gray-600 max-w-xs leading-relaxed">
-                 We orchestrate a network of design shops, platform teams, and cloud providers to accelerate innovation.
-               </p>
-             </Reveal>
-          </div>
-        </section>
 
-        {/* --- Partners Grid --- */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
+            <Reveal delay={0.2}>
+              <p className="mt-6 text-lg text-gray-600 max-w-xl leading-relaxed">
+                We collaborate with infrastructure leaders, design studios,
+                and AI pioneers to build dependable systems at scale.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* Right CTA */}
+          <Reveal delay={0.3}>
+            <div className="border border-gray-200 p-10 bg-bg-card flex flex-col gap-6">
+              <h2 className="text-3xl font-serif font-medium">
+                Join the Alliance
+              </h2>
+              <p className="text-gray-600 leading-relaxed">
+                Partner with us to shape the next generation of enterprise AI.
+                We work deeply with a small group of trusted collaborators.
+              </p>
+
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-3 text-lg font-medium
+                           border border-black px-6 py-4
+                           hover:bg-black hover:text-white transition-colors"
+              >
+                Become a Partner
+                <ArrowUpRight className="w-5 h-5" />
+              </button>
+            </div>
+          </Reveal>
+
+        </div>
+      </section>
+
+      {/* =========================
+          PARTNERS GRID
+      ========================= */}
+      <main className="max-w-7xl mx-auto px-6 py-24">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {partners.map((p, index) => (
             <Reveal key={p.id} delay={index * 0.1}>
-              <a href="#" className="group relative block h-full bg-bg-card border border-gray-100 p-8 
-                                   hover:bg-black transition-all duration-500 ease-out 
-                                   hover:shadow-2xl cursor-pointer overflow-hidden min-h-[340px] flex flex-col justify-between">
-                
-                {/* --- Watermark Number --- */}
-                <span className="absolute -bottom-6 -right-2 text-[8rem] font-bold leading-none 
-                               text-black opacity-[0.03] 
-                               group-hover:text-white group-hover:opacity-[0.1] 
-                               transition-all duration-500 pointer-events-none select-none z-0">
-                  0{index + 1}
+              <div
+                className="group relative h-full bg-bg-card border border-gray-100 p-8
+                           hover:bg-black transition-all duration-500 ease-out
+                           hover:shadow-2xl cursor-default overflow-hidden min-h-80 flex flex-col justify-between"
+              >
+                <span className="absolute -bottom-8 -right-2 text-[8rem] font-bold leading-none
+                                 text-black opacity-[0.03]
+                                 group-hover:text-white group-hover:opacity-[0.1]
+                                 transition-all duration-500 pointer-events-none select-none z-0">
+                  {index + 1}
                 </span>
 
-                {/* --- Top: Category & Icon --- */}
                 <div className="relative z-10 flex justify-between items-start mb-8">
                   <div className="flex items-center gap-3">
-                     {/* Logo Chip */}
-                     <div className="w-10 h-10 flex items-center justify-center bg-gray-50 border border-gray-200 group-hover:bg-gray-900 group-hover:border-gray-700 transition-colors duration-500">
-                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: p.logoColor }}></div>
-                     </div>
-                     <div>
-                       <span className="block text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-gray-500 transition-colors">
-                         {p.category}
-                       </span>
-                     </div>
+                    <div className="w-10 h-10 flex items-center justify-center border border-gray-200 group-hover:border-gray-700">
+                      <div className="w-3 h-3" style={{ backgroundColor: p.logoColor }} />
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-gray-500 transition-colors">
+                      {p.category}
+                    </span>
                   </div>
-                  
-                  <ArrowUpRight className="w-6 h-6 text-gray-300 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500" />
+                  <ArrowUpRight className="w-6 h-6 text-gray-300 group-hover:text-white transition-all duration-500" />
                 </div>
 
-                {/* --- Middle: Main Content --- */}
                 <div className="relative z-10 mb-8">
-                  <h3 className="text-3xl font-serif font-medium mb-2 group-hover:text-white transition-colors duration-500">
+                  <h3 className="text-3xl font-serif font-medium mb-2 group-hover:text-white transition-colors">
                     {p.name}
                   </h3>
-                  <p className="text-sm font-bold uppercase tracking-widest text-blue-600 group-hover:text-blue-400 transition-colors duration-500">
+                  <p className="text-sm font-bold uppercase tracking-widest text-blue-600 group-hover:text-blue-400 transition-colors">
                     {p.tagline}
                   </p>
                 </div>
 
-                {/* --- Bottom: Description --- */}
-                <div className="relative z-10">
-                  <p className="text-base text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors duration-500 border-t border-gray-100/50 group-hover:border-white/10 pt-6">
-                    {p.description}
-                  </p>
-                </div>
+                <p className="relative z-10 text-base text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors border-t border-gray-100/50 group-hover:border-white/10 pt-6">
+                  {p.description}
+                </p>
 
-                {/* Hover Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500" />
-
-              </a>
+                <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              </div>
             </Reveal>
           ))}
         </section>
-
-        {/* --- Join CTA --- */}
-        <section className="bg-black text-white rounded-2xl p-12 md:p-16 relative overflow-hidden text-center">
-           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-           
-           <div className="relative z-10 max-w-2xl mx-auto">
-             <Reveal>
-                <h2 className="text-4xl md:text-5xl font-serif mb-6">Join the Alliance</h2>
-                <p className="text-gray-400 text-lg mb-8">
-                  We are always looking for visionary partners to expand our ecosystem. If you are building the future of AI infrastructure, let's talk.
-                </p>
-                <button 
-                  onClick={() => setIsModalOpen(true)}
-                  className="bg-white text-black px-8 py-4 text-lg font-medium rounded-full hover:scale-105 transition-transform cursor-pointer"
-                >
-                  Become a Partner
-                </button>
-             </Reveal>
-           </div>
-        </section>
-
       </main>
+
+      {/* =========================
+          FINAL CTA
+      ========================= */}
+      <section className="px-6 py-24 border-t border-gray-200">
+        <div className="max-w-3xl mx-auto text-center">
+          <Reveal>
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6">
+              Join the Alliance
+            </h2>
+            <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+              We’re always looking to collaborate with teams building meaningful,
+              scalable AI infrastructure. Let’s explore what we can build together.
+            </p>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center gap-3 text-lg font-medium
+                         border border-black px-8 py-4
+                         hover:bg-black hover:text-white transition-colors"
+            >
+              Become a Partner
+              <ArrowUpRight className="w-5 h-5" />
+            </button>
+          </Reveal>
+        </div>
+      </section>
+
       <Footer />
 
-      {/* --- Form Modal --- */}
-      <PartnerFormModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      {/* =========================
+          PARTNER FORM MODAL
+      ========================= */}
+      <PartnerFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );

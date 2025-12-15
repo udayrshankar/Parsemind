@@ -7,56 +7,68 @@ interface Props {
   onClose: () => void;
 }
 
+// ✅ USE THE SAME SCRIPT URL YOU SHARED
+const SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbw5rOfLJ7T6k0INjkbSLaRXGKT4FiXgU7e5FZHw3GTQ9Kmf335Y19Fc8CJcwFh_CvTc/exec';
+
 export const PartnerFormModal = ({ isOpen, onClose }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  // --------------------
   // Form State
+  // --------------------
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: '',
-    message: ''
+    message: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // --------------------
+  // Submit Handler
+  // --------------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
 
     try {
-      // Your Google Apps Script Web App URL
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFVcXKbAJ6zjJHOX-jfYjbQDv3qxrGSXoX56EHi9Ezx4mjMbJATv6cutW_El6MDqAt/exec';
-
-      // CHANGE: Use URLSearchParams to send data as 'application/x-www-form-urlencoded'
-      // This is the standard format Google Apps Script expects for 'e.parameter'
+      // Google Apps Script expects form-encoded data
       const params = new URLSearchParams();
       params.append('name', formData.name);
       params.append('email', formData.email);
       params.append('company', formData.company);
       params.append('message', formData.message);
-      
+
       await fetch(SCRIPT_URL, {
         method: 'POST',
         body: params,
-        mode: 'no-cors', // Required to bypass CORS restrictions
+        mode: 'no-cors', // Required for Apps Script
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
 
       setIsSuccess(true);
-      
-      // Clear form and close modal after delay
+
+      // Auto-close after success
       setTimeout(() => {
-        onClose();
         setIsSuccess(false);
-        setFormData({ name: '', email: '', company: '', message: '' });
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          message: '',
+        });
+        onClose();
       }, 3000);
 
     } catch (err) {
@@ -77,7 +89,7 @@ export const PartnerFormModal = ({ isOpen, onClose }: Props) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-100"
           />
 
           {/* Modal */}
@@ -85,91 +97,123 @@ export const PartnerFormModal = ({ isOpen, onClose }: Props) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white shadow-2xl z-[101] p-8 overflow-hidden rounded-none"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
+                       w-full max-w-lg bg-white shadow-2xl z-101 p-8 overflow-hidden"
           >
-            <button 
+            <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-100 transition-colors rounded-none"
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 transition-colors"
             >
               <X size={20} className="text-gray-500" />
             </button>
 
             {isSuccess ? (
+              /* --------------------
+                 Success State
+              -------------------- */
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="w-16 h-16 bg-green-100 flex items-center justify-center mb-6 rounded-none">
+                <div className="w-16 h-16 bg-green-100 flex items-center justify-center mb-6">
                   <CheckCircle size={32} className="text-green-600" />
                 </div>
-                <h3 className="text-2xl font-serif font-medium mb-2">Request Sent!</h3>
-                <p className="text-gray-500">We'll contact you regarding the partnership.</p>
+                <h3 className="text-2xl font-serif font-medium mb-2">
+                  Request Sent!
+                </h3>
+                <p className="text-gray-500">
+                  We’ll get back to you regarding the partnership.
+                </p>
               </div>
             ) : (
+              /* --------------------
+                 Form
+              -------------------- */
               <>
-                <h2 className="text-3xl font-serif font-medium mb-2">Become a Partner</h2>
-                <p className="text-gray-500 mb-8">Join our ecosystem. Tell us about your organization.</p>
+                <h2 className="text-3xl font-serif font-medium mb-2">
+                  Become a Partner
+                </h2>
+                <p className="text-gray-500 mb-8">
+                  Join our ecosystem. Tell us about your organization.
+                </p>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Full Name</label>
-                    <input 
+                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">
+                      Full Name
+                    </label>
+                    <input
                       required
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full bg-gray-50 border border-gray-200 px-4 py-3 focus:outline-none focus:border-black transition-colors rounded-none"
+                      className="w-full bg-gray-50 border border-gray-200 px-4 py-3
+                                 focus:outline-none focus:border-black transition-colors"
                       placeholder="Jane Doe"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Email</label>
-                      <input 
+                      <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">
+                        Email
+                      </label>
+                      <input
                         required
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3 focus:outline-none focus:border-black transition-colors rounded-none"
+                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3
+                                   focus:outline-none focus:border-black transition-colors"
                         placeholder="jane@company.com"
                       />
                     </div>
+
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Company</label>
-                      <input 
+                      <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">
+                        Company
+                      </label>
+                      <input
                         required
                         name="company"
                         value={formData.company}
                         onChange={handleChange}
-                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3 focus:outline-none focus:border-black transition-colors rounded-none"
+                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3
+                                   focus:outline-none focus:border-black transition-colors"
                         placeholder="Acme Inc."
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Partnership Interest</label>
-                    <textarea 
+                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">
+                      Partnership Interest
+                    </label>
+                    <textarea
                       required
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       rows={3}
-                      className="w-full bg-gray-50 border border-gray-200 px-4 py-3 focus:outline-none focus:border-black transition-colors resize-none rounded-none"
+                      className="w-full bg-gray-50 border border-gray-200 px-4 py-3
+                                 focus:outline-none focus:border-black transition-colors resize-none"
                       placeholder="How would you like to collaborate?"
                     />
                   </div>
 
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
+                  {error && (
+                    <p className="text-red-500 text-sm">{error}</p>
+                  )}
 
-                  <button 
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-black text-white font-medium py-4 mt-4 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer rounded-none"
+                    className="w-full bg-black text-white font-medium py-4 mt-4
+                               hover:scale-[1.02] active:scale-[0.98]
+                               transition-all flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
                         <Loader2 className="animate-spin" size={20} />
-                        Sending...
+                        Sending…
                       </>
                     ) : (
                       'Submit Application'
