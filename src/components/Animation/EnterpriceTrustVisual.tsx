@@ -4,14 +4,14 @@ import { useState } from "react";
 /* ------------------------------
    CONSTANTS
 -------------------------------- */
-const SIZE = 600; // Fixed internal coordinate system
+const SIZE = 700; // Increased from 600 to allow larger radii
 const CENTER = SIZE / 2;
 
 const LAYERS = [
   { 
     id: "compliance",
     label: "COMPLIANCE", 
-    radius: 240, // Distance from center
+    radius: 310, // Increased from 240
     speed: 50, 
     dashArray: "4 8", 
     width: 1,
@@ -20,7 +20,7 @@ const LAYERS = [
   { 
     id: "security",
     label: "DATA SECURITY", 
-    radius: 190, 
+    radius: 245, // Increased from 190
     speed: 35, 
     dashArray: "40 120", 
     width: 1.5,
@@ -29,7 +29,7 @@ const LAYERS = [
   { 
     id: "observability",
     label: "OBSERVABILITY", 
-    radius: 140, 
+    radius: 180, // Increased from 140
     speed: 25, 
     dashArray: "10 10", 
     width: 1,
@@ -38,7 +38,7 @@ const LAYERS = [
   { 
     id: "oversight",
     label: "HUMAN OVERSIGHT", 
-    radius: 90, 
+    radius: 115, // Increased from 90
     speed: 20, 
     dashArray: "80 180", 
     width: 2,
@@ -50,7 +50,7 @@ const LAYERS = [
    ICON COMPONENT
 -------------------------------- */
 const ShieldIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     <path d="M12 8v4" />
     <path d="M12 16h.01" />
@@ -60,14 +60,12 @@ const ShieldIcon = () => (
 /* ------------------------------
    MAIN COMPONENT
 -------------------------------- */
-export default function SwissTrustFixed() {
+export default function EnterpriseTrustVisual() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <div className="relative w-full h-[640px] flex items-center justify-center font-sans overflow-hidden ">
+    <div className="relative w-full h-[740px] flex items-center justify-center font-sans overflow-hidden">
       
-      
-
       <div 
         className="relative" 
         style={{ width: SIZE, height: SIZE }}
@@ -94,15 +92,14 @@ export default function SwissTrustFixed() {
                             animate={{ rotate: 360 }}
                             transition={{ duration: layer.speed, repeat: Infinity, ease: "linear" }}
                          >
-                            {/* Invisible Hit Area (Thicker) */}
-                            {/* We use React Events on the SVG element for precise shape matching */}
+                            {/* Invisible Hit Area (Thicker for easier interaction) */}
                             <circle
                                 cx={CENTER}
                                 cy={CENTER}
                                 r={layer.radius}
                                 fill="none"
                                 stroke="transparent"
-                                strokeWidth="30"
+                                strokeWidth="40" // Increased hit area
                                 className="pointer-events-auto cursor-pointer"
                                 onMouseEnter={() => setHoveredId(layer.id)}
                                 onMouseLeave={() => setHoveredId(null)}
@@ -130,7 +127,6 @@ export default function SwissTrustFixed() {
         </svg>
 
         {/* B. HTML LAYER (Labels) */}
-        {/* We place labels in the same relative container so they align perfectly with SVG */}
         {LAYERS.map((layer) => {
              const isHovered = hoveredId === layer.id;
              const isDimmed = hoveredId !== null && !isHovered;
@@ -138,24 +134,27 @@ export default function SwissTrustFixed() {
              return (
                 <div
                     key={`label-${layer.id}`}
-                    className="absolute top-1/2 left-1/2 pointer-events-none" // Start at center
+                    className="absolute top-1/2 left-1/2 pointer-events-none" 
                     style={{ 
-                        // Move up by radius. -50% centers the div itself.
+                        // Move up by radius.
                         transform: `translate(-50%, calc(-50% - ${layer.radius}px))` 
                     }} 
                 >
                     {/* Interactive wrapper for label */}
                     <div 
-                        className="pointer-events-auto cursor-pointer p-1"
+                        className="pointer-events-auto cursor-pointer p-2"
                         onMouseEnter={() => setHoveredId(layer.id)}
                         onMouseLeave={() => setHoveredId(null)}
                     >
                         <motion.div 
-                            className="bg-white/90 backdrop-blur-sm px-1.5 py-0.5 z-10"
-                            animate={{ opacity: isDimmed ? 0.2 : 1 }}
+                            className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-transparent z-10"
+                            animate={{ 
+                                opacity: isDimmed ? 0.2 : 1,
+                                borderColor: isHovered ? "rgba(37, 99, 235, 0.2)" : "rgba(255,255,255,0)"
+                            }}
                         >
                              <motion.span 
-                                className="text-[10px] font-bold tracking-[0.2em] whitespace-nowrap block"
+                                className="text-[11px] font-bold tracking-[0.2em] whitespace-nowrap block"
                                 animate={{ 
                                     color: isHovered ? "#2563eb" : "#000000",
                                     scale: isHovered ? 1.05 : 1
@@ -172,10 +171,11 @@ export default function SwissTrustFixed() {
         {/* C. CENTER CORE */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <motion.div
-                className="w-32 h-32 bg-white rounded-full border border-neutral-100 shadow-2xl flex flex-col items-center justify-center gap-2"
+                // Scaled up core: w-32 -> w-40
+                className="w-44 h-44 bg-white rounded-full border border-neutral-100 shadow-2xl flex flex-col items-center justify-center gap-3"
                 animate={{
                     borderColor: hoveredId ? "rgba(37, 99, 235, 0.2)" : "rgba(245, 245, 245, 1)",
-                    boxShadow: hoveredId ? "0 10px 40px -10px rgba(37, 99, 235, 0.2)" : "0 10px 40px -10px rgba(0,0,0,0.1)"
+                    boxShadow: hoveredId ? "0 20px 50px -10px rgba(37, 99, 235, 0.15)" : "0 20px 50px -10px rgba(0,0,0,0.05)"
                 }}
             >
                 <motion.div 
@@ -185,7 +185,7 @@ export default function SwissTrustFixed() {
                     <ShieldIcon />
                 </motion.div>
                 
-                <div className="h-8 flex flex-col items-center justify-center w-full px-2 text-center">
+                <div className="h-10 flex flex-col items-center justify-center w-full px-4 text-center">
                     <AnimatePresence mode="wait">
                         {hoveredId ? (
                             <motion.div
@@ -196,10 +196,10 @@ export default function SwissTrustFixed() {
                                 transition={{ duration: 0.2 }}
                                 className="flex flex-col items-center"
                             >
-                                <span className="text-[9px] font-bold tracking-widest text-blue-600 uppercase">
+                                <span className="text-[10px] font-bold tracking-widest text-blue-600 uppercase">
                                     STATUS: ACTIVE
                                 </span>
-                                <span className="text-[10px] font-medium tracking-wide text-neutral-500 mt-0.5 truncate w-full">
+                                <span className="text-xs font-medium tracking-wide text-neutral-600 mt-1 truncate w-full">
                                     {LAYERS.find(l => l.id === hoveredId)?.description}
                                 </span>
                             </motion.div>
@@ -212,10 +212,10 @@ export default function SwissTrustFixed() {
                                 transition={{ duration: 0.2 }}
                                 className="flex flex-col items-center"
                             >
-                                <span className="text-[9px] font-medium tracking-widest text-neutral-400">
+                                <span className="text-[10px] font-medium tracking-widest text-neutral-400">
                                     SYSTEM
                                 </span>
-                                <span className="text-xs font-bold tracking-wider text-black">
+                                <span className="text-sm font-bold tracking-wider text-black mt-0.5">
                                     PROTECTED
                                 </span>
                             </motion.div>

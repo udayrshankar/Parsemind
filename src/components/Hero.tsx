@@ -1,8 +1,67 @@
 // src/components/Hero.tsx
 import { useState, useEffect } from 'react';
 import { Reveal } from './Reveal';
-import { SignalBackground } from './SignalBackground';
 import EmaAnimation from './EmaAnimation';
+import { motion } from 'framer-motion';
+
+
+
+const FlickeringGrid = () => {
+  const [squares, setSquares] = useState<{ id: number; r: number; c: number; delay: number }[]>([]);
+
+  useEffect(() => {
+    // Generate ~25 random "active" cells
+    const count = 25;
+    const newSquares = Array.from({ length: count }).map((_, i) => ({
+      id: i,
+      r: Math.floor(Math.random() * 20), // Row index (assuming max ~20 rows)
+      c: Math.floor(Math.random() * 20), // Col index
+      delay: Math.random() * 5,
+    }));
+    setSquares(newSquares);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0">
+      {/* A. The Static Lines (Adapted for Dark Mode) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundPosition: "0 0", // Fixed alignment
+          // Changed #000 to rgba(255, 255, 255, 0.1) for subtle light lines
+          backgroundImage:
+            "linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+
+      {/* B. The Flickering Cells (Brighter for Dark Mode) */}
+      {squares.map((sq) => (
+        <motion.div
+          key={sq.id}
+          // Changed bg-indigo-500/5 to bg-indigo-400/20 for a "glow" effect
+          className="absolute bg-indigo-400/20 border border-indigo-400/30 shadow-[0_0_15px_rgba(129,140,248,0.3)]"
+          style={{
+            width: 40,
+            height: 40,
+            top: sq.r * 40, // Snap to grid row
+            left: sq.c * 40, // Snap to grid col
+          }}
+          animate={{
+            opacity: [0, 1, 0], // Flash on and off
+            scale: [0.9, 1, 0.9],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 4, // Random pulse speed
+            repeat: Infinity,
+            delay: sq.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 // --- Custom Hook for Typewriter Effect (No external dependency needed) ---
 const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) => {
@@ -49,7 +108,16 @@ export const Hero = () => {
   return (
     <section className="relative min-h-screen w-full overflow-hidden isolate px-4 py-20 bg-black">
       
-      <SignalBackground />
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          maskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 300px, transparent 400px)',
+          WebkitMaskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 300px, transparent 400px)',
+          pointerEvents: 'none',
+        }}
+       >
+        <FlickeringGrid />
+      </div>
 
       {/* 2. Noise overlay */}
       <div

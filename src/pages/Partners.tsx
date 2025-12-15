@@ -140,23 +140,33 @@ export default function PartnersPage() {
       </main>
 
       {/* =========================
-          FINAL CTA
+          FINAL CTA (UPDATED)
       ========================= */}
-      <section className="px-6 py-24 border-t border-gray-200">
-        <div className="max-w-3xl mx-auto text-center">
+      <section className="relative px-6 py-32 bg-black text-white overflow-hidden m-15 flex justify-center">
+        
+        {/* Background Dot Pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)",
+            backgroundSize: "24px 24px"
+          }}
+        />
+
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
           <Reveal>
-            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6">
+            <h2 className="text-4xl md:text-6xl font-serif font-medium mb-6 tracking-tight">
               Join the Alliance
             </h2>
-            <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto">
               We’re always looking to collaborate with teams building meaningful,
               scalable AI infrastructure. Let’s explore what we can build together.
             </p>
             <button
               onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center gap-3 text-lg font-medium
-                         border border-black px-8 py-4
-                         hover:bg-black hover:text-white transition-colors"
+                         border border-white bg-white text-black px-8 py-4
+                         hover:bg-transparent hover:text-white transition-all duration-300"
             >
               Become a Partner
               <ArrowUpRight className="w-5 h-5" />

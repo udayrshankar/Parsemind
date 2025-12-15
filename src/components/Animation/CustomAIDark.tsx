@@ -8,14 +8,14 @@ import {
   HardDrive, 
   ListTodo, 
   Bot, 
-  CheckCircle2
+  CheckCircle2,
+  ArrowUpRight // Added for affordance
 } from "lucide-react";
+import { usePageTransition } from "../TransitionContext"; // Import Context
 
 /* ------------------------------
    CONSTANTS & DIMENSIONS
 -------------------------------- */
-// The internal coordinate system is fixed. 
-// We scale the VIEW, not the math.
 const BASE_WIDTH = 400; 
 const BASE_HEIGHT = 640;
 
@@ -131,6 +131,9 @@ interface SwissAgentSystemProps {
 
 export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
   const [activeStep, setActiveStep] = useState(0);
+  
+  // 1. Access the Transition Context
+  const { triggerTransition } = usePageTransition();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -140,21 +143,34 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
   }, []);
 
   return (
-    // 1. BOUNDING BOX: Reserves the correct physical space in the DOM
-    <div 
+    // 2. INTERACTIVE CONTAINER
+    // We wrap the scaler in a motion.div that handles the layout and the click event.
+    <motion.div 
+        onClick={() => triggerTransition("https://anseru.ai")}
+        className="group relative mx-auto bg-neutral-950 border border-neutral-800 rounded-2xl cursor-pointer overflow-hidden transition-all duration-500 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-900/20"
         style={{ 
             width: BASE_WIDTH * scale, 
             height: BASE_HEIGHT * scale 
-        }} 
-        className="relative overflow-hiddenrounded-xl mx-auto"
+        }}
     >
-        {/* 2. SCALER: Scales the content from the top-left corner */}
+        {/* 3. CTA OVERLAY (Text) */}
+        {/* Positioned absolutely at the top to sit above the animation layer */}
+        <div className="absolute top-6 left-0 right-0 z-30 flex flex-col items-center justify-center pointer-events-none">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-800 group-hover:border-indigo-500/30 transition-colors duration-300">
+                <span className="text-xs font-medium text-neutral-300">
+                    Check Out our first Product <span className="text-white font-bold">Anseru.ai</span>
+                </span>
+                <ArrowUpRight size={14} className="text-indigo-400" />
+            </div>
+        </div>
+
+        {/* 4. SCALER: Internal coordinate system */}
         <div 
             style={{ 
                 width: BASE_WIDTH,
                 height: BASE_HEIGHT,
                 transform: `scale(${scale})`,
-                transformOrigin: 'top left', // CRITICAL for alignment
+                transformOrigin: 'top left', 
             }}
             className="relative font-sans"
         >
@@ -169,7 +185,6 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                 initial="hidden"
                 animate="show"
                 style={{ top: TOP_Y, height: INPUT_HEIGHT }}
-                // Flex centering ensures these stay middle regardless of absolute positioning quirks
                 className="absolute w-full z-10 flex justify-center gap-3"
             >
                 {[
@@ -194,7 +209,6 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                     top: MAIN_Y, 
                     height: MAIN_HEIGHT,
                     width: MAIN_WIDTH,
-                    // Robust centering: Start at 50% left, subtract 50% of own width
                     left: "50%" 
                 }}
                 initial={{ y: 20, opacity: 0, x: "-50%" }}
@@ -283,6 +297,6 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
             </motion.div>
 
         </div>
-    </div>
+    </motion.div>
   );
 }

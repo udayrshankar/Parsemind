@@ -163,7 +163,7 @@ export default function SwissAgentSystem() {
         ].map((item) => (
              <div 
                 key={item.label}
-                className="bg-white border border-neutral-200 rounded-full px-4 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide"
+                className="bg-white border border-neutral-200 px-4 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide"
              >
                 <item.icon size={12} className="text-neutral-400" />
                 {item.label}
