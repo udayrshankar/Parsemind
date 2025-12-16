@@ -102,7 +102,7 @@ const PipelineStep = ({
     </div>
 
     <div className="flex flex-col">
-      <span className="text-xs font-bold text-white tracking-wide uppercase">
+      <span className="text-sm font-bold text-white uppercase">
         {label}
       </span>
       <span className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider">

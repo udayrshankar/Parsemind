@@ -71,7 +71,7 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
   return (
     // 1. Bounding Box
     <div 
-        className="relative mx-auto overflow-hidden"
+        className="relative mx-auto overflow-hidden translate-y-15"
         style={{ 
             width: SIZE * scale, 
             height: SIZE * scale 

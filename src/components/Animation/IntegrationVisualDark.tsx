@@ -306,7 +306,7 @@ export default function IntegrationVisualDark({ scale = 1 }: IntegrationVisualDa
                 <div className="flex items-center gap-1.5 px-3 py-1 bg-neutral-900 border border-neutral-800 shadow-sm">
                     <Radio size={10} className="text-indigo-500 animate-pulse" />
                     {/* Updated: text-[9px] -> text-[10px] */}
-                    <span className="text-[10px] font-bold tracking-widest text-neutral-400">
+                    <span className="text-md font-bold tracking-widest text-neutral-400">
                         AI Agent
                     </span>
                 </div>

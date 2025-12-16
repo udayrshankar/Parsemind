@@ -33,7 +33,7 @@ const FlickeringGrid = () => {
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-0">
+    <div className="absolute inset-0 pointer-events-none bg-gray-200 z-0">
       {/* A. The Static Lines */}
       <div 
         className="absolute inset-0 opacity-[0.08]" 
@@ -183,7 +183,7 @@ export const Features = () => {
           </div>
 
           {/* --- Right Column: Visuals --- */}
-          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative rounded-2xl border border-gray-100 bg-white/50 backdrop-blur-sm">
+          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative border border-gray-100 bg-white/50 backdrop-blur-sm">
             
             {/* 1. The Active Grid Background */}
             <FlickeringGrid />

@@ -1,8 +1,7 @@
+// src/components/EmaAnimation.tsx
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Layers, 
-  Box, 
   Hexagon, 
   Component, 
   ChevronLeft, 
@@ -42,10 +41,21 @@ const COMPONENT_LIST: Slide[] = [
   },
   { 
     id: 'enterprise-trust', 
-    component: <EnterpriseTrustVisualDark scale={0.55} />, 
+    component: <EnterpriseTrustVisualDark scale={0.9} />, 
     duration: 4000 
   },
 ];
+
+// Pre-calculated random positions for background particles
+const PARTICLES = Array.from({ length: 15 }).map((_, i) => ({
+  id: i,
+  top: `${Math.floor(Math.random() * 90)}%`,
+  left: `${Math.floor(Math.random() * 90)}%`,
+  size: Math.random() > 0.5 ? 4 : 8, 
+  delay: Math.random() * 5,
+  duration: 10 + Math.random() * 10,
+  type: Math.random() > 0.7 ? 'square' : 'dot'
+}));
 
 /* ------------------------------------------------------------
    2. HELPER COMPONENTS
@@ -61,17 +71,15 @@ const FloatingNode = ({
   delay?: number;
 }) => (
   <motion.div
-    // Reduced background opacity (zinc-900/50) and borders for subtler look
-    className={`absolute z-20 bg-zinc-900/50 backdrop-blur-sm p-3 rounded-2xl border border-zinc-800/50 shadow-lg flex items-center justify-center ${className}`}
+    className={`absolute z-20 bg-zinc-900/80 backdrop-blur-md p-2.5 px-4 rounded-full border border-zinc-800/80 shadow-xl flex items-center justify-center ${className}`}
     initial={{ opacity: 0, scale: 0.8, y: 10 }}
     animate={{ 
-        opacity: 0.6, // Reduced visibility
+        opacity: 1, 
         scale: 1, 
-        y: [0, -12, 0], // Vertical float
-        x: [0, 8, 0]    // Horizontal drift
+        y: [0, -12, 0], 
+        x: [0, 8, 0]    
     }}
     transition={{
-      // Different durations for X and Y create an organic "wandering" path
       y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: delay },
       x: { duration: 7, repeat: Infinity, ease: "easeInOut", delay: delay },
       opacity: { duration: 0.5, delay: delay }
@@ -115,29 +123,19 @@ const EmaAnimation = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Auto-cycle logic
   useEffect(() => {
     if (isPaused) return;
-
     const currentDuration = COMPONENT_LIST[currentIndex].duration;
     const timer = setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % COMPONENT_LIST.length);
     }, currentDuration);
-
     return () => clearTimeout(timer);
   }, [currentIndex, isPaused]);
 
-  // Manual Controls
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % COMPONENT_LIST.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + COMPONENT_LIST.length) % COMPONENT_LIST.length);
-  };
+  const handleNext = () => setCurrentIndex((prev) => (prev + 1) % COMPONENT_LIST.length);
+  const handlePrev = () => setCurrentIndex((prev) => (prev - 1 + COMPONENT_LIST.length) % COMPONENT_LIST.length);
 
   return (
-    // Reduced height to 600px
     <div 
       className="relative w-full max-w-[700px] h-[600px] mx-auto flex items-center justify-center font-sans text-zinc-300 group"
       onMouseEnter={() => setIsPaused(true)}
@@ -161,25 +159,81 @@ const EmaAnimation = () => {
          <Component className="w-10 h-10 text-zinc-800/60" strokeWidth={1} />
       </GhostNode>
 
-      {/* --- LAYER 1: Floating Decorations (Drifting) --- */}
+      {PARTICLES.map((p) => (
+        <motion.div
+          key={p.id}
+          className={`absolute pointer-events-none ${
+            p.type === 'square' ? 'border border-zinc-800/40' : 'bg-zinc-800/40 rounded-full'
+          }`}
+          style={{
+            top: p.top,
+            left: p.left,
+            width: p.size,
+            height: p.size,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: [0, 0.3, 0], 
+            y: [0, -30, 0],
+            rotate: p.type === 'square' ? [0, 90, 180] : 0,
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
+
+      {/* --- LAYER 1: Floating Status Chips --- */}
+      
+      {/* 1. DATA (Top Left) */}
       <FloatingNode className="top-[8%] left-[0%]" delay={0}>
-        <div className="flex gap-1">
-            <div className="w-2.5 h-2.5 rounded-full bg-zinc-600" />
-            <div className="w-2.5 h-2.5 rounded-full bg-[#ffaa00]" />
+        <div className="flex gap-1.5 items-center">
+            <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-full bg-zinc-600" />
+                <div className="w-2 h-2 rounded-full bg-[#ffaa00]" /> {/* Orange */}
+            </div>
+            <span className="text-[10px] tracking-widest text-zinc-400 font-mono font-medium">DATA</span>
         </div>
-        <span className="text-[10px] text-zinc-500 font-mono ml-2">DATA</span>
       </FloatingNode>
 
+      {/* 2. STACK (Top Right) */}
       <FloatingNode className="top-[12%] right-[-5%]" delay={1.2}>
-         <Layers className="text-zinc-600 w-6 h-6" strokeWidth={1.5} />
+         <div className="flex gap-1.5 items-center">
+            <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-full bg-zinc-600" />
+                <div className="w-2 h-2 rounded-full bg-[#3b82f6]" /> {/* Blue */}
+            </div>
+            <span className="text-[10px] tracking-widest text-zinc-400 font-mono font-medium">STACK</span>
+        </div>
       </FloatingNode>
 
+       {/* 3. NODE (Bottom Left) */}
        <FloatingNode className="bottom-[12%] left-[-5%]" delay={0.8}>
-         <Box className="text-zinc-600 w-6 h-6" strokeWidth={1.5} />
+         <div className="flex gap-1.5 items-center">
+            <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-full bg-zinc-600" />
+                <div className="w-2 h-2 rounded-full bg-[#10b981]" /> {/* Green */}
+            </div>
+            <span className="text-[10px] tracking-widest text-zinc-400 font-mono font-medium">NODE</span>
+        </div>
+      </FloatingNode>
+
+      {/* 4. SYNC (Bottom Right - New) */}
+      <FloatingNode className="bottom-[25%] right-[-2%]" delay={2.5}>
+         <div className="flex gap-1.5 items-center">
+            <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-full bg-zinc-600" />
+                <div className="w-2 h-2 rounded-full bg-[#8b5cf6]" /> {/* Purple */}
+            </div>
+            <span className="text-[10px] tracking-widest text-zinc-400 font-mono font-medium">SYNC</span>
+        </div>
       </FloatingNode>
 
       {/* --- LAYER 2: Central Card Switcher --- */}
-      <div className="relative z-30 w-full h-full flex items-center justify-center pointer-events-none overflow-visible">
+      <div className="relative z-30 w-full h-full flex items-center justify-center pointer-events-none overflow-clip">
         <div className="pointer-events-auto flex items-center justify-center"> 
             <AnimatePresence mode='wait'>
                 <motion.div
@@ -201,25 +255,42 @@ const EmaAnimation = () => {
 
       {/* --- LAYER 3: Carousel Controls --- */}
       
-      <button 
+      {/* Left Arrow - Scale Animation Added */}
+      <motion.button 
+        initial={{ scale: 1 }}
+        animate={{ scale: [1, 1.15, 1] }} // Pulse effect
+        transition={{ 
+            duration: 2, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+        }}
         onClick={handlePrev}
         className="absolute left-2 md:left-4 z-50 p-3 rounded-full 
                    bg-zinc-900/10 text-zinc-700 border border-zinc-800/10
                    hover:bg-zinc-800/50 hover:text-zinc-300 hover:border-zinc-700/50 
-                   transition-all duration-300 backdrop-blur-sm"
+                   transition-colors duration-300 backdrop-blur-sm cursor-pointer"
       >
         <ChevronLeft size={24} strokeWidth={1.5} />
-      </button>
+      </motion.button>
 
-      <button 
+      {/* Right Arrow - Scale Animation Added */}
+      <motion.button 
+        initial={{ scale: 1 }}
+        animate={{ scale: [1, 1.15, 1] }} // Pulse effect
+        transition={{ 
+            duration: 2, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+            delay: 1 // Offset the pulse slightly from the left arrow
+        }}
         onClick={handleNext}
         className="absolute right-2 md:right-4 z-50 p-3 rounded-full 
                    bg-zinc-900/10 text-zinc-700 border border-zinc-800/10
                    hover:bg-zinc-800/50 hover:text-zinc-300 hover:border-zinc-700/50 
-                   transition-all duration-300 backdrop-blur-sm"
+                   transition-colors duration-300 backdrop-blur-sm cursor-pointer"
       >
         <ChevronRight size={24} strokeWidth={1.5} />
-      </button>
+      </motion.button>
 
       {/* Pagination Dots */}
       <div className="absolute bottom-4 z-40 flex gap-2">
@@ -229,7 +300,7 @@ const EmaAnimation = () => {
                 onClick={() => setCurrentIndex(idx)}
                 className={`h-1 rounded-full transition-all duration-500 
                     ${idx === currentIndex 
-                        ? 'w-8 bg-indigo-500' 
+                        ? 'w-8 bg-zinc-500' 
                         : 'w-2 bg-zinc-800/50 hover:bg-zinc-700'
                     }`}
             />

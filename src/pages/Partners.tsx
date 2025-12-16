@@ -64,8 +64,8 @@ export default function PartnersPage() {
 
           {/* Right CTA */}
           <Reveal delay={0.3}>
-            <div className="border border-gray-200 p-10 bg-bg-card flex flex-col gap-6">
-              <h2 className="text-3xl font-serif font-medium">
+            <div className="border border-gray-200 p-10 bg-card flex flex-col gap-6">
+              <h2 className="text-3xl  font-serif font-medium">
                 Join the Alliance
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -76,8 +76,8 @@ export default function PartnersPage() {
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="inline-flex items-center gap-3 text-lg font-medium
-                           border border-black px-6 py-4
-                           hover:bg-black hover:text-white transition-colors"
+                           border border-black px-6 py-4 bg-black text-white
+                           hover:bg-white hover:text-black transition-colors"
               >
                 Become a Partner
                 <ArrowUpRight className="w-5 h-5" />

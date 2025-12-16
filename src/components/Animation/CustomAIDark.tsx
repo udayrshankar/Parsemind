@@ -194,7 +194,6 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                             <Bot size={18} />
                         </div>
                         <div>
-                            {/* Updated: text-sm -> text-xs (12px) */}
                             <h3 className="text-xs font-bold text-white leading-tight">
                                 AGENT CORE
                             </h3>
@@ -210,7 +209,7 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
                 </div>
 
                 {/* Modules */}
-                <div className="flex-1 p-4 flex flex-col gap-2 justify-center">
+                <div className="flex-1 p-4 font-sans text-xs flex flex-col gap-2 justify-center">
                     <AgentModule 
                         icon={ListTodo} 
                         label="Planning" 
