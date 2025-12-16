@@ -18,7 +18,7 @@ const RADIUS = 220;
 const CARD_WIDTH = 140;
 const CARD_HEIGHT = 100;
 
-const ACTIVE_COLOR = "#6366f1"; // Indigo (Active Node)
+const ACTIVE_COLOR = "#000000"; // Indigo (Active Node)
 const RING_DOT_COLOR = "#0ea5e9"; // Sky Blue (Background Data Flow)
 
 const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
@@ -206,14 +206,14 @@ const IntegrationCard = ({
                 w-full h-full border flex flex-col items-center justify-center gap-2 p-3 text-center cursor-pointer
                 backdrop-blur-sm transition-all duration-500
                 ${isActive 
-                    ? 'bg-white/95 border-indigo-500 shadow-xl' 
+                    ? 'bg-white/95 shadow-xl' 
                     : 'bg-white/60 border-neutral-200 shadow-sm hover:bg-white/80'
                 }
             `}
             animate={{ y: isActive ? -4 : 0 }}
         >
             <div 
-                className={`p-2.5 transition-colors duration-500 ${isActive ? 'text-white bg-indigo-500' : 'text-neutral-500 bg-neutral-100'}`}
+                className={`p-2.5 transition-colors duration-500 ${isActive ? 'text-black' : 'text-neutral-500 bg-neutral-100'}`}
             >
                 <Icon size={20} strokeWidth={1.5} />
             </div>

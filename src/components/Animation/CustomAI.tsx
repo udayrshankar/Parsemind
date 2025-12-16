@@ -19,7 +19,7 @@ const MAIN_WIDTH = 340;
 const MAIN_HEIGHT = 380;
 const INPUT_HEIGHT = 48;
 const OUTPUT_HEIGHT = 48;
-const GAP = 48;
+const GAP = 24; // UPDATED: Reduced from 48 to 24 to bring inputs closer
 
 // Vertical Geometry
 const TOTAL_STACK = INPUT_HEIGHT + GAP + MAIN_HEIGHT + GAP + OUTPUT_HEIGHT;
@@ -50,14 +50,14 @@ const fadeUp = {
    SUB-COMPONENTS
 -------------------------------- */
 
-// 1. Vertical Flow Line with Particle (Refactored for Center-Relative Coordinates)
+// 1. Vertical Flow Line with Particle
 const FlowLine = ({
-  startX, // Numeric offset from center (e.g. -130)
+  startX, // Numeric offset from center
   startY,
-  endX,   // Numeric offset from center (e.g. 0)
+  endX,   // Numeric offset from center
   endY,
   delay = 0,
-  color = "#4f46e5" // Default Indigo
+  color = "#4f46e5"
 }: {
   startX: number;
   startY: number;
@@ -68,7 +68,6 @@ const FlowLine = ({
 }) => (
   <div className="absolute inset-0 pointer-events-none z-0">
     <svg className="absolute inset-0 w-full h-full overflow-visible">
-      {/* Base Line */}
       <line
         x1={`calc(50% + ${startX}px)`}
         y1={startY}
@@ -79,8 +78,6 @@ const FlowLine = ({
         strokeDasharray="4 4"
       />
     </svg>
-    
-    {/* Animated Particle (Using HTML for robust positioning) */}
     <motion.div
       className="absolute w-2 h-2 rounded-full shadow-sm"
       style={{ 
@@ -91,7 +88,7 @@ const FlowLine = ({
         left: `calc(50% + ${startX}px)`, 
         top: startY, 
         opacity: 0,
-        x: "-50%", // Center the dot on the coordinate
+        x: "-50%",
         y: "-50%" 
       }}
       animate={{ 
@@ -122,7 +119,6 @@ const WifiTransmission = ({
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
-      {/* Signal Waves */}
       {[0, 1, 2].map((i) => (
         <motion.div
           key={i}
@@ -135,21 +131,19 @@ const WifiTransmission = ({
             y: 0,
           }}
           animate={{
-            width: 80, // Expands width
-            height: 50, // Expands height (arc shape)
-            opacity: 0, // Fades out
-            y: distance, // Moves down
+            width: 80,
+            height: 50,
+            opacity: 0,
+            y: distance,
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
             ease: "easeOut",
-            delay: i * 0.6, // Stagger the waves
+            delay: i * 0.6,
           }}
         />
       ))}
-
-      {/* Central Guide Line */}
       <div
         className="absolute left-1/2 -translate-x-1/2 w-[1px] bg-gradient-to-b from-indigo-200 to-transparent"
         style={{ top: startY, height: distance }}
@@ -179,7 +173,6 @@ const AgentModule = ({
             }
         `}
   >
-    {/* Active Indicator Bar */}
     <motion.div
       className="absolute left-0 top-3 bottom-3 w-0.5 bg-indigo-600"
       initial={{ height: 0, opacity: 0 }}
@@ -238,7 +231,7 @@ export default function SwissAgentSystem() {
     <div className="relative w-full h-[640px] flex justify-center font-sans overflow-hidden">
       {/* --- CONNECTIONS --- */}
       
-      {/* 1. DATA FLOW (Left) - Indigo */}
+      {/* 1. DATA FLOW (Left) */}
       <FlowLine
         startX={-LINE_OFFSET}
         startY={TOP_Y + INPUT_HEIGHT}
@@ -247,7 +240,7 @@ export default function SwissAgentSystem() {
         delay={0}
       />
       
-      {/* 2. WEB FLOW (Center) - Indigo */}
+      {/* 2. WEB FLOW (Center) */}
       <FlowLine
         startX={0}
         startY={TOP_Y + INPUT_HEIGHT}
@@ -256,7 +249,7 @@ export default function SwissAgentSystem() {
         delay={0.5}
       />
       
-      {/* 3. EVENTS FLOW (Right) - Indigo (Matches Data) */}
+      {/* 3. EVENTS FLOW (Right) */}
       <FlowLine
         startX={LINE_OFFSET}
         startY={TOP_Y + INPUT_HEIGHT}
