@@ -143,9 +143,6 @@ const RoiDashboard = ({ index }: { index: number }) => (
             <span className="text-[10px] font-bold text-white uppercase tracking-widest leading-none">
             ROI Dashboard
             </span>
-            <span className="text-[9px] text-neutral-400 font-medium uppercase tracking-wider mt-0.5">
-                Live Analysis
-            </span>
         </div>
       </div>
       <div className="flex items-center gap-1">
@@ -155,51 +152,52 @@ const RoiDashboard = ({ index }: { index: number }) => (
     </div>
 
     {/* Metrics Grid */}
-    <div className="p-6 grid grid-cols-2 gap-8 bg-white">
-      
-      {/* Metric A */}
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <TrendingUp size={14} className="text-neutral-400" />
-          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-            Efficiency
-          </span>
-        </div>
-        <div>
-            <span className="text-4xl font-bold text-neutral-900 tracking-tighter block">
-            32%
-            </span>
-            <div className="flex items-center gap-1 mt-1 text-green-600">
-                <Zap size={10} fill="currentColor" />
-                <span className="text-[10px] font-bold uppercase tracking-wide">+12.5% vs Last Mo</span>
-            </div>
-        </div>
-      </div>
-
-      {/* Metric B */}
-      <div className="flex flex-col gap-2 relative">
-        {/* Divider Line */}
-        <div className="absolute -left-4 top-2 bottom-2 w-px bg-neutral-100" />
-        
-        <div className="flex items-center gap-2">
-          <Timer size={14} className="text-neutral-400" />
-          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-            Workload
-          </span>
-        </div>
-        <div>
-            <span className="text-4xl font-bold text-neutral-900 tracking-tighter block">
-            -41%
-            </span>
-             <div className="inline-block mt-1 px-2 py-0.5 bg-indigo-50 border border-indigo-100 rounded-sm">
-                <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-wide">
-                    120hrs Saved
-                </span>
-            </div>
-        </div>
-      </div>
-
+<div className="p-6 grid grid-cols-2 gap-8 bg-white">
+  
+  {/* Metric A */}
+  <div className="flex flex-col gap-2 items-center text-center">
+    <div className="flex items-center justify-center gap-2">
+      <TrendingUp size={14} className="text-neutral-400" />
+      <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+        Efficiency
+      </span>
     </div>
+    <div>
+        <span className="text-4xl font-bold text-neutral-900 tracking-tighter block text-center">
+        32%
+        </span>
+        {/* Removed translate-y-3 here */}
+        <div className="flex items-center justify-center gap-1 mt-1 text-green-600">
+            <span className="text-[10px] font-bold uppercase tracking-wide">+12.5% vs Last Mo</span>
+        </div>
+    </div>
+  </div>
+
+  {/* Metric B */}
+  <div className="flex flex-col gap-2 relative items-center text-center">
+    {/* Divider Line */}
+    <div className="absolute -left-4 top-2 bottom-2 w-px bg-neutral-100" />
+    
+    <div className="flex items-center justify-center gap-2">
+      <Timer size={14} className="text-neutral-400" />
+      <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+        Workload
+      </span>
+    </div>
+    <div>
+        <span className="text-4xl font-bold text-neutral-900 tracking-tighter block text-center">
+        -41%
+        </span>
+        {/* Kept mt-1 to match Metric A */}
+         <div className="flex items-center justify-center gap-1 mt-1">
+            <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-wide">
+                120hrs Saved
+            </span>
+        </div>
+    </div>
+  </div>
+
+</div>
 
   
   </motion.div>

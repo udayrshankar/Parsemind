@@ -68,7 +68,7 @@ const FlickeringGrid = ({
 
     const drawGrid = () => {
       // Opacity is set to 0.4 for distinct but subtle lines
-      ctx.strokeStyle = `rgba(${gridRgb}, 0.4)`; 
+      ctx.strokeStyle = `rgba(${gridRgb}, 1)`; 
       ctx.lineWidth = 1;
       ctx.beginPath();
 
@@ -175,7 +175,7 @@ const features = [
     id: 3,
     title: "Trusted, Enterprise-Ready AI",
     description: "Deliver safe, reliable, and transparent generative AI that adheres to strict enterprise compliance standards.",
-    animation: <EnterpriseTrustVisual/>
+    animation: <EnterpriseTrustVisual scale={0.93}/>
   },
 ];
 
@@ -183,7 +183,7 @@ export const Features = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="px-4 md:px-6 py-16 md:py-10 relative">
+    <section className="px-6 md:px-12 py-16 md:py-10 relative">
       <div className="max-w-7xl mx-auto">
         <div className="text-center flex justify-center mb-8 md:mb-10">
           <Reveal>
@@ -241,17 +241,17 @@ export const Features = () => {
             })}
           </div>
 
-          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[730px] w-full overflow-hidden relative border border-gray-200 rounded-2xl shadow-sm">
+          <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[600px] w-full overflow-hidden relative border border-gray-200 shadow-sm">
             
             {/* --------------------------------------------------
                 DULL WHITE THEME
             -------------------------------------------------- */}
             <FlickeringGrid 
               gridGap={40}
-              gridColor="#E5E5E5"        // Light Gray Lines
+              gridColor="#e4e3df"        // Light Gray Lines
               flickerColor="#A3A3A3"     // Medium Gray Flickers
-              backgroundColor="#FAFAFA"  // Dull White Background
-              maskCoverage="70%" 
+              backgroundColor="#f7f6f2"  // Dull White Background
+              maskCoverage="100%" 
             />
             {/* -------------------------------------------------- */}
 

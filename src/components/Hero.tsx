@@ -99,7 +99,7 @@ export const Hero = () => {
   const typedText = useTypewriter("Agentic AI", 150, 2000);
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden isolate px-4 bg-black">
+    <section className="relative min-h-screen w-full overflow-hidden isolate px-6 md:px-12 bg-black">
       
       {/* 1. Background Layer */}
       <div

@@ -19,10 +19,10 @@ const CARD_WIDTH = 140;
 const CARD_HEIGHT = 100;
 
 // Dark Mode Palette
-const ACTIVE_COLOR = "#818cf8"; // Light Indigo (Pop against dark)
+const ACTIVE_COLOR = "#fafafa"; // Light Indigo (Pop against dark)
 const RING_DOT_COLOR = "#06b6d4"; // Cyan/Neon (Data flow)
 const INACTIVE_LINE_COLOR = "#404040"; // Dark Grey
-const ACTIVE_LINE_COLOR = "#6366f1"; // Solid Indigo
+const ACTIVE_LINE_COLOR = "#ffffff"; // Solid Indigo
 
 const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
 
@@ -148,7 +148,7 @@ const RingBeam = ({
   const start = toCartesian(startAngle, RADIUS);
   const end = toCartesian(endAngle, RADIUS);
   const pathData = describeArc(start.x, start.y, end.x, end.y, RADIUS);
-  const dots = [0, 1, 2]; 
+  const dots = [0]; 
 
   return (
     <g>
@@ -207,14 +207,14 @@ const IntegrationCard = ({
                 w-full h-full border flex flex-col items-center justify-center gap-2 p-3 text-center cursor-pointer
                 backdrop-blur-md transition-all duration-500
                 ${isActive 
-                    ? 'bg-neutral-800/90 border-indigo-500 shadow-[0_0_30px_-5px_rgba(99,102,241,0.3)]' 
+                    ? 'bg-neutral-800/90 border-white shadow-[0_0_30px_-5px_rgba(99,102,241,0.3)]' 
                     : 'bg-neutral-900/80 border-neutral-800 shadow-sm hover:bg-neutral-800'
                 }
             `}
             animate={{ y: isActive ? -4 : 0 }}
         >
             <div 
-                className={`p-2.5 transition-colors duration-500 ${isActive ? 'text-white bg-indigo-600' : 'text-neutral-400 bg-neutral-800'}`}
+                className={`p-2.5 transition-colors duration-500 ${isActive ? 'text-white' : 'text-neutral-400 bg-neutral-800'}`}
             >
                 <Icon size={20} strokeWidth={1.5} />
             </div>
@@ -228,14 +228,7 @@ const IntegrationCard = ({
                 </span>
             </div>
 
-            {/* Status Indicator */}
-            <div 
-              className="absolute top-0 right-0 w-2 h-2 transition-all duration-500"
-              style={{ 
-                backgroundColor: isActive ? '#10b981' : 'transparent',
-                boxShadow: isActive ? '0 0 10px #10b981' : 'none'
-              }} 
-            />
+            
         </motion.div>
     </motion.div>
   );

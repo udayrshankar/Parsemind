@@ -148,7 +148,7 @@ const RingBeam = ({
   const pathData = describeArc(start.x, start.y, end.x, end.y, RADIUS);
 
   // High density dots
-  const dots = [0, 1, 2]; 
+  const dots = [0]; 
 
   return (
     <g>
@@ -227,13 +227,7 @@ const IntegrationCard = ({
                 </span>
             </div>
 
-            {/* Status Indicator (Square) */}
-            <div 
-              className="absolute top-0 right-0 w-2 h-2 transition-all duration-500"
-              style={{ 
-                backgroundColor: isActive ? '#10b981' : 'transparent',
-              }} 
-            />
+            
         </motion.div>
     </motion.div>
   );

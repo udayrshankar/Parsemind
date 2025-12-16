@@ -88,7 +88,8 @@ const FounderBlock = ({ person }: { person: Person }) => {
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <div ref={ref} className="border-t border-neutral-200 pt-8">
+    // Updated: Removed 'border-t border-neutral-200'
+    <div ref={ref} className="pt-8">
       {/* Image Container - Enforced Grayscale & Parallax */}
       <div className="relative h-[520px] w-full overflow-hidden border border-neutral-200 bg-neutral-100">
         <motion.div style={{ y }} className="h-[120%] w-full relative -top-[10%]">
@@ -116,7 +117,7 @@ const FounderBlock = ({ person }: { person: Person }) => {
           {person.bio}
         </p>
 
-        <div className="mt-10 border-t border-neutral-200 pt-6">
+        <div className="mt-10 pt-6">
           <p className="text-xs uppercase tracking-widest font-bold text-neutral-400 mb-4">
             Focus Areas
           </p>
@@ -147,17 +148,16 @@ export default function AboutPage() {
           {/* ====================
               Header
           ==================== */}
-          <section className="mb-24 border-b border-neutral-200 pb-16">
+          <section className=" border-b border-neutral-200 pb-16">
             <Reveal>
-              {/* Removed bg-accent-hover, replaced with bg-neutral-100 (Light Grey) */}
-              <div className="flex flex-col lg:flex-row justify-between items-end gap-12 bg-white border border-neutral-200 p-12">
+              <div className="flex flex-col lg:flex-row justify-between items-center gap-12 bg-white border border-neutral-200 p-12">
                 
                 {/* Primary Content Node */}
                 <div className="max-w-4xl">
                   <span className="text-neutral-500 uppercase tracking-[0.25em] mb-4 block font-medium text-xs">
                     Who We Are
                   </span>
-                  <h1 className="text-5xl md:text-6xl font-medium tracking-tight text-neutral-900 leading-[1.1]">
+                  <h1 className="type-h1 text-text-main">
                     We build systems that scale with trust.
                   </h1>
                 </div>
@@ -166,7 +166,7 @@ export default function AboutPage() {
                 <div className="w-full lg:w-auto min-w-[240px]">
                   <button 
                     onClick={() => document.getElementById('mission-principles')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="w-full bg-neutral-900 text-white border border-neutral-900 px-8 py-5 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300"
+                    className="w-full bg-neutral-900 text-white border border-neutral px-8 py-5 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300"
                   >
                     View Principles
                   </button>
@@ -180,9 +180,9 @@ export default function AboutPage() {
               Founders
           ==================== */}
           <section className="mb-32">
-            <div className="border-b border-neutral-200 pb-4 flex justify-between items-end mb-12">
+            <div className="border-b py-2 border-neutral-200 flex justify-between items-center mb-5">
               <Reveal>
-                <h2 className="text-3xl font-medium">Meet Our Founders</h2>
+                <h2 className="text-6xl font-medium">Meet Our Founders</h2>
               </Reveal>
               <span className="text-sm font-bold uppercase tracking-widest text-neutral-400">
                 Leadership

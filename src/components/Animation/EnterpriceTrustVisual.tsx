@@ -61,15 +61,24 @@ const ShieldIcon = () => (
 /* ------------------------------
    MAIN COMPONENT
 -------------------------------- */
-export default function EnterpriseTrustVisual() {
+interface EnterpriseTrustVisualProps {
+  scale?: number;
+}
+
+export default function EnterpriseTrustVisual({ scale = 1 }: EnterpriseTrustVisualProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <div className="relative w-full h-[740px] flex items-center justify-center font-sans overflow-hidden">
+    <div className="relative w-full h-[740px] flex items-center justify-center font-sans overflow-hidden translate-y-5">
       
       <div 
         className="relative" 
-        style={{ width: SIZE, height: SIZE }}
+        style={{ 
+          width: SIZE, 
+          height: SIZE,
+          transform: `scale(${scale})`, // Applied scale transform here
+          transformOrigin: "center center"
+        }}
       >
         {/* A. SVG LAYER (Rings & Radiation) */}
         <svg 
@@ -112,11 +121,11 @@ export default function EnterpriseTrustVisual() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: layer.radius * 0.002 }}
                     >
-                         <motion.g
+                          <motion.g
                             style={{ originX: "50%", originY: "50%" }}
                             animate={{ rotate: 360 }}
                             transition={{ duration: layer.speed, repeat: Infinity, ease: "linear" }}
-                         >
+                          >
                             {/* Hit Area */}
                             <circle
                                 cx={CENTER}
@@ -145,7 +154,7 @@ export default function EnterpriseTrustVisual() {
                                 }}
                                 transition={{ duration: 0.3 }}
                             />
-                         </motion.g>
+                          </motion.g>
                     </motion.g>
                 );
             })}
@@ -153,10 +162,10 @@ export default function EnterpriseTrustVisual() {
 
         {/* B. HTML LAYER (Labels) */}
         {LAYERS.map((layer) => {
-             const isHovered = hoveredId === layer.id;
-             const isDimmed = hoveredId !== null && !isHovered;
+              const isHovered = hoveredId === layer.id;
+              const isDimmed = hoveredId !== null && !isHovered;
 
-             return (
+              return (
                 <div
                     key={`label-${layer.id}`}
                     className="absolute top-1/2 left-1/2 pointer-events-none" 
@@ -185,10 +194,10 @@ export default function EnterpriseTrustVisual() {
                              >
                                 {layer.label}
                              </motion.span>
-                         </motion.div>
+                          </motion.div>
                     </div>
                 </div>
-             );
+              );
         })}
 
         {/* C. CENTER CORE */}

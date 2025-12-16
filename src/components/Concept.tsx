@@ -70,7 +70,7 @@ export default function Concept() {
     <div className="w-full flex flex-col items-center gap-10">
       <section
             id="process"
-            className="w-full px-4"
+            className="w-full px-6 md:px-12"
             
           >
             <div

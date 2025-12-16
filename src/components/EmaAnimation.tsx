@@ -233,7 +233,7 @@ const EmaAnimation = () => {
       </FloatingNode>
 
       {/* --- LAYER 2: Central Card Switcher --- */}
-      <div className="relative z-30 w-full h-full flex items-center justify-center pointer-events-none overflow-clip">
+      <div className="relative z-30 w-full h-[500px] flex items-center justify-center pointer-events-none overflow-clip">
         <div className="pointer-events-auto flex items-center justify-center"> 
             <AnimatePresence mode='wait'>
                 <motion.div

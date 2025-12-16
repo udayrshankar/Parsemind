@@ -1,21 +1,18 @@
 // src/components/Footer.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Reveal } from './Reveal';
-import { WavyBackground } from './WavyBackground';
 import { Link } from 'react-router-dom';
 import { usePageTransition } from './TransitionContext';
-import { useEffect, useState } from 'react';
 
 const links = [
   { name: "Home", href: "/" },
-  { name: "Our Products", href: "#solutions" }, // fallback anchor
+  { name: "Our Products", href: "#solutions" }, 
   { name: "About", href: "/about" },
   { name: "Partners", href: "/partners" },
 ];
 
 export const Footer: React.FC = () => {
-
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   useEffect(() => {
@@ -49,65 +46,68 @@ export const Footer: React.FC = () => {
   const { triggerTransition } = usePageTransition();
 
   const handleNavClick = (e: React.MouseEvent, linkName: string) => {
-    // Keep the same behavior as Navbar: intercept "Our Products"
     if (linkName === "Our Products") {
       e.preventDefault();
       triggerTransition("https://anseru.ai");
       return;
     }
-
-    // For same-page anchors (like #solutions) we allow default behaviour; Link will handle route changes
-    // Close any overlays here if you have that logic (not required in this Footer)
   };
 
   return (
-    <footer className="relative w-full bg-black text-white isolate overflow-hidden">
-      {/* Full-bleed animated background */}
-      <WavyBackground />
-
-      {/* Overlay noise texture (same style as Hero) */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
+    <footer className="relative w-full bg-black text-white isolate overflow-hidden border-t border-white/10">
+      
+      {/* 1. Technical Grid Background */}
+      <div 
+        className="absolute inset-0 z-0 opacity-20 pointer-events-none"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          backgroundImage: `
+            linear-gradient(to right, #333 1px, transparent 1px),
+            linear-gradient(to bottom, #333 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px'
         }}
       />
+      
+      {/* 2. Gradient Fade for Depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-0 pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-20 space-y-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-24 space-y-24">
+        
         {/* Top CTA Block */}
         <Reveal>
-          <div className="flex flex-col md:flex-row justify-between gap-10 items-start md:items-center">
-            <div className="max-w-2xl space-y-4">
-              <h2 className="text-3xl md:text-4xl font-semibold leading-tight">
-                Architect your next AI leap with Parsemind
+          {/* UPDATED: Changed md:items-end to md:items-center */}
+          <div className="flex flex-col md:flex-row justify-between gap-12 items-start md:items-center border-b border-white/10 pb-16">
+            <div className="max-w-2xl space-y-6">
+              <h2 className="text-4xl md:text-5xl font-medium leading-[1.1] tracking-tight font-fraunces">
+                Architect your next <br/> AI leap with Parsemind
               </h2>
-              <p className="text-gray-300 text-sm md:text-base leading-relaxed max-w-xl">
+              <p className="text-neutral-400 text-lg leading-relaxed max-w-xl font-inter">
                 Design and deploy fully managed agentic AI architectures — secure, scalable, and built for real production environments.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
               <button
-                onClick={() => { openCalendly(); }}
+                onClick={openCalendly}
                 className="
-                  px-8 py-3 text-sm md:text-base font-medium
+                  px-8 py-4 text-sm font-bold uppercase tracking-widest
                   bg-white text-black
                   hover:bg-black hover:text-white
-                  transition-all duration-300 hover:scale-[1.03]
+                  transition-all duration-300
                   border border-white
                 "
               >
-                Book a Strategy Call
+                Book Strategy Call
               </button>
 
               <a
                 href="mailto:kggoutham@anseru.ai"
                 className="
-                  px-8 py-3 text-sm md:text-base font-medium
+                  px-8 py-4 text-sm font-bold uppercase tracking-widest
                   bg-black text-white
-                  border border-white
-                  hover:bg-white hover:text-black
-                  transition-all duration-300 hover:scale-[1.03]
+                  border border-white/30
+                  hover:bg-white hover:text-black hover:border-white
+                  transition-all duration-300
                 "
               >
                 Email Us
@@ -117,103 +117,102 @@ export const Footer: React.FC = () => {
         </Reveal>
 
         {/* Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          {/* Brand Column */}
-          <Reveal delay={0.1}>
-            <div className="space-y-4 md:col-span-2">
-              <span className="uppercase tracking-[0.2em] text-sm font-semibold">
-                Parsemind
-              </span>
-              <p className="text-gray-300 text-sm md:text-base leading-relaxed max-w-md">
-                Parsemind engineers intelligent agentic architectures that transform how enterprise teams operate, automate and scale their business.
-              </p>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
+          
+          {/* Brand Column (Span 6) */}
+          <div className="md:col-span-6 space-y-8">
+            <Reveal delay={0.1}>
+              <div className="space-y-6">
+                <span className="uppercase tracking-[0.2em] text-xs font-bold text-white block">
+                  Parsemind
+                </span>
+                <p className="text-neutral-500 text-base leading-relaxed max-w-md">
+                  Parsemind engineers intelligent agentic architectures that transform how enterprise teams operate, automate and scale their business.
+                </p>
 
-              <div className="flex gap-3 pt-2">
-                <a
-                  href="mailto:kggoutham@anseru.ai"
-                  className="w-9 h-9 border border-white/30 flex items-center justify-center hover:bg-white hover:text-black transition-all"
-                >
-                  <Mail size={16} />
-                </a>
-
-                <a
-                  href="#"
-                  className="w-9 h-9 border border-white/30 flex items-center justify-center hover:bg-white hover:text-black transition-all"
-                >
-                  <Linkedin size={16} />
-                </a>
-
-                <a
-                  href="#"
-                  className="w-9 h-9 border border-white/30 flex items-center justify-center hover:bg-white hover:text-black transition-all"
-                >
-                  <Twitter size={16} />
-                </a>
+                <div className="flex gap-4">
+                  {[
+                    { icon: Mail, href: "mailto:kggoutham@anseru.ai" },
+                    { icon: Linkedin, href: "#" },
+                    { icon: Twitter, href: "#" }
+                  ].map((social, i) => (
+                    <a
+                      key={i}
+                      href={social.href}
+                      className="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group"
+                    >
+                      <social.icon size={16} className="text-neutral-400 group-hover:text-black transition-colors" />
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
 
-          {/* Solutions (now routed) */}
-          <Reveal delay={0.15}>
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold uppercase tracking-wide">
-                Solutions
-              </h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                {/* If you want these to navigate to dedicated routes in future, swap Link->to accordingly */}
-                {['Agentic Automation', 'AI Integration', 'Knowledge Agents', 'Custom Workflows'].map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+          {/* Solutions Column (Span 3) */}
+          <div className="md:col-span-3">
+             <Reveal delay={0.15}>
+              <div className="space-y-6">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-white">
+                  Solutions
+                </h3>
+                <ul className="space-y-4">
+                  {['Agentic Automation', 'AI Integration', 'Knowledge Agents', 'Custom Workflows'].map((s) => (
+                    <li key={s}>
+                      <a href="#" className="text-sm text-neutral-500 hover:text-white transition-colors block">
+                        {s}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          </div>
 
-          {/* Company (nav links mirrored from Navbar) */}
-          <Reveal delay={0.2}>
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold uppercase tracking-wide">
-                Company
-              </h3>
-
-              <ul className="space-y-2 text-sm text-gray-400">
-                {links.map((link) => {
-                  const isExternalAnchor = link.href.startsWith('#');
-                  // Render as anchor for in-page anchors or Link for routes
-                  return (
+          {/* Company Column (Span 3) */}
+          <div className="md:col-span-3">
+            <Reveal delay={0.2}>
+              <div className="space-y-6">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-white">
+                  Company
+                </h3>
+                <ul className="space-y-4">
+                  {links.map((link) => (
                     <li key={link.name}>
-                      {link.name === "Our Products" ? (
-                        // For Our Products we intercept and trigger the same transition
+                       {link.name === "Our Products" ? (
                         <a
                           href={link.href}
                           onClick={(e) => handleNavClick(e, link.name)}
-                          className="hover:text-gray-200 transition-colors cursor-pointer"
+                          className="text-sm text-neutral-500 hover:text-white transition-colors block cursor-pointer"
                         >
                           {link.name}
                         </a>
-                      ) : isExternalAnchor ? (
-                        <a href={link.href} className="hover:text-gray-200 transition-colors">{link.name}</a>
                       ) : (
-                        <Link to={link.href} className="hover:text-gray-200 transition-colors">
+                        <Link 
+                          to={link.href} 
+                          className="text-sm text-neutral-500 hover:text-white transition-colors block"
+                        >
                           {link.name}
                         </Link>
                       )}
                     </li>
-                  );
-                })}
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          </div>
 
-               
-              </ul>
-            </div>
-          </Reveal>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row gap-4 md:gap-0 items-start md:items-center justify-between text-xs text-gray-500">
-          <p>© {year} Parsemind. All rights reserved.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link to="/privacy" className="hover:text-gray-300 transition-all">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-gray-300 transition-all">Terms of Use</Link>
-            <Link to="/responsible-ai" className="hover:text-gray-300 transition-all">Responsible AI</Link>
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row gap-6 md:gap-0 items-start md:items-center justify-between">
+          <p className="text-xs text-neutral-600 font-mono">
+            © {year} PARSEMIND INC. ALL RIGHTS RESERVED.
+          </p>
+          <div className="flex flex-wrap gap-8 text-xs text-neutral-600 font-mono uppercase tracking-wide">
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Use</Link>
+            <Link to="/responsible-ai" className="hover:text-white transition-colors">Responsible AI</Link>
           </div>
         </div>
       </div>

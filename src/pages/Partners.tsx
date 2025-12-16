@@ -123,7 +123,7 @@ export default function PartnersPage() {
                   <h3 className="text-3xl font-serif font-medium mb-2 group-hover:text-white transition-colors">
                     {p.name}
                   </h3>
-                  <p className="text-sm font-bold uppercase tracking-widest text-blue-600 group-hover:text-blue-400 transition-colors">
+                  <p className="text-sm font-bold uppercase tracking-widest text-black group-hover:text-gray-500 transition-colors">
                     {p.tagline}
                   </p>
                 </div>

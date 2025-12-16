@@ -79,7 +79,7 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
     >
       {/* 2. Scaler Container */}
       <div 
-        className="relative flex items-center justify-center font-sans text-white"
+        className="relative flex items-center justify-center font-sans text-white translate-y-20"
         style={{ 
             width: SIZE, 
             height: SIZE,

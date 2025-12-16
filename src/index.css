@@ -81,7 +81,7 @@
 
   /* Buttons */
   .btn-primary {
-    @apply bg-primary-accent text-text-button rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer flex items-center justify-center;
+    @apply bg-primary-accent text-text-button transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer flex items-center justify-center;
     font-family: var(--font-inter);
     font-size: 18px;
     font-weight: 500;
@@ -90,7 +90,7 @@
   }
 
   .btn-secondary {
-    @apply bg-secondary text-text-main rounded-full transition-all hover:bg-border cursor-pointer flex items-center justify-center;
+    @apply bg-secondary text-text-main transition-all hover:bg-border cursor-pointer flex items-center justify-center;
     font-family: var(--font-inter);
     font-size: 18px;
     font-weight: 500;
@@ -101,7 +101,7 @@
   /* Cards */
   .card-gradient {
     /* Since we renamed the variable to --background-image-card-gradient, this class now works */
-    @apply bg-card-gradient shadow-card rounded-2xl border border-white/20;
+    @apply bg-card-gradient shadow-card border border-white/20;
   }
 }
 
