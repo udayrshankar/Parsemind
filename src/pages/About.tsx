@@ -144,7 +144,7 @@ export default function AboutPage() {
           {/* ====================
               Header
           ==================== */}
-          <section className="mb-24 border-b border-border pb-16">
+          <section className="border-b border-border pb-16">
             <Reveal>
               <span className="text-text-body uppercase tracking-[0.25em] mb-4 block font-medium">
                 Who We Are
@@ -159,7 +159,7 @@ export default function AboutPage() {
               Founders
           ==================== */}
           <section className="mb-32">
-            <div className="mb-12 border-b border-border pb-4 flex justify-between items-end">
+            <div className="border-b border-border pb-4 flex justify-between items-end">
               <Reveal>
                 <h2 className="type-h2">Founders</h2>
               </Reveal>

@@ -96,7 +96,7 @@ const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) 
 // --- Main Component ---
 
 export const Hero = () => {
-  const typedText = useTypewriter("AI Agentic", 150, 2000);
+  const typedText = useTypewriter("Agentic AI", 150, 2000);
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden isolate px-4 bg-black">
