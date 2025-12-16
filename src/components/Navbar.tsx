@@ -88,7 +88,7 @@ export const Navbar = () => {
         </div>
 
         {/* --- Desktop Links --- */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8 translate-x-5">
           {links.map((link) => (
             <Link 
               key={link.name} 
