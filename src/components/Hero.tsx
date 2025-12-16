@@ -98,6 +98,44 @@ const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) 
 export const Hero = () => {
   const typedText = useTypewriter("Agentic AI", 150, 2000);
 
+  // --- Calendly Logic Start ---
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    // 1. Check if Calendly is already loaded (e.g., by Footer)
+    if (window.Calendly) {
+      setIsScriptLoaded(true);
+      return;
+    }
+
+    // 2. Load Calendly CSS
+    const link = document.createElement('link');
+    link.href = 'https://assets.calendly.com/assets/external/widget.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+
+    // 3. Load Calendly JS
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.async = true;
+    script.onload = () => setIsScriptLoaded(true);
+    document.body.appendChild(script);
+
+    return () => {
+      // Optional cleanup: usually we keep the script for other components
+      // document.head.removeChild(link);
+      // document.body.removeChild(script);
+    };
+  }, []);
+
+  const openCalendly = () => {
+    if (!isScriptLoaded || !window.Calendly) return;
+    window.Calendly.initPopupWidget({
+      url: 'https://calendly.com/kg-goutham-anseru/30min',
+    });
+  };
+  // --- Calendly Logic End ---
+
   return (
     <section className="relative min-h-screen w-full overflow-hidden isolate px-6 md:px-12 bg-black">
       
@@ -156,7 +194,10 @@ export const Hero = () => {
             {/* CTA Buttons */}
             <Reveal delay={0.4}>
               <div className="flex flex-wrap gap-4" style={{ fontFamily: '"Inter", sans-serif' }}>
-                <button className="bg-white text-black font-medium px-8 py-3 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300">
+                <button 
+                  onClick={openCalendly} // Added onClick handler
+                  className="bg-white text-black font-medium px-8 py-3 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300"
+                >
                   Book a Strategy Call
                 </button>
 
