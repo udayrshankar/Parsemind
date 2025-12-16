@@ -132,12 +132,12 @@ export const Hero = () => {
                 className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-10"
                 style={{ fontFamily: '"Fraunces", serif' }}
               >
-                We Engineer Intelligent <br />
-                <span className='text-[#9b9b9b] inline-block min-w-[280px]'>
+                We engineer intelligent <br />
+                <span className='inline-block min-w-[280px] text-transparent bg-clip-text bg-linear-to-r from-gray-300 to-gray-500'>
                   {typedText}
                   <span className="animate-pulse text-white">|</span>
                 </span>
-                <span className='ml-1'>Architectures</span>
+                <span className='ml-1'>architectures <br/> for your Buisness Growth</span>
               </h1>
             </Reveal>
 

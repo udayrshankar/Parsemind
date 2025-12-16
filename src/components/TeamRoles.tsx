@@ -7,20 +7,20 @@ const roles = [
     description: "Bridging the gap between business strategy, operational reality, and AI execution."
   },
   {
-    title: "AI/ML Engineers",
-    description: "Experts in building and fine-tuning production-grade AI and agentic systems."
+    title: "Subject Matter Experts",
+    description: "Ensuring domain-aligned AI systems that integrate seamlessly into real workflows."
   },
   {
-    title: "Data Scientists",
-    description: "Turning raw, unstructured data into actionable and predictive insights."
+    title: "AI/ML Engineers",
+    description: "Experts in building and fine-tuning production-grade AI and agentic systems."
   },
   {
     title: "AI Solution Architects",
     description: "Designing scalable, secure, and cloud-native AI architectures."
   },
   {
-    title: "Subject Matter Experts",
-    description: "Ensuring domain-aligned AI systems that integrate seamlessly into real workflows."
+    title: "Data Scientists",
+    description: "Turning raw, unstructured data into actionable and predictive insights."
   },
   {
     title: "UI/UX Specialists",

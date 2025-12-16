@@ -3,6 +3,7 @@ import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import BlogsPage from "./pages/Blogspg";
+import ScrollToTop from "./components/ScrollToTop";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -12,6 +13,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 export default function App(): React.ReactElement {
   return (
     <div className="min-h-screen bg-black">
+      <ScrollToTop />
       <Navbar />
       <main>
         <Suspense fallback={<div className="p-50 text-center text-gray-300">Loading…</div>}>

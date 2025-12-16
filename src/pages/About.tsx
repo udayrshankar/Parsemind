@@ -144,14 +144,31 @@ export default function AboutPage() {
           {/* ====================
               Header
           ==================== */}
-          <section className="border-b border-border pb-16">
+          <section className="mb-24 border-b border-border pb-16">
             <Reveal>
-              <span className="text-text-body uppercase tracking-[0.25em] mb-4 block font-medium">
-                Who We Are
-              </span>
-              <h1 className="type-h1 text-text-main max-w-4xl">
-                We build systems that scale with trust.
-              </h1>
+              <div className="flex flex-col lg:flex-row justify-between items-end gap-12 bg-accent-hover">
+                
+                {/* Primary Content Node */}
+                <div className="max-w-4xl">
+                  <span className="text-text-body uppercase tracking-[0.25em] mb-4 block font-medium">
+                    Who We Are
+                  </span>
+                  <h1 className="type-h1 text-text-main">
+                    We build systems that scale with trust.
+                  </h1>
+                </div>
+
+                {/* Secondary CTA Node */}
+                <div className="w-full lg:w-auto p-8 min-w-[320px]">
+                  <button 
+                    onClick={() => document.getElementById('mission-principles')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="w-full bg-white text-black border border-black px-6 py-4 text-xs font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors"
+                  >
+                    View Principles
+                  </button>
+                </div>
+
+              </div>
             </Reveal>
           </section>
 
@@ -161,7 +178,7 @@ export default function AboutPage() {
           <section className="mb-32">
             <div className="border-b border-border pb-4 flex justify-between items-end">
               <Reveal>
-                <h2 className="type-h2">Founders</h2>
+                <h2 className="type-h2">Meet Our Founders</h2>
               </Reveal>
               <span className="text-sm font-bold uppercase tracking-widest text-gray-400">
                 Leadership
