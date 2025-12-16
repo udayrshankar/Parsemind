@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ElementType } from "react";
 import { 
   Database, 
   Cloud, 
@@ -12,23 +12,35 @@ import {
 /* ------------------------------
    CONSTANTS & MATH
 -------------------------------- */
-const SIZE = 640;
-const CENTER = SIZE / 2;
+const BASE_SIZE = 700; // The internal coordinate system size
+const CENTER = BASE_SIZE / 2;
 const RADIUS = 220; 
-const CARD_WIDTH = 150;
-const CARD_HEIGHT = 110;
+const CARD_WIDTH = 140;
+const CARD_HEIGHT = 100;
 
-// The "Swiss" ease
-const EASE_SWISS = { ease: [0.25, 1, 0.5, 1] as const };
+// Dark Mode Palette
+const ACTIVE_COLOR = "#818cf8"; // Light Indigo (Pop against dark)
+const RING_DOT_COLOR = "#06b6d4"; // Cyan/Neon (Data flow)
+const INACTIVE_LINE_COLOR = "#404040"; // Dark Grey
+const ACTIVE_LINE_COLOR = "#6366f1"; // Solid Indigo
 
-const ITEMS = [
+const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
+
+interface IntegrationItem {
+  id: string;
+  label: string;
+  subLabel: string;
+  angle: number;
+  icon: ElementType; 
+}
+
+const ITEMS: IntegrationItem[] = [
   { 
     id: "slack", 
     label: "MESSAGING", 
     subLabel: "Slack / Teams",
     angle: 315, 
     icon: Slack, 
-    color: "#6366f1" // Indigo-500
   },
   { 
     id: "db", 
@@ -36,7 +48,6 @@ const ITEMS = [
     subLabel: "Postgres / Vector",
     angle: 45, 
     icon: Database, 
-    color: "#6366f1" 
   },
   { 
     id: "crm", 
@@ -44,7 +55,6 @@ const ITEMS = [
     subLabel: "Salesforce / Hubspot",
     angle: 135, 
     icon: Cloud, 
-    color: "#6366f1" 
   },
   { 
     id: "git", 
@@ -52,11 +62,9 @@ const ITEMS = [
     subLabel: "Github Actions",
     angle: 225, 
     icon: Github, 
-    color: "#6366f1" 
   },
 ];
 
-// Helper: Convert Polar (angle, radius) to Cartesian (x, y)
 const toCartesian = (angle: number, r: number) => {
   const rad = (angle - 90) * (Math.PI / 180);
   return {
@@ -65,79 +73,112 @@ const toCartesian = (angle: number, r: number) => {
   };
 };
 
+const describeArc = (x1: number, y1: number, x2: number, y2: number, r: number) => {
+  return `M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`;
+};
+
 /* ------------------------------
    SUB-COMPONENTS
 -------------------------------- */
 
-// 1. The Data Beam (Radial Vector)
-const DataBeam = ({ 
-  angle, 
-  isActive, 
-  color 
+// 1. Radial Beam (Center <-> Node)
+const RadialBeam = ({ 
+  angle,
+  isActive
 }: { 
-  angle: number; 
-  isActive: boolean; 
-  color: string 
+  angle: number;
+  isActive: boolean;
 }) => {
-  const start = toCartesian(angle, 40); 
-  const end = toCartesian(angle, RADIUS - 65); 
+  const start = toCartesian(angle, 50); 
+  const end = toCartesian(angle, RADIUS - 60); 
 
   return (
     <g>
-      {/* Passive Base Line - Dark Mode: Neutral-800 */}
+      {/* Background Line (Darker) */}
       <line
         x1={start.x} y1={start.y}
         x2={end.x} y2={end.y}
-        stroke="#262626" 
+        stroke={INACTIVE_LINE_COLOR}
         strokeWidth="1"
-        strokeDasharray="4 4"
       />
-      
-      {/* Active Pulse Line */}
+
+      {/* Active Connection Line */}
       <motion.line
         x1={start.x} y1={start.y}
         x2={end.x} y2={end.y}
-        stroke={color}
+        stroke={ACTIVE_LINE_COLOR}
         strokeWidth="2"
         initial={{ pathLength: 0, opacity: 0 }}
         animate={{ 
-            pathLength: isActive ? 1 : 0, 
-            opacity: isActive ? 1 : 0 
+          pathLength: isActive ? 1 : 0,
+          opacity: isActive ? 1 : 0
         }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-        strokeLinecap="round"
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       />
-
-      {/* Data Packet Particle */}
-      {isActive && (
-        <motion.circle
-            r="3"
-            fill={color}
-            initial={{ cx: start.x, cy: start.y }}
-            animate={{ 
-                cx: [start.x, end.x],
-                cy: [start.y, end.y],
-                opacity: [0, 1, 0]
-            }}
-            transition={{
-                duration: 1.2,
-                repeat: Infinity,
-                ease: "linear",
-                repeatDelay: 0.1
-            }}
-        />
-      )}
+      
+      {/* Active Data Dot */}
+      <motion.circle
+        r="3"
+        fill={ACTIVE_COLOR}
+        initial={{ opacity: 0 }}
+        animate={{ 
+            cx: isActive ? [start.x, end.x] : start.x,
+            cy: isActive ? [start.y, end.y] : start.y,
+            opacity: isActive ? [0, 1, 0] : 0
+        }}
+        transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 0.2
+        }}
+      />
     </g>
   );
 };
 
-// 2. The Integration Node
+// 2. Ring Beam (Node <-> Node)
+const RingBeam = ({ 
+  startAngle, 
+  endAngle, 
+}: { 
+  startAngle: number; 
+  endAngle: number; 
+}) => {
+  const start = toCartesian(startAngle, RADIUS);
+  const end = toCartesian(endAngle, RADIUS);
+  const pathData = describeArc(start.x, start.y, end.x, end.y, RADIUS);
+  const dots = [0, 1, 2]; 
+
+  return (
+    <g>
+      {/* Background Path (Darker) */}
+      <path d={pathData} fill="none" stroke={INACTIVE_LINE_COLOR} strokeWidth="1" strokeDasharray="4 4" />
+      
+      {/* Moving Dots (Cyan/Neon) */}
+      {dots.map((i) => (
+        <circle key={i} r="2" fill={RING_DOT_COLOR}>
+          <animateMotion 
+             dur="4s" 
+             repeatCount="indefinite"
+             path={pathData}
+             begin={`-${i * 1.3}s`} 
+             keyPoints="0;1"
+             keyTimes="0;1"
+          />
+        </circle>
+      ))}
+    </g>
+  );
+};
+
+// 3. The Integration Node (Card) - DARK THEME
 const IntegrationCard = ({ 
     item, 
     isActive, 
     onHover 
 }: { 
-    item: typeof ITEMS[0]; 
+    item: IntegrationItem; 
     isActive: boolean;
     onHover: (id: string | null) => void;
 }) => {
@@ -146,52 +187,55 @@ const IntegrationCard = ({
 
   return (
     <motion.div
-        className="absolute flex items-center justify-center cursor-pointer z-20"
+        className="absolute z-20"
         style={{
-            left: pos.x - CARD_WIDTH / 2,
-            top: pos.y - CARD_HEIGHT / 2,
+            left: pos.x,
+            top: pos.y,
+            x: "-50%",
+            y: "-50%",
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
         }}
         onMouseEnter={() => onHover(item.id)}
         onMouseLeave={() => onHover(null)}
         whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+        transition={{ duration: 0.3, ease: EASE_SWISS }}
     >
         <motion.div
+            // Dark Mode Styles: bg-neutral-900, border-neutral-800
             className={`
-                w-full h-full border flex flex-col items-center justify-center gap-2 p-3 text-center
+                w-full h-full border flex flex-col items-center justify-center gap-2 p-3 text-center cursor-pointer
                 backdrop-blur-md transition-all duration-500
                 ${isActive 
-                    ? 'bg-neutral-900/90 shadow-[0_0_30px_-5px_rgba(99,102,241,0.15)]' 
-                    : 'bg-neutral-900/40 border-neutral-800 hover:border-neutral-700'
+                    ? 'bg-neutral-800/90 border-indigo-500 shadow-[0_0_30px_-5px_rgba(99,102,241,0.3)]' 
+                    : 'bg-neutral-900/80 border-neutral-800 shadow-sm hover:bg-neutral-800'
                 }
             `}
-            animate={{
-                borderColor: isActive ? "rgba(99, 102, 241, 0.5)" : "rgba(38, 38, 38, 1)", 
-                y: isActive ? -4 : 0
-            }}
+            animate={{ y: isActive ? -4 : 0 }}
         >
             <div 
-                className={`p-2.5 transition-colors duration-500 ${isActive ? 'text-indigo-400' : 'text-neutral-500 bg-neutral-800/50'}`}
-                style={{ backgroundColor: isActive ? "rgba(99, 102, 241, 0.1)" : undefined }}
+                className={`p-2.5 transition-colors duration-500 ${isActive ? 'text-white bg-indigo-600' : 'text-neutral-400 bg-neutral-800'}`}
             >
                 <Icon size={20} strokeWidth={1.5} />
             </div>
             
             <div>
-                {/* Updated: text-[10px] -> text-xs (12px) */}
-                <span className={`block text-xs font-bold tracking-widest uppercase ${isActive ? 'text-white' : 'text-neutral-500'}`}>
+                <span className={`block text-[10px] font-bold tracking-widest uppercase ${isActive ? 'text-white' : 'text-neutral-400'}`}>
                     {item.label}
                 </span>
-                {/* Updated: text-[9px] -> text-[10px] */}
-                <span className="block text-[10px] text-neutral-500 font-medium mt-0.5">
+                <span className="block text-[9px] text-neutral-500 font-medium mt-0.5">
                     {item.subLabel}
                 </span>
             </div>
 
-            {/* Live Indicator */}
-            <div className={`absolute top-2 right-2 w-1.5 h-1.5 rounded-full transition-colors duration-300 ${isActive ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]' : 'bg-neutral-800'}`} />
+            {/* Status Indicator */}
+            <div 
+              className="absolute top-0 right-0 w-2 h-2 transition-all duration-500"
+              style={{ 
+                backgroundColor: isActive ? '#10b981' : 'transparent',
+                boxShadow: isActive ? '0 0 10px #10b981' : 'none'
+              }} 
+            />
         </motion.div>
     </motion.div>
   );
@@ -200,18 +244,16 @@ const IntegrationCard = ({
 /* ------------------------------
    MAIN EXPORT
 -------------------------------- */
-interface IntegrationVisualDarkProps {
-    scale?: number;
-}
-
-export default function IntegrationVisualDark({ scale = 1 }: IntegrationVisualDarkProps) {
+export default function IntegrationVisualDark({ scale = 1 }: { scale?: number }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [autoCycle, setAutoCycle] = useState(true);
 
+  // Cycle Logic
   useEffect(() => {
     if (!autoCycle) return;
     const interval = setInterval(() => {
         setActiveId(prev => {
+            if (!prev) return ITEMS[0].id;
             const currentIndex = ITEMS.findIndex(i => i.id === prev);
             const nextIndex = (currentIndex + 1) % ITEMS.length;
             return ITEMS[nextIndex].id;
@@ -230,97 +272,108 @@ export default function IntegrationVisualDark({ scale = 1 }: IntegrationVisualDa
   };
 
   return (
-    // 1. Bounding Box (Scaled)
+    // Outer Wrapper controls the Layout Size based on Scale
     <div 
-        className="relative mx-auto overflow-hidden"
-        style={{ 
-            width: SIZE * scale, 
-            height: SIZE * scale 
-        }}
+      className="relative flex items-center justify-center font-sans overflow-visible"
+      style={{ 
+        width: BASE_SIZE * scale, 
+        height: BASE_SIZE * scale 
+      }}
     >
-      {/* 2. Scaler Container */}
+      
+      {/* Inner Scaler applies the transform */}
       <div 
-        className="relative flex items-center justify-center font-sans overflow-hidden"
+        className="relative flex-shrink-0 origin-top-left"
         style={{ 
-            width: SIZE, 
-            height: SIZE,
+            width: BASE_SIZE, 
+            height: BASE_SIZE,
             transform: `scale(${scale})`,
-            transformOrigin: "top left"
+            transformOrigin: "center center"
         }}
       >
-      
-        {/* 1. Background Grid & Ambient Noise - Dark Mode */}
-        <div 
-            className="absolute inset-0 pointer-events-none opacity-[0.05]"
-            style={{
-                backgroundImage: "linear-gradient(#404040 1px, transparent 1px), linear-gradient(90deg, #404040 1px, transparent 1px)",
-                backgroundSize: "40px 40px"
-            }}
-        />
+        {/* 1. Connection Layer (SVG) */}
+        <svg 
+            width={BASE_SIZE} 
+            height={BASE_SIZE} 
+            viewBox={`0 0 ${BASE_SIZE} ${BASE_SIZE}`}
+            className="absolute inset-0 w-full h-full pointer-events-none z-10"
+        >
+          {/* Main Ring Guide (Dark) */}
+          <circle 
+            cx={CENTER} cy={CENTER} r={RADIUS} 
+            fill="none" stroke="#262626" strokeWidth="1" 
+          />
 
-        {/* 2. Connection Layer (SVG) */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-            <circle 
-                cx={CENTER} cy={CENTER} r={RADIUS} 
-                fill="none" stroke="#262626" strokeWidth="1" 
-            />
-            {ITEMS.map((item) => (
-            <DataBeam 
-                key={item.id}
-                angle={item.angle} 
-                isActive={activeId === item.id} 
-                color={item.color}
-            />
-            ))}
+          {ITEMS.map((item, i) => {
+             const nextItem = ITEMS[(i + 1) % ITEMS.length];
+             
+             return (
+               <g key={`conns-${item.id}`}>
+                 <RadialBeam 
+                    angle={item.angle} 
+                    isActive={activeId === item.id}
+                 />
+                 
+                 <RingBeam 
+                    startAngle={item.angle}
+                    endAngle={nextItem.angle}
+                 />
+               </g>
+             );
+          })}
         </svg>
 
-        {/* 3. The Orchestration Core (Agent) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-8 -translate-y-1/2 z-30">
-            <motion.div
-                // Dark Mode Core: Neutral-950, Border-Neutral-800
-                className="w-24 h-24 bg-neutral-950 border-4 border-neutral-800 shadow-2xl flex items-center justify-center relative overflow-hidden"
-                animate={{ scale: activeId ? 1.05 : 1 }}
-                transition={EASE_SWISS}
-            >
-                <div className="relative z-10 text-white">
-                    <Workflow size={32} strokeWidth={1.5} />
-                </div>
-                
-                {/* Inner Processing Pulse */}
-                <motion.div 
-                    className="absolute inset-0 bg-indigo-500/20 blur-xl"
-                    animate={{ opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                />
-            </motion.div>
-
-            {/* Outer Ripple Ring */}
-            <motion.div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-indigo-500/20 rounded-full -z-10"
-                animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-            />
-            
-            {/* Core Label */}
-            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-neutral-900 border border-neutral-800 shadow-sm">
-                    <Radio size={10} className="text-indigo-500 animate-pulse" />
-                    {/* Updated: text-[9px] -> text-[10px] */}
-                    <span className="text-md font-bold tracking-widest text-neutral-400">
-                        AI Agent
-                    </span>
-                </div>
+        {/* 2. The Orchestration Core (Agent) - DARK THEME */}
+        <div 
+            className="absolute z-30"
+            style={{ 
+                left: CENTER, 
+                top: CENTER,
+                transform: "translate(-50%, -50%)"
+            }}
+        >
+          <motion.div
+            // bg-black, border-neutral-700
+            className="w-24 h-24 bg-black border border-neutral-800 shadow-2xl flex items-center justify-center relative overflow-hidden"
+            animate={{ 
+                scale: activeId ? 1.05 : 1,
+                boxShadow: activeId 
+                    ? "0 0 40px -10px rgba(99, 102, 241, 0.4)" // Indigo Glow
+                    : "0 0 0 0 rgba(0,0,0,0)"
+            }}
+            transition={{ ease: EASE_SWISS }}
+          >
+            <div className="relative z-10 text-white">
+                <Workflow size={36} strokeWidth={1.5} />
             </div>
+            
+            {/* Inner Processing Pulse */}
+            <motion.div 
+               className="absolute inset-0 bg-indigo-500/20 blur-xl"
+               animate={{ opacity: [0.2, 0.4, 0.2] }}
+               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+
+          {/* Core Label */}
+          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 shadow-sm">
+                <Radio size={12} className="text-indigo-500 animate-pulse" />
+                <span className="text-[10px] font-bold tracking-widest text-neutral-400">
+                    AI ORCHESTRATOR
+                </span>
+            </div>
+          </div>
         </div>
 
-        {/* 4. Satellite Nodes */}
+        {/* 3. Satellite Nodes */}
         {ITEMS.map((item) => (
-            <IntegrationCard 
-                key={item.id} 
-                item={item} 
-                isActive={activeId === item.id} 
-                onHover={handleHover}
-            />
+          <IntegrationCard 
+            key={item.id} 
+            item={item} 
+            isActive={activeId === item.id} 
+            onHover={handleHover}
+          />
         ))}
 
       </div>

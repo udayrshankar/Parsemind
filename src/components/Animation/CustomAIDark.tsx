@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { 
-  
   Zap, 
   BrainCircuit, 
   HardDrive, 
@@ -151,48 +150,50 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
     >
         {/* CTA OVERLAY */}
         <div className="absolute top-6 left-0 right-0 z-30 flex flex-col items-center justify-center pointer-events-none">
-  {/* CONTAINER: 
-    - Rounded-full and overflow-hidden to contain the spinning gradient.
-    - p-[1px] acts as the "border width" (the space for the gradient to show).
-  */}
-  <div className="relative w-[260px] overflow-hidden p-[1px]">
-    
-    {/* LAYER 1: The Revolving Animation 
-      - A conic gradient that spins 360 degrees infinitely.
-      - Colors: Neutral Gray (#E5E5E5) -> Indigo (#6366f1) -> Neutral Gray.
-    */}
-    <motion.div
-      className="absolute inset-[-100%]"
-      animate={{ rotate: 360 }}
-      transition={{
-        duration: 3,
-        repeat: Infinity,
-        ease: "linear",
-      }}
-      style={{
-        background: "conic-gradient(from 90deg at 50% 50%, #E5E5E5 0%, #6366f1 50%, #E5E5E5 100%)",
-      }}
-    />
+          {/* PULSING CONTAINER:
+              - Changed div to motion.div
+              - Added animate prop for scaling
+          */}
+          <motion.div 
+            className="relative w-[260px] overflow-hidden p-[1px]"
+            animate={{ scale: [1, 1.05, 1] }} // Pulse Effect
+            transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }}
+          >
+            
+            {/* LAYER 1: The Revolving Animation */}
+            <motion.div
+              className="absolute inset-[-100%]"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              style={{
+                background: "conic-gradient(from 90deg at 50% 50%, #E5E5E5 0%, #6366f1 50%, #E5E5E5 100%)",
+              }}
+            />
 
-    {/* LAYER 2: The Content (White Background)
-      - Placed relatively on top to mask the center of the gradient.
-      - Updated text colors to match the Light Theme (Neutral-500 & Indigo-600).
-    */}
-    <div className="relative flex h-full w-full items-center justify-center gap-2 bg-white/95 px-4 py-2 backdrop-blur-md">
-      <span className="text-xs font-medium text-neutral-500">
-        <span className="font-bold text-indigo-600"> Anseru</span> - Our First AI{" "}
-        <span className="font-bold text-indigo-600"> B2B SAAS</span>
-      </span>
-      <motion.div
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <ArrowUpRight size={14} className="text-indigo-500" />
-      </motion.div>
-    </div>
-    
-  </div>
-</div>
+            {/* LAYER 2: The Content */}
+            <div className="relative flex h-full w-full items-center justify-center gap-2 bg-white/95 px-4 py-2 backdrop-blur-md">
+              <span className="text-xs font-medium text-neutral-500">
+                <span className="font-bold text-indigo-600"> Anseru</span> - Our First AI{" "}
+                <span className="font-bold text-indigo-600"> B2B SAAS</span>
+              </span>
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <ArrowUpRight size={14} className="text-indigo-500" />
+              </motion.div>
+            </div>
+            
+          </motion.div>
+        </div>
 
         <div 
             style={{ 
@@ -206,8 +207,6 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
       
             <FlowLine startY={TOP_Y + INPUT_HEIGHT} endY={MAIN_Y} />
             <FlowLine startY={MAIN_Y + MAIN_HEIGHT} endY={BOTTOM_Y} />
-
-           
 
             {/* --- CENTER AGENT --- */}
             <motion.div

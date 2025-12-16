@@ -75,7 +75,7 @@ const principles = [
 ];
 
 // --------------------
-// Founder Block
+// Founder Block (Fixed Parallax)
 // --------------------
 const FounderBlock = ({ person }: { person: Person }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -84,42 +84,45 @@ const FounderBlock = ({ person }: { person: Person }) => {
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  // Smooth parallax movement
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <div ref={ref} className="border-t border-border pt-8">
-      {/* Image */}
-      <div className="relative h-[520px] overflow-hidden border border-border">
-        <motion.img
-          src={person.image}
-          alt={person.name}
-          style={{ y }}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/20" />
+    <div ref={ref} className="border-t border-neutral-200 pt-8">
+      {/* Image Container - Enforced Grayscale & Parallax */}
+      <div className="relative h-[520px] w-full overflow-hidden border border-neutral-200 bg-neutral-100">
+        <motion.div style={{ y }} className="h-[120%] w-full relative -top-[10%]">
+             <img
+                src={person.image}
+                alt={person.name}
+                className="w-full h-full object-cover grayscale" // Forced grayscale to remove "purple/color"
+             />
+        </motion.div>
+        {/* Subtle Overlay to unify contrast */}
+        <div className="absolute inset-0 bg-black/5" />
       </div>
 
       {/* Content */}
-      <div className="pt-6">
-        <span className="text-xs uppercase tracking-widest font-bold text-gray-400">
+      <div className="pt-8">
+        <span className="text-xs uppercase tracking-widest font-bold text-neutral-400">
           {person.role}
         </span>
 
-        <h3 className="mt-4 text-4xl font-serif font-medium text-text-main">
+        <h3 className="mt-4 text-4xl font-serif font-medium text-neutral-900">
           {person.name}
         </h3>
 
-        <p className="mt-6 text-lg leading-relaxed text-text-body/80 max-w-xl">
+        <p className="mt-6 text-lg leading-relaxed text-neutral-600 max-w-xl">
           {person.bio}
         </p>
 
-        <div className="mt-10 border-t border-border pt-6">
-          <p className="text-xs uppercase tracking-widest font-bold text-gray-400 mb-4">
+        <div className="mt-10 border-t border-neutral-200 pt-6">
+          <p className="text-xs uppercase tracking-widest font-bold text-neutral-400 mb-4">
             Focus Areas
           </p>
           <div className="flex flex-col gap-2">
             {person.qualities.map((q) => (
-              <span key={q} className="text-sm text-text-main">
+              <span key={q} className="text-sm text-neutral-800 font-medium">
                 — {q}
               </span>
             ))}
@@ -135,7 +138,7 @@ const FounderBlock = ({ person }: { person: Person }) => {
 // --------------------
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-bg-main text-text-main font-inter">
+    <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 font-inter">
       <TransitionProvider>
         <Navbar />
 
@@ -144,25 +147,26 @@ export default function AboutPage() {
           {/* ====================
               Header
           ==================== */}
-          <section className="mb-24 border-b border-border pb-16">
+          <section className="mb-24 border-b border-neutral-200 pb-16">
             <Reveal>
-              <div className="flex flex-col lg:flex-row justify-between items-end gap-12 bg-accent-hover">
+              {/* Removed bg-accent-hover, replaced with bg-neutral-100 (Light Grey) */}
+              <div className="flex flex-col lg:flex-row justify-between items-end gap-12 bg-white border border-neutral-200 p-12">
                 
                 {/* Primary Content Node */}
                 <div className="max-w-4xl">
-                  <span className="text-text-body uppercase tracking-[0.25em] mb-4 block font-medium">
+                  <span className="text-neutral-500 uppercase tracking-[0.25em] mb-4 block font-medium text-xs">
                     Who We Are
                   </span>
-                  <h1 className="type-h1 text-text-main">
+                  <h1 className="text-5xl md:text-6xl font-medium tracking-tight text-neutral-900 leading-[1.1]">
                     We build systems that scale with trust.
                   </h1>
                 </div>
 
                 {/* Secondary CTA Node */}
-                <div className="w-full lg:w-auto p-8 min-w-[320px]">
+                <div className="w-full lg:w-auto min-w-[240px]">
                   <button 
                     onClick={() => document.getElementById('mission-principles')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="w-full bg-white text-black border border-black px-6 py-4 text-xs font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors"
+                    className="w-full bg-neutral-900 text-white border border-neutral-900 px-8 py-5 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300"
                   >
                     View Principles
                   </button>
@@ -176,11 +180,11 @@ export default function AboutPage() {
               Founders
           ==================== */}
           <section className="mb-32">
-            <div className="border-b border-border pb-4 flex justify-between items-end">
+            <div className="border-b border-neutral-200 pb-4 flex justify-between items-end mb-12">
               <Reveal>
-                <h2 className="type-h2">Meet Our Founders</h2>
+                <h2 className="text-3xl font-medium">Meet Our Founders</h2>
               </Reveal>
-              <span className="text-sm font-bold uppercase tracking-widest text-gray-400">
+              <span className="text-sm font-bold uppercase tracking-widest text-neutral-400">
                 Leadership
               </span>
             </div>
@@ -197,32 +201,33 @@ export default function AboutPage() {
           {/* ====================
               Mission & Principles
           ==================== */}
-          <section className="border-t border-border pt-24">
+          {/* Added ID here to fix the connection issue */}
+          <section id="mission-principles" className="border-t border-neutral-200 pt-24">
             <div className="flex flex-col text-center justify-center items-center mb-16">
               <Reveal>
-                <span className="text-text-body uppercase tracking-wider">
+                <span className="text-neutral-500 uppercase tracking-wider text-xs font-bold">
                   How We Think
                 </span>
-                <h2 className="type-h2 text-text-main mt-2">
+                <h2 className="text-4xl font-medium text-neutral-900 mt-4">
                   Mission & Principles
                 </h2>
               </Reveal>
             </div>
 
-            {/* Cards — SAME system as "What Sets Us Apart" */}
+            {/* Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {principles.map((item, index) => (
                 <Reveal key={index} delay={index * 0.1}>
                   <div
-                    className="group relative h-full bg-bg-card border border-gray-100 p-8
-                               hover:bg-black transition-all duration-500 ease-out
-                               hover:shadow-2xl cursor-default overflow-hidden"
+                    className="group relative h-full bg-white border border-neutral-200 p-10
+                               hover:bg-neutral-900 transition-all duration-500 ease-out
+                               cursor-default overflow-hidden"
                   >
-                    {/* Large background number */}
+                    {/* Background Number */}
                     <span
                       className="absolute -bottom-10 -right-4 text-[10rem] font-bold leading-none
-                                 text-black opacity-5
-                                 group-hover:text-white group-hover:opacity-10
+                                 text-neutral-100
+                                 group-hover:text-neutral-800
                                  transition-colors duration-500 pointer-events-none select-none z-0"
                     >
                       {index + 1}
@@ -230,18 +235,15 @@ export default function AboutPage() {
 
                     <div className="relative z-10 flex flex-col items-start gap-4 h-full min-h-[200px]">
                       <div>
-                        <h3 className="type-h3 text-text-main mb-3 group-hover:text-white transition-colors duration-500 leading-tight">
+                        <h3 className="text-xl font-semibold text-neutral-900 mb-3 group-hover:text-white transition-colors duration-500 leading-tight">
                           {item.title}
                         </h3>
 
-                        <p className="type-body-main text-[18px] text-gray-600 group-hover:text-gray-400 transition-colors duration-500">
+                        <p className="text-[16px] text-neutral-600 group-hover:text-neutral-400 transition-colors duration-500 leading-relaxed">
                           {item.description}
                         </p>
                       </div>
                     </div>
-
-                    {/* Subtle hover glow */}
-                    <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   </div>
                 </Reveal>
               ))}

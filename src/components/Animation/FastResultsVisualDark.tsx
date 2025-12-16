@@ -12,7 +12,6 @@ import {
 /* ------------------------------
    CONSTANTS & CONFIG
 -------------------------------- */
-// Internal base dimensions for the scaler
 const BASE_WIDTH = 400; 
 const BASE_HEIGHT = 800;
 
@@ -93,6 +92,7 @@ const PipelineStep = ({
     className="relative z-10 bg-neutral-900 border border-neutral-800 p-4 flex items-center gap-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] w-full mb-8 group"
     style={{ maxWidth: CARD_WIDTH }}
   >
+    {/* Left Connector Dot */}
     <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-neutral-900 border border-neutral-800 rounded-full z-20 flex items-center justify-center">
         <div className="w-1 h-1 bg-neutral-600 rounded-full group-hover:bg-indigo-500 transition-colors" />
     </div>
@@ -110,6 +110,7 @@ const PipelineStep = ({
       </span>
     </div>
 
+    {/* Right Connector Dot */}
     <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-neutral-900 border border-neutral-800 rounded-full z-20 flex items-center justify-center">
          <div className="w-1 h-1 bg-neutral-600 rounded-full group-hover:bg-indigo-500 transition-colors" />
     </div>
@@ -126,17 +127,18 @@ const RoiDashboard = ({ index }: { index: number }) => (
     className="relative z-20 bg-neutral-900 border border-neutral-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
     style={{ width: DASHBOARD_WIDTH }}
   >
-    <div className="bg-black px-5 py-3 flex items-center justify-between border-b border-neutral-800">
+    {/* Top Center Connector Notch - Visual Anchor for Center Alignment */}
+    <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-neutral-900 border-t border-l border-neutral-800 rotate-45 z-30" />
+
+    <div className="bg-black px-5 py-3 flex items-center justify-between border-b border-neutral-800 relative z-40">
       <div className="flex items-center gap-3">
         <div className="p-1 bg-neutral-800 rounded">
             <LayoutDashboard size={14} className="text-neutral-300" />
         </div>
         <div className="flex flex-col">
-            {/* Updated: text-[10px] -> text-xs */}
             <span className="text-xs font-bold text-white uppercase tracking-widest leading-none">
             ROI Dashboard
             </span>
-            {/* Updated: text-[9px] -> text-[10px] */}
             <span className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider mt-0.5">
                 Live Analysis
             </span>
@@ -154,7 +156,6 @@ const RoiDashboard = ({ index }: { index: number }) => (
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <TrendingUp size={14} className="text-neutral-500" />
-          {/* Updated: text-[10px] -> text-xs */}
           <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
             Efficiency
           </span>
@@ -165,7 +166,6 @@ const RoiDashboard = ({ index }: { index: number }) => (
             </span>
             <div className="flex items-center gap-1 mt-1 text-emerald-500">
                 <Zap size={10} fill="currentColor" />
-                {/* Updated: text-[10px] to match standard */}
                 <span className="text-[10px] font-bold uppercase tracking-wide">+12.5% vs Last Mo</span>
             </div>
         </div>
@@ -177,7 +177,6 @@ const RoiDashboard = ({ index }: { index: number }) => (
         
         <div className="flex items-center gap-2">
           <Timer size={14} className="text-neutral-500" />
-          {/* Updated: text-[10px] -> text-xs */}
           <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
             Workload
           </span>
@@ -187,7 +186,6 @@ const RoiDashboard = ({ index }: { index: number }) => (
             -41%
             </span>
              <div className="inline-block mt-1 px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 rounded-sm">
-                {/* Updated: text-[10px] to match standard */}
                 <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-wide">
                     120hrs Saved
                 </span>
@@ -207,7 +205,6 @@ interface FastResultsVisualDarkProps {
 
 export default function FastResultsVisualDark({ scale = 1 }: FastResultsVisualDarkProps) {
   return (
-    // 1. Bounding Box
     <div 
         className="relative mx-auto overflow-hidden"
         style={{ 
@@ -215,7 +212,6 @@ export default function FastResultsVisualDark({ scale = 1 }: FastResultsVisualDa
             height: BASE_HEIGHT * scale 
         }}
     >
-        {/* 2. Scaler Container */}
         <div 
             style={{ 
                 width: BASE_WIDTH,
@@ -223,11 +219,13 @@ export default function FastResultsVisualDark({ scale = 1 }: FastResultsVisualDa
                 transform: `scale(${scale})`,
                 transformOrigin: 'top left', 
             }}
+            // 'justify-center' aligns the whole stack vertically in the middle of the 800px
+            // 'items-center' aligns the stack horizontally in the center
             className="relative font-sans flex flex-col items-center justify-center py-12"
         >
             <FlowLine />
 
-            <div className="flex flex-col items-center w-full">
+            <div className="flex flex-col items-center justify-center w-full">
                 <PipelineStep 
                     index={0}
                     icon={Database}
@@ -249,7 +247,8 @@ export default function FastResultsVisualDark({ scale = 1 }: FastResultsVisualDa
                     subLabel="Quality Analysis"
                 />
 
-                <div className="mt-4">
+                {/* Increased margin (mt-8) to match the flow, ensuring it feels equally spaced and centered */}
+                <div className="mt-8">
                     <RoiDashboard index={3} />
                 </div>
             </div>

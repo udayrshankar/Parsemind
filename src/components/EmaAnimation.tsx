@@ -36,7 +36,7 @@ const COMPONENT_LIST: Slide[] = [
   },
   { 
     id: 'integration', 
-    component: <IntegrationVisualDark scale={0.6} />, 
+    component: <IntegrationVisualDark scale={0.9} />, 
     duration: 10000 
   },
   { 
