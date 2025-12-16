@@ -133,7 +133,7 @@ export const Hero = () => {
                 style={{ fontFamily: '"Fraunces", serif' }}
               >
                 We Engineer Intelligent <br />
-                <span className='text-[#ffaa00] inline-block min-w-[280px]'>
+                <span className='text-[#9b9b9b] inline-block min-w-[280px]'>
                   {typedText}
                   <span className="animate-pulse text-white">|</span>
                 </span>

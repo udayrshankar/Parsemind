@@ -74,7 +74,7 @@ const FloatingNode = ({
     className={`absolute z-20 bg-zinc-900/80 backdrop-blur-md p-2.5 px-4 rounded-full border border-zinc-800/80 shadow-xl flex items-center justify-center ${className}`}
     initial={{ opacity: 0, scale: 0.8, y: 10 }}
     animate={{ 
-        opacity: 1, 
+        opacity: 0.5, 
         scale: 1, 
         y: [0, -12, 0], 
         x: [0, 8, 0]    

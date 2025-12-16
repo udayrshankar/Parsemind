@@ -105,7 +105,7 @@ export const Navbar = () => {
         <div className="hidden lg:block">
           <button
             onClick={openCalendly}
-            className="bg-white text-black text-xs px-2 py-2 md:py-2 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
+            className="bg-white text-black text-xs px-5 py-2 md:py-2 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
           >
             Book a Strategy Call
           </button>
