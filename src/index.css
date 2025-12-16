@@ -35,7 +35,7 @@
 
   /* -- Gradients -- */
   /* FIX: Changed from --image-card-gradient to --background-image-card-gradient */
-  --background-image-card-gradient: radial-gradient(100% 122% at 0% 50%, #f7f8fa 64%, #222222 99%);
+  --background-image-card-gradient: radial-gradient(100% 122% at 0% 50%, #f7f8fa 64%, #fafafa 79%, #c4dffa 99%);
 }
 
 /* --- COMPONENT STYLES --- */
