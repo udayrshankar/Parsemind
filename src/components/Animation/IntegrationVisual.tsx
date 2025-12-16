@@ -1,3 +1,4 @@
+// src/components/Animation/IntegrationVisual.tsx
 import { motion } from "framer-motion";
 import { useState, useEffect, type ElementType } from "react";
 import { 
@@ -12,14 +13,17 @@ import {
 /* ------------------------------
    CONSTANTS & MATH
 -------------------------------- */
-const SIZE = 700;
-const CENTER = SIZE / 2;
+const BASE_SIZE = 700; // The internal coordinate system size
+const CENTER = BASE_SIZE / 2;
 const RADIUS = 220; 
 const CARD_WIDTH = 140;
 const CARD_HEIGHT = 100;
 
-const ACTIVE_COLOR = "#000000"; // Indigo (Active Node)
-const RING_DOT_COLOR = "#0ea5e9"; // Sky Blue (Background Data Flow)
+// Light Mode Palette
+const ACTIVE_COLOR = "#000000"; // Indigo-600 (Main Accent)
+const RING_DOT_COLOR = "#0891b2"; // Cyan-600 (Data flow)
+const INACTIVE_LINE_COLOR = "#969696"; // Neutral-200
+const ACTIVE_LINE_COLOR = "#000000"; // Indigo-600
 
 const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
 
@@ -86,25 +90,24 @@ const RadialBeam = ({
   angle: number;
   isActive: boolean;
 }) => {
-  const start = toCartesian(angle, 50); // Core edge
-  const end = toCartesian(angle, RADIUS - 60); // Card edge
+  const start = toCartesian(angle, 50); 
+  const end = toCartesian(angle, RADIUS - 60); 
 
   return (
     <g>
-      {/* 1. Background Line (Faint) */}
+      {/* Background Line */}
       <line
         x1={start.x} y1={start.y}
         x2={end.x} y2={end.y}
-        stroke="#e5e5e5"
+        stroke={INACTIVE_LINE_COLOR}
         strokeWidth="1"
       />
 
-      {/* 2. Active Connection Line (Draws when active) */}
-      {/* ADDED: This connects the AI to the node with a solid line */}
+      {/* Active Connection Line */}
       <motion.line
         x1={start.x} y1={start.y}
         x2={end.x} y2={end.y}
-        stroke={ACTIVE_COLOR}
+        stroke={ACTIVE_LINE_COLOR}
         strokeWidth="2"
         initial={{ pathLength: 0, opacity: 0 }}
         animate={{ 
@@ -114,7 +117,7 @@ const RadialBeam = ({
         transition={{ duration: 0.3, ease: "easeInOut" }}
       />
       
-      {/* 3. Active Data Dot (Pulses along the line) */}
+      {/* Active Data Dot */}
       <motion.circle
         r="3"
         fill={ACTIVE_COLOR}
@@ -128,7 +131,7 @@ const RadialBeam = ({
             duration: 1.5,
             repeat: Infinity,
             ease: "linear",
-            delay: 0.2 // Slight delay so line draws first
+            delay: 0.2
         }}
       />
     </g>
@@ -146,18 +149,16 @@ const RingBeam = ({
   const start = toCartesian(startAngle, RADIUS);
   const end = toCartesian(endAngle, RADIUS);
   const pathData = describeArc(start.x, start.y, end.x, end.y, RADIUS);
-
-  // High density dots
   const dots = [0]; 
 
   return (
     <g>
       {/* Background Path */}
-      <path d={pathData} fill="none" stroke="#f0f0f0" strokeWidth="1" strokeDasharray="4 4" />
+      <path d={pathData} fill="none" stroke={INACTIVE_LINE_COLOR} strokeWidth="1" strokeDasharray="4 4" />
       
       {/* Moving Dots */}
       {dots.map((i) => (
-        <circle key={i} r="2.5" fill={RING_DOT_COLOR}>
+        <circle key={i} r="2" fill={RING_DOT_COLOR}>
           <animateMotion 
              dur="4s" 
              repeatCount="indefinite"
@@ -172,7 +173,7 @@ const RingBeam = ({
   );
 };
 
-// 3. The Integration Node (Card)
+// 3. The Integration Node (Card) - LIGHT THEME
 const IntegrationCard = ({ 
     item, 
     isActive, 
@@ -202,18 +203,19 @@ const IntegrationCard = ({
         transition={{ duration: 0.3, ease: EASE_SWISS }}
     >
         <motion.div
+            // Light Mode Styles: bg-white, border-neutral-200
             className={`
                 w-full h-full border flex flex-col items-center justify-center gap-2 p-3 text-center cursor-pointer
-                backdrop-blur-sm transition-all duration-500
+                backdrop-blur-md transition-all duration-500
                 ${isActive 
-                    ? 'bg-white/95 shadow-xl' 
-                    : 'bg-white/60 border-neutral-200 shadow-sm hover:bg-white/80'
+                    ? 'bg-white border-black shadow-[0_10px_30px_-10px_rgba(79,70,229,0.2)]' 
+                    : 'bg-white/80 border-neutral-100 shadow-sm hover:border-neutral-200'
                 }
             `}
             animate={{ y: isActive ? -4 : 0 }}
         >
             <div 
-                className={`p-2.5 transition-colors duration-500 ${isActive ? 'text-black' : 'text-neutral-500 bg-neutral-100'}`}
+                className={`p-2.5 transition-colors duration-500 rounded-sm ${isActive ? 'text-black bg-indigo-50' : 'text-neutral-400 bg-neutral-50'}`}
             >
                 <Icon size={20} strokeWidth={1.5} />
             </div>
@@ -236,7 +238,7 @@ const IntegrationCard = ({
 /* ------------------------------
    MAIN EXPORT
 -------------------------------- */
-export default function IntegrationVisual() {
+export default function IntegrationVisual({ scale = 1 }: { scale?: number }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [autoCycle, setAutoCycle] = useState(true);
 
@@ -264,23 +266,36 @@ export default function IntegrationVisual() {
   };
 
   return (
-    <div className="relative w-full flex items-center justify-center font-sans overflow-visible">
+    // Outer Wrapper controls the Layout Size based on Scale
+    <div 
+      className="relative flex items-center justify-center font-sans overflow-visible"
+      style={{ 
+        width: BASE_SIZE * scale, 
+        height: BASE_SIZE * scale 
+      }}
+    >
       
+      {/* Inner Scaler applies the transform */}
       <div 
-        className="relative flex-shrink-0"
-        style={{ width: SIZE, height: SIZE }}
+        className="relative flex-shrink-0 origin-top-left"
+        style={{ 
+            width: BASE_SIZE, 
+            height: BASE_SIZE,
+            transform: `scale(${scale})`,
+            transformOrigin: "center center"
+        }}
       >
         {/* 1. Connection Layer (SVG) */}
         <svg 
-            width={SIZE} 
-            height={SIZE} 
-            viewBox={`0 0 ${SIZE} ${SIZE}`}
+            width={BASE_SIZE} 
+            height={BASE_SIZE} 
+            viewBox={`0 0 ${BASE_SIZE} ${BASE_SIZE}`}
             className="absolute inset-0 w-full h-full pointer-events-none z-10"
         >
-          {/* Main Ring Guide */}
+          {/* Main Ring Guide (Light) */}
           <circle 
             cx={CENTER} cy={CENTER} r={RADIUS} 
-            fill="none" stroke="#f5f5f5" strokeWidth="1" 
+            fill="none" stroke="#e5e5e5" strokeWidth="1" 
           />
 
           {ITEMS.map((item, i) => {
@@ -302,7 +317,7 @@ export default function IntegrationVisual() {
           })}
         </svg>
 
-        {/* 2. The Orchestration Core (Agent) */}
+        {/* 2. The Orchestration Core (Agent) - LIGHT THEME */}
         <div 
             className="absolute z-30"
             style={{ 
@@ -312,30 +327,33 @@ export default function IntegrationVisual() {
             }}
         >
           <motion.div
-            className="w-24 h-24 bg-neutral-900 border-4 border-white shadow-2xl flex items-center justify-center relative overflow-hidden"
+            // bg-white, border-neutral-100
+            className="w-24 h-24 bg-white border border-neutral-100 shadow-xl flex items-center justify-center relative overflow-hidden"
             animate={{ 
                 scale: activeId ? 1.05 : 1,
-                boxShadow: activeId ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)" : "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+                boxShadow: activeId 
+                    ? "0 20px 40px -10px rgba(79, 70, 229, 0.15)" // Indigo Glow (Soft)
+                    : "0 10px 20px -5px rgba(0,0,0,0.05)"
             }}
             transition={{ ease: EASE_SWISS }}
           >
-            <div className="relative z-10 text-white">
+            <div className="relative z-10 text-neutral-900">
                 <Workflow size={36} strokeWidth={1.5} />
             </div>
             
             {/* Inner Processing Pulse */}
             <motion.div 
-               className="absolute inset-0 bg-indigo-500/20 blur-xl"
-               animate={{ opacity: [0.2, 0.5, 0.2] }}
+               className="absolute inset-0 bg-indigo-50/50 blur-xl"
+               animate={{ opacity: [0.2, 0.6, 0.2] }}
                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
 
           {/* Core Label */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-neutral-100 shadow-sm">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-neutral-200 shadow-sm">
                 <Radio size={12} className="text-indigo-600 animate-pulse" />
-                <span className="text-[10px] font-bold tracking-widest text-neutral-600">
+                <span className="text-[10px] font-bold tracking-widest text-neutral-500">
                     AI ORCHESTRATOR
                 </span>
             </div>
