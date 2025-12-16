@@ -6,7 +6,6 @@ import {
   LayoutDashboard, 
   TrendingUp, 
   Timer,
-  Zap,
 } from "lucide-react";
 
 /* ------------------------------
