@@ -129,7 +129,7 @@ export const Hero = () => {
           <div className="md:col-span-7 pt-16">
             <Reveal delay={0.1}>
               <h1 
-                className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-10"
+                className="text-5xl md:text-5xl font-bold text-white tracking-tight leading-[1.1] mb-10"
                 style={{ fontFamily: '"Fraunces", serif' }}
               >
                 We engineer intelligent <br />
