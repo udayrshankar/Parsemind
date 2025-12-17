@@ -85,7 +85,6 @@ const PipelineStep = ({
   label: string, 
   subLabel: string, 
   index: number,
-  isLast?: boolean
 }) => (
   <motion.div
     custom={index}
