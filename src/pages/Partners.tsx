@@ -1,3 +1,4 @@
+// src/pages/Partners.tsx
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Reveal } from '../components/Reveal';
@@ -34,8 +35,9 @@ const partners: Partner[] = [
 export default function PartnersPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // UPDATED: Changed font-sans to font-inter
   return (
-    <div className="min-h-screen bg-bg-main text-black font-sans selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-bg-main text-black font-inter selection:bg-black selection:text-white">
 
       {/* =========================
           HERO / LANDING CTA
@@ -49,7 +51,8 @@ export default function PartnersPage() {
               <span className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3 block">
                 Our Ecosystem
               </span>
-              <h1 className="text-6xl md:text-8xl font-serif font-medium leading-[0.95] tracking-tight">
+              {/* UPDATED: Changed font-serif to font-fraunces */}
+              <h1 className="text-6xl md:text-8xl font-fraunces font-medium leading-[0.95] tracking-tight">
                 Global <br /> Alliances
               </h1>
             </Reveal>
@@ -65,7 +68,8 @@ export default function PartnersPage() {
           {/* Right CTA */}
           <Reveal delay={0.3}>
             <div className="border border-gray-200 p-10 bg-card flex flex-col gap-6">
-              <h2 className="text-3xl  font-serif font-medium">
+              {/* UPDATED: Changed font-serif to font-fraunces */}
+              <h2 className="text-3xl font-fraunces font-medium">
                 Join the Alliance
               </h2>
               <p className="text-gray-600 leading-relaxed">
@@ -120,7 +124,8 @@ export default function PartnersPage() {
                 </div>
 
                 <div className="relative z-10 mb-8">
-                  <h3 className="text-3xl font-serif font-medium mb-2 group-hover:text-white transition-colors">
+                  {/* UPDATED: Changed font-serif to font-fraunces */}
+                  <h3 className="text-3xl font-fraunces font-medium mb-2 group-hover:text-white transition-colors">
                     {p.name}
                   </h3>
                   <p className="text-sm font-bold uppercase tracking-widest text-black group-hover:text-gray-500 transition-colors">
@@ -155,7 +160,8 @@ export default function PartnersPage() {
 
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <Reveal>
-            <h2 className="text-4xl md:text-6xl font-serif font-medium mb-6 tracking-tight">
+            {/* UPDATED: Changed font-serif to font-fraunces */}
+            <h2 className="text-4xl md:text-6xl font-fraunces font-medium mb-6 tracking-tight">
               Join the Alliance
             </h2>
             <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto">

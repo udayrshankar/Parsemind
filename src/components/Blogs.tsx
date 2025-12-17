@@ -15,7 +15,7 @@ const blogs = [
   },
   {
     id: 2,
-    title: "Scaling Trust & Security",
+    title: "Scaling Trust and Security",
     date: "April 03, 2024",
     readTime: "4 min read",
     excerpt: "Why SOC2 compliance is just the starting point for building truly secure AI infrastructure.",
@@ -54,11 +54,11 @@ export const Blogs = () => {
             <Reveal key={index} delay={index * 0.1}>
               <motion.div 
                 whileHover={{ y: -10 }}
-                className="group cursor-pointer flex flex-col h-full shadow shadow-5xl shadow-black/25 bg-bg-card hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
+                className="group cursor-pointer flex flex-col h-[550px] shadow shadow-5xl shadow-black/25 bg-bg-card hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
               >
                 
                 {/* Image Container */}
-                <div className="overflow-hidden mb-6 p-2 aspect-[1.05] relative">
+                <div className="overflow-hidden mb-6 p-2 h-[300px] relative">
                   {/* Placeholder Image Block */}
                   <div className={`w-full h-full relative transition-transform duration-700 group-hover:scale-105`}>
                      <img src={`${blog.imageColor}`} alt="" className='h-full w-full object-cover'/>
@@ -67,7 +67,7 @@ export const Blogs = () => {
                 </div>
 
                 {/* Content */}
-                <a className="flex flex-col grow p-5" href='/blogs'>
+                <a className="flex flex-col grow px-5" href='/blogs'>
                   <h3 className="type-h2 text-[35px] mb-3 group-hover:text-white transition-colors duration-500">
                     {blog.title}
                   </h3>

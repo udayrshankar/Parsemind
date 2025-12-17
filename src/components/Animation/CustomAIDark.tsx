@@ -197,7 +197,7 @@ export default function SwissAgentSystem({ scale = 1 }: SwissAgentSystemProps) {
             onClick={() => triggerTransition("https://anseru.ai")}
           >
             <span className="text-xs font-medium text-neutral-500">
-              <span className="font-bold text-lg text-indigo-600 underline">
+              <span className="font-bold text-indigo-600 underline">
                 {" "}
                 Anseru
               </span>{" "}

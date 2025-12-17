@@ -1,9 +1,10 @@
 // src/components/Footer.tsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Reveal } from './Reveal';
 import { Link } from 'react-router-dom';
 import { usePageTransition } from './TransitionContext';
+import { useCalendly } from './hooks/useCalendly'; // Import the new hook
 
 const links = [
   { name: "Home", href: "/" },
@@ -13,37 +14,9 @@ const links = [
 ];
 
 export const Footer: React.FC = () => {
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-
-  useEffect(() => {
-    // 1. Load Calendly CSS
-    const link = document.createElement('link');
-    link.href = 'https://assets.calendly.com/assets/external/widget.css';
-    link.rel = 'stylesheet';
-    document.head.appendChild(link);
-
-    // 2. Load Calendly JS
-    const script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
-    script.onload = () => setIsScriptLoaded(true);
-    document.body.appendChild(script);
-
-    return () => {
-      document.head.removeChild(link);
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  const openCalendly = () => {
-    if (!isScriptLoaded || !window.Calendly) return;
-    window.Calendly.initPopupWidget({
-      url: 'https://calendly.com/kg-goutham-anseru/30min',
-    });
-  };
-
   const year = new Date().getFullYear();
   const { triggerTransition } = usePageTransition();
+  const { loadScript, openPopup } = useCalendly(); // Use the hook
 
   const handleNavClick = (e: React.MouseEvent, linkName: string) => {
     if (linkName === "Our Products") {
@@ -75,7 +48,6 @@ export const Footer: React.FC = () => {
         
         {/* Top CTA Block */}
         <Reveal>
-          {/* UPDATED: Changed md:items-end to md:items-center */}
           <div className="flex flex-col md:flex-row justify-between gap-12 items-start md:items-center border-b border-white/10 pb-16">
             <div className="max-w-2xl space-y-6">
               <h2 className="text-4xl md:text-5xl font-medium leading-[1.1] tracking-tight font-fraunces">
@@ -88,7 +60,8 @@ export const Footer: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
               <button
-                onClick={openCalendly}
+                onMouseEnter={loadScript} // Optimize: Load only on hover
+                onClick={openPopup}
                 className="
                   px-8 py-4 text-sm font-bold uppercase tracking-widest
                   bg-white text-black

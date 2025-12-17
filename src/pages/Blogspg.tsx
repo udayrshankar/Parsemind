@@ -131,7 +131,7 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                   </button>
                 </form>
               </div>
-              <div className="h-1.5 w-full bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600" />
+              <div className="h-1.5 w-full bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600" />
             </div>
           </motion.div>
         </>
@@ -162,7 +162,7 @@ export default function BlogsPage() {
                   The Journal
                 </span>
                 <h1 className="type-h1 text-text-main">
-                  Insights & <br /> Perspectives.
+                  Insights and <br /> Perspectives.
                 </h1>
               </Reveal>
             </div>

@@ -11,7 +11,7 @@ import { Footer } from "../components/Footer";
 import { TransitionProvider } from "../components/TransitionContext";
 
 
-export default function App() {
+export default function Home() {
   return (
     <div className="w-full flex flex-col items-center gap-16 bg-white">
 

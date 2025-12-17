@@ -1,3 +1,4 @@
+// src/pages/About.tsx
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Reveal } from "../components/Reveal";
@@ -88,18 +89,16 @@ const FounderBlock = ({ person }: { person: Person }) => {
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    // Updated: Removed 'border-t border-neutral-200'
     <div ref={ref} className="pt-8">
-      {/* Image Container - Enforced Grayscale & Parallax */}
+      {/* Image Container */}
       <div className="relative h-[520px] w-full overflow-hidden border border-neutral-200 bg-neutral-100">
         <motion.div style={{ y }} className="h-[120%] w-full relative -top-[10%]">
              <img
                 src={person.image}
                 alt={person.name}
-                className="w-full h-full object-cover grayscale" // Forced grayscale to remove "purple/color"
+                className="w-full h-full object-cover grayscale" 
              />
         </motion.div>
-        {/* Subtle Overlay to unify contrast */}
         <div className="absolute inset-0 bg-black/5" />
       </div>
 
@@ -109,7 +108,8 @@ const FounderBlock = ({ person }: { person: Person }) => {
           {person.role}
         </span>
 
-        <h3 className="mt-4 text-4xl font-serif font-medium text-neutral-900">
+        {/* UPDATED: Changed font-serif to font-fraunces */}
+        <h3 className="mt-4 text-4xl font-fraunces font-medium text-neutral-900">
           {person.name}
         </h3>
 
@@ -139,6 +139,7 @@ const FounderBlock = ({ person }: { person: Person }) => {
 // --------------------
 export default function AboutPage() {
   return (
+    // UPDATED: Added font-inter to wrapper to ensure defaults
     <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 font-inter">
       <TransitionProvider>
         <Navbar />
@@ -201,7 +202,6 @@ export default function AboutPage() {
           {/* ====================
               Mission & Principles
           ==================== */}
-          {/* Added ID here to fix the connection issue */}
           <section id="mission-principles" className="border-t border-neutral-200 pt-24">
             <div className="flex flex-col text-center justify-center items-center mb-16">
               <Reveal>

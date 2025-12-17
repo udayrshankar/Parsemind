@@ -1,14 +1,13 @@
-import { useState } from 'react';
+// src/components/Concept.tsx
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { Reveal } from './Reveal';
 
-// --- IMPORT YOUR IMAGES HERE ---
+// Images
 import discoverImage from '../assets/markus-spiske-jG8nlwLRZTM-unsplash.jpg';
 import developImage from '../assets/nadine-e-VA9xSQekC8c-unsplash.jpg';
 import deployImage from '../assets/premium_photo-1681488265680-dccd1c52d8a8.jpg';
-
-import { useRef } from 'react';
-import { Reveal } from './Reveal';
 
 const steps = [
   {
@@ -23,7 +22,7 @@ const steps = [
   },
   {
     title: 'Deploy',
-    desc: 'We launch your agents with secure access and continuous monitoring through out.',
+    desc: 'We launch your agents with secure access and continuous monitoring throughout.',
     tableKey: 'deploy',
   },
 ];
@@ -66,195 +65,197 @@ type TabKey = 'discover' | 'develop' | 'deploy';
 export default function Concept() {
   const [activeTab, setActiveTab] = useState<TabKey>('discover');
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Helper to handle interaction (Click for mobile, Hover intent for desktop)
+  const handleInteraction = (key: string) => {
+    setActiveTab(key as TabKey);
+  };
+
   return (
-    <div className="w-full flex flex-col items-center gap-10">
-      <section
-            id="process"
-            className="w-full px-6 md:px-12"
-            
-          >
-            <div
-              className="max-w-7xl mx-auto"
-              ref={containerRef}
-            >
-              {/* --- Section Header --- */}
-              <div className="text-center flex flex-col items-center mb-10">
-                <Reveal>
-                  <span className="text-text-body uppercase tracking-[0.2em] mb-2">
-                    Covers all of it
+    <div className="w-full flex flex-col items-center gap-16 md:gap-24 py-12 md:py-20 bg-white">
+      
+      {/* --- SECTION 1: Steps Grid --- */}
+      <section id="process" className="w-full px-6 md:px-12">
+        <div className="max-w-7xl mx-auto" ref={containerRef}>
+          
+          <div className="text-center flex flex-col items-center mb-12 md:mb-16">
+            <Reveal>
+              <span className="text-gray-500 uppercase tracking-[0.2em] mb-3 block text-xs font-bold font-inter">
+                Covers all of it
+              </span>
+              <h2 className="text-4xl md:text-5xl font-fraunces font-medium text-black">
+                From Concept to Deployment
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            {steps.map((step, index) => (
+              <Reveal key={index} delay={index * 0.15}>
+                <div
+                  className="
+                    group relative
+                    bg-bg-card border border-gray-100
+                    p-8 md:px-10
+                    hover:bg-black hover:text-white
+                    transition-colors duration-500 ease-out
+                    overflow-hidden
+                    cursor-pointer
+                    flex flex-col justify-between
+                    h-[220px]
+                  "
+                  onMouseEnter={() => handleInteraction(step.tableKey)}
+                  onClick={() => handleInteraction(step.tableKey)}
+                >
+                  {/* Big Number */}
+                  <span
+                    className="
+                      absolute -bottom-8 -right-2
+                      text-[8rem] md:text-[9rem] lg:text-[10rem]
+                      font-bold leading-none
+                      text-black opacity-[0.03]
+                      group-hover:text-white group-hover:opacity-[0.1]
+                      transition-all duration-500
+                      pointer-events-none select-none z-0
+                      font-inter
+                    "
+                  >
+                    {index + 1}
                   </span>
-                  <h2 className="type-h2 text-black">
-                    From Concept to Deployment
-                  </h2>
-                </Reveal>
-              </div>
-      
-              {/* --- Steps Grid --- */}
-              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7.5 items-stretch">
-                {steps.map((step, index) => (
-                  <Reveal key={index} delay={index * 0.15}>
-                    <div
-                      className="
-                        group
-                        shadow-card
-                        bg-bg-card
-                        p-6 md:p-7
-                        hover:bg-black hover:text-white
-                        transition-colors duration-300
-                        relative overflow-hidden
-                        flex flex-col justify-center
-                        h-full
-                        hover:cursor-pointer
-                      "
-                      onMouseEnter={() => setActiveTab(step.tableKey as TabKey)}
-                    >
-                      {/* Big background number */}
-                      <span
-                        className="
-                          absolute -bottom-10 -right-4
-                          text-[6rem] md:text-[8rem] lg:text-[10rem]
-                          font-bold leading-none
-                          text-black opacity-5
-                          group-hover:text-white group-hover:opacity-10
-                          transition-colors duration-300
-                          pointer-events-none select-none z-0
-                        "
-                      >
-                        {index + 1}
-                      </span>
-      
-                      <div className="relative z-10 flex flex-col gap-3">
-                        <div className="flex gap-3 items-center">
-                          <h3 className="type-h3">
-                            {step.title}
-                          </h3>
-                        </div>
-      
-                        <p
-                          className="
-                            type-body-main
-                            text-text-body/80
-                            group-hover:text-white
-                            transition-colors duration-300
-                          "
-                        >
-                          {step.desc}
-                        </p>
-                      </div>
-                    </div>
-                  </Reveal>
+
+                  <div className="relative z-10 flex flex-col gap-4">
+                    <h3 className="text-2xl font-fraunces font-medium group-hover:text-white transition-colors">
+                      {step.title}
+                    </h3>
+
+                    <p className="text-base md:text-lg text-gray-500 leading-relaxed font-inter group-hover:text-gray-300 transition-colors">
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- SECTION 2: Tabbed Content --- */}
+      <section className="w-full px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          
+          {/* Tab Navigation (Scrollable on Mobile) */}
+          <div className="flex justify-center mb-[-26px] relative z-20">
+            <div className="max-w-full overflow-x-auto pb-4 md:pb-0 px-2 no-scrollbar">
+              <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-full inline-flex gap-1 border border-gray-200 shadow-xl min-w-max">
+                {(['discover', 'develop', 'deploy'] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`
+                      relative px-6 py-2.5 md:px-8 md:py-3 rounded-full
+                      text-sm md:text-base font-medium font-inter tracking-wide
+                      transition-all duration-300
+                      ${activeTab === tab
+                        ? 'text-white'
+                        : 'text-gray-500 hover:text-black hover:bg-gray-50'}
+                    `}
+                  >
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="activeTabPill"
+                        className="absolute inset-0 bg-black rounded-full shadow-md"
+                        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <span className="relative z-10">
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </span>
+                  </button>
                 ))}
               </div>
             </div>
-          </section>
-    
-      <section className="relative overflow-hidden px-4">
-            <div className="max-w-7xl mx-auto">
-              {/* --- Tab Navigation --- */}
-              <div className="flex justify-center mb-[-26px] relative z-20">
-                <div className="max-w-full overflow-x-auto">
-                  <div className="bg-white/80 backdrop-blur-md p-1.5 rounded-full inline-flex gap-1 border border-black shadow-xl">
-                    {(['discover', 'develop', 'deploy'] as const).map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`
-                          relative px-5 py-2 md:px-8 md:py-3 rounded-full
-                          text-sm md:text-base lg:text-lg font-medium
-                          transition-all duration-300
-                          ${activeTab === tab
-                            ? 'text-white shadow-md'
-                            : 'text-gray-500 hover:text-black hover:bg-gray-50'}
-                        `}
-                      >
-                        {/* Background Pill Animation */}
-                        {activeTab === tab && (
-                          <motion.div
-                            layoutId="activeTabPill"
-                            className="absolute inset-0 bg-black rounded-full"
-                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                          />
-                        )}
-                        <span className="relative z-10">
-                          {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-      
-              <div className="bg-card-gradient rounded-xl p-6 md:p-10 lg:p-16 shadow-card relative w-full z-10 min-h-[420px] md:min-h-[550px] overflow-hidden">
-                <div className="absolute top-5 left-5 flex gap-2 z-20">
-                  <div className="w-3 h-3 rounded-full bg-[#FF5F57] border border-black/5" />
-                  <div className="w-3 h-3 rounded-full bg-[#FEBC2E] border border-black/5" />
-                  <div className="w-3 h-3 rounded-full bg-[#28C840] border border-black/5" />
-                </div>
-      
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 10, filter: 'blur(8px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: -10, filter: 'blur(8px)' }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                    className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center h-full"
-                  >
-                    {/* Left Column: Text Content */}
-                    <div className="flex flex-col justify-center mt-8 md:mt-4">
-                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-text-main mb-6 md:mb-8 leading-tight">
-                        {tabContent[activeTab].title}
-                      </h2>
-      
-                      <ul className="space-y-5 md:space-y-6 mb-8 md:mb-10">
-                        {tabContent[activeTab].bullets.map((item, i) => (
-                          <motion.li
-                            key={i}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 + i * 0.1 }}
-                            className="flex items-start gap-4"
-                          >
-                            <div className="mt-1 w-6 h-6 rounded-full bg-black flex items-center justify-center shrink-0">
-                              <Check size={14} className="text-white" />
-                            </div>
-                            <p className="text-base md:text-lg text-text-body font-inter leading-relaxed">
-                              {item}
-                            </p>
-                          </motion.li>
-                        ))}
-                      </ul>
-      
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                      >
-                        <button className="bg-black text-white px-7 py-3 md:px-8 md:py-4 rounded-full font-medium hover:bg-gray-800 transition-all hover:scale-105 active:scale-95 shadow-lg">
-                          {tabContent[activeTab].buttonText}
-                        </button>
-                      </motion.div>
-                    </div>
-      
-                    {/* Right Column: Mac Window with Image */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.97, filter: 'blur(8px)' }}
-                      animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, scale: 0.97, filter: 'blur(8px)' }}
-                      transition={{ duration: 0.4, delay: 0.1, ease: 'easeOut' }}
-                      className="w-full aspect-4/3 rounded-xl relative overflow-hidden bg-gray-50 border border-black/5 shadow-inner mt-4 lg:mt-0"
-                    >
-                      <img
-                        src={tabContent[activeTab].image}
-                        alt={tabContent[activeTab].title}
-                        className="w-full h-full object-cover"
-                      />
-                    </motion.div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+          </div>
+
+          {/* Main Content Card */}
+          <div className="bg-[#f7f8fa] border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-16 shadow-2xl relative w-full z-10 min-h-[600px] md:min-h-[550px] flex flex-col justify-center overflow-hidden">
+            
+            {/* Mac Window Controls Decoration */}
+            <div className="absolute top-6 left-6 flex gap-2 z-20 opacity-50">
+              <div className="w-3 h-3 rounded-full bg-red-400" />
+              <div className="w-3 h-3 rounded-full bg-amber-400" />
+              <div className="w-3 h-3 rounded-full bg-green-400" />
             </div>
-          </section>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center h-full pt-8 lg:pt-0"
+              >
+                
+                {/* Text Content (Order 2 on Mobile, Order 1 on Desktop) */}
+                <div className="flex flex-col justify-center order-2 lg:order-1">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-black mb-6 leading-[1.1]">
+                    {tabContent[activeTab].title}
+                  </h2>
+
+                  <ul className="space-y-5 mb-8">
+                    {tabContent[activeTab].bullets.map((item, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 + i * 0.1 }}
+                        className="flex items-start gap-4"
+                      >
+                        <div className="mt-1 w-5 h-5 rounded-full bg-black flex items-center justify-center shrink-0">
+                          <Check size={12} className="text-white" strokeWidth={3} />
+                        </div>
+                        <p className="text-base md:text-lg text-gray-600 font-inter leading-relaxed">
+                          {item}
+                        </p>
+                      </motion.li>
+                    ))}
+                  </ul>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <button className="bg-black text-white px-8 py-4 rounded-full font-medium font-inter hover:bg-gray-800 transition-all hover:scale-105 active:scale-95 shadow-lg w-full md:w-auto">
+                      {tabContent[activeTab].buttonText}
+                    </button>
+                  </motion.div>
+                </div>
+
+                {/* Image / Window (Order 1 on Mobile, Order 2 on Desktop) */}
+                <div className="order-1 lg:order-2 w-full">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+                    className="relative w-full aspect-video md:aspect-4/3 rounded-xl overflow-hidden shadow-xl border border-black/5 bg-white group"
+                  >
+                     <img
+                      src={tabContent[activeTab].image}
+                      alt={tabContent[activeTab].title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    {/* Overlay gradient */}
+                    <div className="absolute inset-0 bg-linear-to-t from-black/10 to-transparent pointer-events-none" />
+                  </motion.div>
+                </div>
+
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
