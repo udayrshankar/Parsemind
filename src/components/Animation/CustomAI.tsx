@@ -50,14 +50,13 @@ const fadeUp = {
    SUB-COMPONENTS
 -------------------------------- */
 
-// 1. Vertical Flow Line with Particle (Refactored for Center-Relative Coordinates)
 const FlowLine = ({
-  startX, // Numeric offset from center (e.g. -130)
+  startX,
   startY,
-  endX,   // Numeric offset from center (e.g. 0)
+  endX,
   endY,
   delay = 0,
-  color = "#4f46e5" // Default Indigo
+  color = "#4f46e5"
 }: {
   startX: number;
   startY: number;
@@ -68,7 +67,6 @@ const FlowLine = ({
 }) => (
   <div className="absolute inset-0 pointer-events-none z-0">
     <svg className="absolute inset-0 w-full h-full overflow-visible">
-      {/* Base Line */}
       <line
         x1={`calc(50% + ${startX}px)`}
         y1={startY}
@@ -79,8 +77,6 @@ const FlowLine = ({
         strokeDasharray="4 4"
       />
     </svg>
-    
-    {/* Animated Particle (Using HTML for robust positioning) */}
     <motion.div
       className="absolute w-2 h-2 rounded-full shadow-sm"
       style={{ 
@@ -91,7 +87,7 @@ const FlowLine = ({
         left: `calc(50% + ${startX}px)`, 
         top: startY, 
         opacity: 0,
-        x: "-50%", // Center the dot on the coordinate
+        x: "-50%", 
         y: "-50%" 
       }}
       animate={{ 
@@ -110,7 +106,6 @@ const FlowLine = ({
   </div>
 );
 
-// 2. Wifi Signal Transmission (Output)
 const WifiTransmission = ({
   startY,
   endY,
@@ -122,7 +117,6 @@ const WifiTransmission = ({
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
-      {/* Signal Waves */}
       {[0, 1, 2].map((i) => (
         <motion.div
           key={i}
@@ -135,21 +129,19 @@ const WifiTransmission = ({
             y: 0,
           }}
           animate={{
-            width: 80, // Expands width
-            height: 50, // Expands height (arc shape)
-            opacity: 0, // Fades out
-            y: distance, // Moves down
+            width: 80,
+            height: 50,
+            opacity: 0,
+            y: distance,
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
             ease: "easeOut",
-            delay: i * 0.6, // Stagger the waves
+            delay: i * 0.6,
           }}
         />
       ))}
-
-      {/* Central Guide Line */}
       <div
         className="absolute left-1/2 -translate-x-1/2 w-[1px] bg-gradient-to-b from-indigo-200 to-transparent"
         style={{ top: startY, height: distance }}
@@ -158,7 +150,6 @@ const WifiTransmission = ({
   );
 };
 
-// 3. Agent Module Row
 const AgentModule = ({
   icon: Icon,
   label,
@@ -179,13 +170,11 @@ const AgentModule = ({
             }
         `}
   >
-    {/* Active Indicator Bar */}
     <motion.div
       className="absolute left-0 top-3 bottom-3 w-0.5 bg-indigo-600"
       initial={{ height: 0, opacity: 0 }}
       animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
     />
-
     <div
       className={`p-2 rounded-sm transition-colors duration-300 ${
         isActive
@@ -195,7 +184,6 @@ const AgentModule = ({
     >
       <Icon size={18} strokeWidth={1.5} />
     </div>
-
     <div className="flex flex-col">
       <span
         className={`text-xs font-bold tracking-wide uppercase transition-colors duration-300 ${
@@ -208,7 +196,6 @@ const AgentModule = ({
         {subLabel}
       </span>
     </div>
-
     {isActive && (
       <motion.div
         className="ml-auto"
@@ -224,7 +211,7 @@ const AgentModule = ({
 /* ------------------------------
    MAIN COMPONENT
 -------------------------------- */
-export default function SwissAgentSystem() {
+export default function SwissAgentSystem({ scale = 1 }: { scale?: number }) {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
@@ -235,163 +222,111 @@ export default function SwissAgentSystem() {
   }, []);
 
   return (
-    <div className="relative w-full h-[640px] flex justify-center font-sans overflow-hidden">
-      {/* --- CONNECTIONS --- */}
-      
-      
-      {/* 1. DATA to WEB (Left to Center) - Indigo */}
-      <FlowLine
-        startX={-LINE_OFFSET}
-        startY={TOP_Y + INPUT_HEIGHT / 2}
-        endX={0}
-        endY={TOP_Y + INPUT_HEIGHT / 2}
-        delay={0}
-      />
-      
-      {/* 2. WEB to Main Card (Center Down) - Indigo */}
-      <FlowLine
-        startX={0}
-        startY={TOP_Y + INPUT_HEIGHT / 2}
-        endX={0}
-        endY={MAIN_Y}
-        delay={0.5}
-      />
-      
-      {/* 3. EVENTS to WEB (Right to Center) - Indigo */}
-      <FlowLine
-        startX={LINE_OFFSET}
-        startY={TOP_Y + INPUT_HEIGHT / 2}
-        endX={0}
-        endY={TOP_Y + INPUT_HEIGHT / 2}
-        delay={0.25}
-      />
-
-      {/* Wifi Signal Output */}
-      <WifiTransmission startY={MAIN_Y + MAIN_HEIGHT} endY={BOTTOM_Y} />
-
-      {/* --- 1. INPUTS (TOP) --- */}
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        animate="show"
-        style={{ top: TOP_Y, height: INPUT_HEIGHT, width: MAIN_WIDTH }}
-        className="absolute z-10 flex justify-between left-1/2 -translate-x-1/2"
-      >
-        {/* DATA Input */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide ">
-            <Database size={12} className="text-indigo-500" />
-            DATA
-          </div>
-        </div>
-
-        {/* WEB Input */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide ">
-            <Globe size={12} className="text-indigo-500" />
-            WEB
-          </div>
-        </div>
-
-        {/* EVENTS Input */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide ">
-            <Zap size={12} className="text-indigo-500" />
-            EVENTS
-          </div>
-        </div>
-      </motion.div>
-
-      {/* --- 2. THE AGENT (CENTER) --- */}
-      <motion.div
-        style={{
-          top: MAIN_Y,
-          height: MAIN_HEIGHT,
-          width: MAIN_WIDTH,
+    // OPTIMIZED: Wrapper handles precise height scaling and overflow clipping
+    <div 
+      className="relative w-full overflow-hidden"
+      style={{ height: CONTAINER_HEIGHT * scale }}
+    >
+      <div 
+        className="relative w-full flex justify-center font-sans origin-top"
+        style={{ 
+          height: CONTAINER_HEIGHT,
+          transform: `scale(${scale})`
         }}
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: EASE_SWISS }}
-        className="absolute z-20 bg-white/90 backdrop-blur-xl border border-neutral-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] flex flex-col left-1/2 -translate-x-1/2"
       >
-        {/* Header */}
-        <div className="px-5 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-neutral-900 flex items-center justify-center text-white rounded-sm">
-              <Bot size={18} />
+        {/* --- CONNECTIONS --- */}
+        <FlowLine startX={-LINE_OFFSET} startY={TOP_Y + INPUT_HEIGHT / 2} endX={0} endY={TOP_Y + INPUT_HEIGHT / 2} delay={0} />
+        <FlowLine startX={0} startY={TOP_Y + INPUT_HEIGHT / 2} endX={0} endY={MAIN_Y} delay={0.5} />
+        <FlowLine startX={LINE_OFFSET} startY={TOP_Y + INPUT_HEIGHT / 2} endX={0} endY={TOP_Y + INPUT_HEIGHT / 2} delay={0.25} />
+
+        <WifiTransmission startY={MAIN_Y + MAIN_HEIGHT} endY={BOTTOM_Y} />
+
+        {/* --- 1. INPUTS (TOP) --- */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          style={{ top: TOP_Y, height: INPUT_HEIGHT, width: MAIN_WIDTH }}
+          className="absolute z-10 flex justify-between left-1/2 -translate-x-1/2"
+        >
+          <div className="flex flex-col items-center gap-2">
+            <div className="bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide ">
+              <Database size={12} className="text-indigo-500" />
+              DATA
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-neutral-900 leading-tight">
-                AGENT CORE
-              </h3>
-              <p className="text-[10px] text-neutral-500 font-medium tracking-wide uppercase">
-                Orchestration Layer
-              </p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <div className="bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide ">
+              <Globe size={12} className="text-indigo-500" />
+              WEB
             </div>
           </div>
-          <div className="flex gap-1">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
+          <div className="flex flex-col items-center gap-2">
+            <div className="bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2 shadow-sm text-xs font-semibold text-neutral-600 tracking-wide ">
+              <Zap size={12} className="text-indigo-500" />
+              EVENTS
+            </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Modules Stack */}
-        <div className="flex-1 p-4 flex flex-col gap-2 justify-center">
-          <AgentModule
-            icon={ListTodo}
-            label="Planning"
-            subLabel="Decomposing user intent"
-            isActive={activeStep === 0}
-          />
-          <AgentModule
-            icon={HardDrive}
-            label="Context Memory"
-            subLabel="Retrieving relevant vector data"
-            isActive={activeStep === 1}
-          />
-          <AgentModule
-            icon={BrainCircuit}
-            label="Reasoning"
-            subLabel="LLM Chain-of-Thought analysis"
-            isActive={activeStep === 2}
-          />
-          <AgentModule
-            icon={Zap}
-            label="Action"
-            subLabel="Executing external tools"
-            isActive={activeStep === 3}
-          />
-        </div>
-
-        {/* Footer decoration */}
-        <div className="h-1 w-full bg-neutral-100 overflow-hidden flex">
-          <motion.div
-            className="h-full bg-indigo-500"
-            animate={{ width: ["0%", "100%"] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-          />
-        </div>
-      </motion.div>
-
-      {/* --- 3. OUTPUT (BOTTOM) --- */}
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        animate="show"
-        style={{ top: BOTTOM_Y, height: OUTPUT_HEIGHT }}
-        className="absolute z-10 left-1/2 -translate-x-1/2"
-      >
-        <div className="bg-neutral-900 text-white px-6 py-3 flex items-center gap-3 shadow-xl shadow-indigo-500/20 rounded-sm">
-          <div className="p-1 bg-white/10 rounded-full">
-            <CheckCircle2 size={14} className="text-emerald-400" />
+        {/* --- 2. THE AGENT (CENTER) --- */}
+        <motion.div
+          style={{ top: MAIN_Y, height: MAIN_HEIGHT, width: MAIN_WIDTH }}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: EASE_SWISS }}
+          className="absolute z-20 bg-white/90 backdrop-blur-xl border border-neutral-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] flex flex-col left-1/2 -translate-x-1/2"
+        >
+          <div className="px-5 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-neutral-900 flex items-center justify-center text-white rounded-sm">
+                <Bot size={18} />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-neutral-900 leading-tight">AGENT CORE</h3>
+                <p className="text-[10px] text-neutral-500 font-medium tracking-wide uppercase">Orchestration Layer</p>
+              </div>
+            </div>
+            <div className="flex gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <div className="w-1.5 h-1.5 rounded-full bg-neutral-300" />
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-xs font-bold tracking-wide">
-              EXECUTION COMPLETE
-            </span>
+
+          <div className="flex-1 p-4 flex flex-col gap-2 justify-center">
+            <AgentModule icon={ListTodo} label="Planning" subLabel="Decomposing user intent" isActive={activeStep === 0} />
+            <AgentModule icon={HardDrive} label="Context Memory" subLabel="Retrieving relevant vector data" isActive={activeStep === 1} />
+            <AgentModule icon={BrainCircuit} label="Reasoning" subLabel="LLM Chain-of-Thought analysis" isActive={activeStep === 2} />
+            <AgentModule icon={Zap} label="Action" subLabel="Executing external tools" isActive={activeStep === 3} />
           </div>
-        </div>
-      </motion.div>
+
+          <div className="h-1 w-full bg-neutral-100 overflow-hidden flex">
+            <motion.div
+              className="h-full bg-indigo-500"
+              animate={{ width: ["0%", "100%"] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+        </motion.div>
+
+        {/* --- 3. OUTPUT (BOTTOM) --- */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          style={{ top: BOTTOM_Y, height: OUTPUT_HEIGHT }}
+          className="absolute z-10 left-1/2 -translate-x-1/2"
+        >
+          <div className="bg-neutral-900 text-white px-6 py-3 flex items-center gap-3 shadow-xl shadow-indigo-500/20 rounded-sm">
+            <div className="p-1 bg-white/10 rounded-full">
+              <CheckCircle2 size={14} className="text-emerald-400" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-bold tracking-wide">EXECUTION COMPLETE</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }

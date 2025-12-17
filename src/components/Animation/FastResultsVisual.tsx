@@ -16,26 +16,23 @@ import {
 const CARD_WIDTH = 300;
 const DASHBOARD_WIDTH = 340;
 const DELAY_STEP = 0.4;
+const BASE_HEIGHT = 800; // Define base height
 
-// The Signature Swiss Ease
 const EASE_SWISS = [0.25, 1, 0.5, 1] as const;
 
 /* ------------------------------
    VISUAL ASSETS
 -------------------------------- */
-// The animated data flow line (Background Layer)
 const FlowLine = () => (
     <div className="absolute inset-0 flex justify-center pointer-events-none z-0">
         <svg className="h-full w-px overflow-visible">
-            {/* Base Dashed Line */}
             <line 
                 x1="0" y1="0" 
                 x2="0" y2="100%" 
                 stroke="#E5E5E5" strokeWidth="1" strokeDasharray="4 4" 
             />
-            {/* Animated Particle */}
             <motion.circle
-                r="3" fill="#4F46E5" // Indigo-600
+                r="3" fill="#4F46E5" 
                 initial={{ cy: 0, opacity: 0 }}
                 animate={{ cy: "100%", opacity: [0, 1, 1, 0] }}
                 transition={{
@@ -73,8 +70,6 @@ const cardVariants = {
 /* ------------------------------
    SUB-COMPONENTS
 -------------------------------- */
-
-// 1. Swiss Pipeline Card
 const PipelineStep = ({ 
   icon: Icon, 
   label, 
@@ -96,18 +91,14 @@ const PipelineStep = ({
     style={{ maxWidth: CARD_WIDTH }}
   >
     <div className="relative bg-white border border-neutral-200 p-4 flex items-center gap-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] w-full">
-        {/* Connector Node (Left) */}
         <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-neutral-200 rounded-full z-20 flex items-center justify-center">
-            {/* UPDATED: Made black and added animate-pulse */}
             <div className="w-1 h-1 bg-black rounded-full animate-pulse" />
         </div>
 
-        {/* Icon Box */}
         <div className="w-12 h-12 bg-neutral-50 border border-neutral-100 flex items-center justify-center text-neutral-400 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors duration-500 shrink-0">
             <Icon size={20} strokeWidth={1.5} />
         </div>
 
-        {/* Text Stack */}
         <div className="flex flex-col">
             <span className="text-sm font-bold text-neutral-900 tracking-wide uppercase">
                 {label}
@@ -117,22 +108,17 @@ const PipelineStep = ({
             </span>
         </div>
 
-        {/* Connector Node (Right) */}
         <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-neutral-200 rounded-full z-20 flex items-center justify-center">
-             {/* UPDATED: Made black and added animate-pulse */}
             <div className="w-1 h-1 bg-black rounded-full animate-pulse" />
         </div>
     </div>
 
-    {/* Chevron Arrow Flow Indicator */}
     <div className="absolute -bottom-7 text-neutral-300">
         <ChevronDown size={20} strokeWidth={2} />
     </div>
   </motion.div>
 );
 
-
-// 2. The Final Dashboard (Styled as a "Report")
 const RoiDashboard = ({ index }: { index: number }) => (
   <motion.div
     custom={index}
@@ -143,7 +129,6 @@ const RoiDashboard = ({ index }: { index: number }) => (
     className="relative z-20 bg-white border border-neutral-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col"
     style={{ width: DASHBOARD_WIDTH }}
   >
-    {/* Header */}
     <div className="bg-neutral-900 px-5 py-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="p-1 bg-white/10 rounded">
@@ -161,10 +146,7 @@ const RoiDashboard = ({ index }: { index: number }) => (
       </div>
     </div>
 
-    {/* Metrics Grid */}
     <div className="p-6 grid grid-cols-2 gap-8 bg-white">
-      
-      {/* Metric A - GREEN */}
       <div className="flex flex-col gap-4 items-center text-center">
         <div className="flex items-center justify-center gap-2">
           <TrendingUp size={14} className="text-neutral-400" />
@@ -183,9 +165,7 @@ const RoiDashboard = ({ index }: { index: number }) => (
         </div>
       </div>
 
-      {/* Metric B - RED */}
       <div className="flex flex-col gap-4 relative items-center text-center">
-        {/* Divider Line */}
         <div className="absolute -left-4 top-2 bottom-2 w-px bg-neutral-100" />
         
         <div className="flex items-center justify-center gap-2">
@@ -206,52 +186,40 @@ const RoiDashboard = ({ index }: { index: number }) => (
             </div>
         </div>
       </div>
-
     </div>
-
-      
   </motion.div>
 );
 
 /* ------------------------------
    MAIN COMPONENT
 -------------------------------- */
-export default function FastResultsVisual() {
+export default function FastResultsVisual({ scale = 1 }: { scale?: number }) {
   return (
-    <div className="relative w-full h-[800px] flex flex-col items-center justify-center font-sans overflow-hidden py-12">
-      
-      {/* 0. Background Flow Line */}
-      <FlowLine />
+    // OPTIMIZED: Wrapper with dynamic height based on scale
+    <div 
+        className="relative w-full overflow-hidden" 
+        style={{ height: BASE_HEIGHT * scale }}
+    >
+      <div 
+        className="relative w-full flex flex-col items-center justify-center font-sans py-12 origin-top"
+        style={{ 
+            height: BASE_HEIGHT,
+            transform: `scale(${scale})`
+        }}
+      >
+        
+        <FlowLine />
 
-      {/* 1. Stacked Pipeline Steps */}
-      <div className="flex flex-col items-center">
-          <PipelineStep 
-            index={0}
-            icon={Database}
-            label="Raw Activity"
-            subLabel="Ingesting events"
-          />
+        <div className="flex flex-col items-center">
+            <PipelineStep index={0} icon={Database} label="Raw Activity" subLabel="Ingesting events" />
+            <PipelineStep index={1} icon={BrainCircuit} label="Agent Decisions" subLabel="Chain-of-thought" />
+            <PipelineStep index={2} icon={LineChart} label="Metrics Engine" subLabel="Quality Analysis" />
+            <div className="mt-4">
+               <RoiDashboard index={3} />
+            </div>
+        </div>
 
-          <PipelineStep 
-            index={1}
-            icon={BrainCircuit}
-            label="Agent Decisions"
-            subLabel="Chain-of-thought"
-          />
-
-          <PipelineStep 
-            index={2}
-            icon={LineChart}
-            label="Metrics Engine"
-            subLabel="Quality Analysis"
-          />
-
-          {/* 2. The Dashboard Result */}
-          <div className="mt-4">
-             <RoiDashboard index={3} />
-          </div>
       </div>
-
     </div>
   );
 }
