@@ -1,3 +1,4 @@
+// src/components/Features.tsx
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
@@ -148,7 +149,7 @@ const FlickeringGrid = ({
 };
 
 
-// --- Feature Data (Unchanged) ---
+// --- Feature Data ---
 const features = [
   {
     id: 0,
@@ -172,14 +173,13 @@ const features = [
     id: 3,
     title: "Trusted, Enterprise-Ready AI",
     description: "Deliver safe, reliable, and transparent generative AI that adheres to strict enterprise compliance standards.",
-    animation: <EnterpriseTrustVisual scale={0.93}/>
+    animation: <EnterpriseTrustVisual /> // Removed prop assumption
   },
 ];
 
 export const Features = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // UPDATED: Logic to ensure hover only works on Desktop (lg breakpoint = 1024px)
   const handleMouseEnter = (index: number) => {
     if (window.innerWidth >= 1024) {
       setActiveIndex(index);
@@ -205,7 +205,6 @@ export const Features = () => {
               return (
                 <Reveal delay={feature.id * 0.1} key={feature.id}>
                   <div
-                    // UPDATED: Hover for desktop (guarded), Click for mobile
                     onMouseEnter={() => handleMouseEnter(index)}
                     onClick={() => setActiveIndex(index)}
                     className={`
@@ -217,7 +216,6 @@ export const Features = () => {
                       }
                     `}
                   >
-                    {/* Dark background overlay - Desktop Only */}
                     {isActive && <div className="hidden lg:block absolute inset-0 bg-black -z-10" />}
                     
                     {/* Header Content */}
@@ -264,7 +262,10 @@ export const Features = () => {
                                     maskCoverage="100%" 
                                 />
                                 <div className="relative z-10 w-full h-full flex items-center justify-center">
-                                    {feature.animation}
+                                    {/* OPTIMIZATION: Scaled Wrapper for Mobile */}
+                                    <div className="transform scale-[0.6] origin-center">
+                                      {feature.animation}
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
@@ -280,7 +281,6 @@ export const Features = () => {
           {/* DESKTOP STICKY VIEW */}
           <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[600px] w-full overflow-hidden relative border border-gray-200 shadow-sm">
             
-            {/* Dull White Theme Grid */}
             <FlickeringGrid 
               gridGap={40}
               gridColor="#e4e3df"        
