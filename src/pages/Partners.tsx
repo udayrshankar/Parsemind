@@ -91,7 +91,7 @@ export default function PartnersPage() {
       {/* =========================
           PARTNERS GRID
       ========================= */}
-      <main className="max-w-7xl mx-auto px-6 py-24">
+      <main className="max-w-7xl mx-auto px-6">
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {partners.map((p, index) => (
             <Reveal key={p.id} delay={index * 0.1}>

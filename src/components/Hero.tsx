@@ -133,7 +133,7 @@ export const Hero = () => {
       <div
         className="absolute inset-0 z-0"
         style={{
-          maskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 300px, transparent 400px)',
+          maskImage: 'radial-gradient(circle at 70% 50%, white 0px, white 300px, transparent 400px)',
           WebkitMaskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 300px, transparent 400px)',
           pointerEvents: 'none',
         }}
@@ -157,7 +157,7 @@ export const Hero = () => {
           <div className="md:col-span-7 pt-16">
             <Reveal delay={0.1}>
               <h1 
-                className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-10"
+                className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.1] mb-10"
                 style={{ fontFamily: '"Fraunces", serif' }}
               >
                 We engineer intelligent <br />

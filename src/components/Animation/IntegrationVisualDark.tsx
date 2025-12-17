@@ -6,7 +6,6 @@ import {
   Slack,
   Github,
   Workflow,
-  Radio
 } from "lucide-react";
 
 /* ------------------------------
@@ -89,7 +88,7 @@ const RadialBeam = ({
   angle: number;
   isActive: boolean;
 }) => {
-  const start = toCartesian(angle, 50); 
+  const start = toCartesian(angle, 60); // Increased start radius slightly to clear the larger box
   const end = toCartesian(angle, RADIUS - 60); 
 
   return (
@@ -303,13 +302,13 @@ export default function IntegrationVisualDark({ scale = 1 }: { scale?: number })
              return (
                <g key={`conns-${item.id}`}>
                  <RadialBeam 
-                    angle={item.angle} 
-                    isActive={activeId === item.id}
+                   angle={item.angle} 
+                   isActive={activeId === item.id}
                  />
                  
                  <RingBeam 
-                    startAngle={item.angle}
-                    endAngle={nextItem.angle}
+                   startAngle={item.angle}
+                   endAngle={nextItem.angle}
                  />
                </g>
              );
@@ -326,37 +325,38 @@ export default function IntegrationVisualDark({ scale = 1 }: { scale?: number })
             }}
         >
           <motion.div
-            // bg-black, border-neutral-700
-            className="w-24 h-24 bg-black border border-neutral-800 shadow-2xl flex items-center justify-center relative overflow-hidden"
+            // Increased size slightly to 120px (w-30 equivalent) to comfortably fit icon + 2 lines of text
+            className="w-32 h-32 bg-black border border-neutral-800 shadow-2xl flex flex-col items-center justify-center relative overflow-hidden gap-1"
             animate={{ 
                 scale: activeId ? 1.05 : 1,
                 boxShadow: activeId 
-                    ? "0 0 40px -10px rgba(99, 102, 241, 0.4)" // Indigo Glow
+                    ? "0 0 50px -10px rgba(99, 102, 241, 0.3)" // Indigo Glow
                     : "0 0 0 0 rgba(0,0,0,0)"
             }}
             transition={{ ease: EASE_SWISS }}
           >
-            <div className="relative z-10 text-white">
-                <Workflow size={36} strokeWidth={1.5} />
-            </div>
-            
             {/* Inner Processing Pulse */}
             <motion.div 
-               className="absolute inset-0 bg-indigo-500/20 blur-xl"
+               className="absolute inset-0 bg-indigo-500/10 blur-xl"
                animate={{ opacity: [0.2, 0.4, 0.2] }}
                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
-          </motion.div>
 
-          {/* Core Label */}
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 shadow-sm">
-                <Radio size={12} className="text-indigo-500 animate-pulse" />
-                <span className="text-[10px] font-bold tracking-widest text-neutral-400">
-                    AI ORCHESTRATOR
+            <div className="relative z-10 text-white mb-1">
+                <Workflow size={32} strokeWidth={1.5} />
+            </div>
+
+            {/* Stacked Text */}
+            <div className="relative z-10 flex flex-col items-center leading-none">
+                <span className="text-xs font-bold tracking-widest text-white">
+                    AI
+                </span>
+                <span className="text-[9px] font-bold tracking-widest text-neutral-500 mt-1">
+                    ORCHESTRATOR
                 </span>
             </div>
-          </div>
+            
+          </motion.div>
         </div>
 
         {/* 3. Satellite Nodes */}

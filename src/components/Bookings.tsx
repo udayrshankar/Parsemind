@@ -102,7 +102,7 @@ export const Booking = () => {
                       onClick={openCalendly}
                       className="bg-black text-white px-8 py-3 md:py-3.5 hover:bg-white hover:text-black hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
                     >
-                      Book a Strategy Call
+                      Talk to our AI Expert
                     </button>
 
                   

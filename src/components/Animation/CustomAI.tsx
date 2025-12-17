@@ -19,7 +19,7 @@ const MAIN_WIDTH = 340;
 const MAIN_HEIGHT = 380;
 const INPUT_HEIGHT = 48;
 const OUTPUT_HEIGHT = 48;
-const GAP = 24; // UPDATED: Reduced from 48 to 24 to bring inputs closer
+const GAP = 48;
 
 // Vertical Geometry
 const TOTAL_STACK = INPUT_HEIGHT + GAP + MAIN_HEIGHT + GAP + OUTPUT_HEIGHT;
@@ -50,14 +50,14 @@ const fadeUp = {
    SUB-COMPONENTS
 -------------------------------- */
 
-// 1. Vertical Flow Line with Particle
+// 1. Vertical Flow Line with Particle (Refactored for Center-Relative Coordinates)
 const FlowLine = ({
-  startX, // Numeric offset from center
+  startX, // Numeric offset from center (e.g. -130)
   startY,
-  endX,   // Numeric offset from center
+  endX,   // Numeric offset from center (e.g. 0)
   endY,
   delay = 0,
-  color = "#4f46e5"
+  color = "#4f46e5" // Default Indigo
 }: {
   startX: number;
   startY: number;
@@ -68,6 +68,7 @@ const FlowLine = ({
 }) => (
   <div className="absolute inset-0 pointer-events-none z-0">
     <svg className="absolute inset-0 w-full h-full overflow-visible">
+      {/* Base Line */}
       <line
         x1={`calc(50% + ${startX}px)`}
         y1={startY}
@@ -78,6 +79,8 @@ const FlowLine = ({
         strokeDasharray="4 4"
       />
     </svg>
+    
+    {/* Animated Particle (Using HTML for robust positioning) */}
     <motion.div
       className="absolute w-2 h-2 rounded-full shadow-sm"
       style={{ 
@@ -88,7 +91,7 @@ const FlowLine = ({
         left: `calc(50% + ${startX}px)`, 
         top: startY, 
         opacity: 0,
-        x: "-50%",
+        x: "-50%", // Center the dot on the coordinate
         y: "-50%" 
       }}
       animate={{ 
@@ -119,6 +122,7 @@ const WifiTransmission = ({
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
+      {/* Signal Waves */}
       {[0, 1, 2].map((i) => (
         <motion.div
           key={i}
@@ -131,19 +135,21 @@ const WifiTransmission = ({
             y: 0,
           }}
           animate={{
-            width: 80,
-            height: 50,
-            opacity: 0,
-            y: distance,
+            width: 80, // Expands width
+            height: 50, // Expands height (arc shape)
+            opacity: 0, // Fades out
+            y: distance, // Moves down
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
             ease: "easeOut",
-            delay: i * 0.6,
+            delay: i * 0.6, // Stagger the waves
           }}
         />
       ))}
+
+      {/* Central Guide Line */}
       <div
         className="absolute left-1/2 -translate-x-1/2 w-[1px] bg-gradient-to-b from-indigo-200 to-transparent"
         style={{ top: startY, height: distance }}
@@ -173,6 +179,7 @@ const AgentModule = ({
             }
         `}
   >
+    {/* Active Indicator Bar */}
     <motion.div
       className="absolute left-0 top-3 bottom-3 w-0.5 bg-indigo-600"
       initial={{ height: 0, opacity: 0 }}
@@ -231,30 +238,31 @@ export default function SwissAgentSystem() {
     <div className="relative w-full h-[640px] flex justify-center font-sans overflow-hidden">
       {/* --- CONNECTIONS --- */}
       
-      {/* 1. DATA FLOW (Left) */}
+      
+      {/* 1. DATA to WEB (Left to Center) - Indigo */}
       <FlowLine
         startX={-LINE_OFFSET}
-        startY={TOP_Y + INPUT_HEIGHT}
+        startY={TOP_Y + INPUT_HEIGHT / 2}
         endX={0}
-        endY={MAIN_Y}
+        endY={TOP_Y + INPUT_HEIGHT / 2}
         delay={0}
       />
       
-      {/* 2. WEB FLOW (Center) */}
+      {/* 2. WEB to Main Card (Center Down) - Indigo */}
       <FlowLine
         startX={0}
-        startY={TOP_Y + INPUT_HEIGHT}
+        startY={TOP_Y + INPUT_HEIGHT / 2}
         endX={0}
         endY={MAIN_Y}
         delay={0.5}
       />
       
-      {/* 3. EVENTS FLOW (Right) */}
+      {/* 3. EVENTS to WEB (Right to Center) - Indigo */}
       <FlowLine
         startX={LINE_OFFSET}
-        startY={TOP_Y + INPUT_HEIGHT}
+        startY={TOP_Y + INPUT_HEIGHT / 2}
         endX={0}
-        endY={MAIN_Y}
+        endY={TOP_Y + INPUT_HEIGHT / 2}
         delay={0.25}
       />
 

@@ -5,7 +5,9 @@ import {
   LineChart, 
   LayoutDashboard, 
   TrendingUp, 
+  TrendingDown,
   Timer,
+  ChevronDown
 } from "lucide-react";
 
 /* ------------------------------
@@ -77,12 +79,14 @@ const PipelineStep = ({
   icon: Icon, 
   label, 
   subLabel,
-  index 
+  index,
+  isLast = false
 }: { 
   icon: any, 
   label: string, 
   subLabel: string, 
-  index: number 
+  index: number,
+  isLast?: boolean
 }) => (
   <motion.div
     custom={index}
@@ -90,32 +94,41 @@ const PipelineStep = ({
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin: "-50px" }}
-    className="relative z-10 bg-white border border-neutral-200 p-4 flex items-center gap-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] w-full mb-8 group"
+    className="relative z-10 w-full mb-8 flex flex-col items-center group"
     style={{ maxWidth: CARD_WIDTH }}
   >
-    {/* Connector Node (Left) */}
-    <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-neutral-200 rounded-full z-20 flex items-center justify-center">
-        <div className="w-1 h-1 bg-neutral-300 rounded-full group-hover:bg-indigo-500 transition-colors" />
+    <div className="relative bg-white border border-neutral-200 p-4 flex items-center gap-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] w-full">
+        {/* Connector Node (Left) */}
+        <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-neutral-200 rounded-full z-20 flex items-center justify-center">
+            {/* UPDATED: Made black and added animate-pulse */}
+            <div className="w-1 h-1 bg-black rounded-full animate-pulse" />
+        </div>
+
+        {/* Icon Box */}
+        <div className="w-12 h-12 bg-neutral-50 border border-neutral-100 flex items-center justify-center text-neutral-400 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors duration-500 shrink-0">
+            <Icon size={20} strokeWidth={1.5} />
+        </div>
+
+        {/* Text Stack */}
+        <div className="flex flex-col">
+            <span className="text-sm font-bold text-neutral-900 tracking-wide uppercase">
+                {label}
+            </span>
+            <span className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider">
+                {subLabel}
+            </span>
+        </div>
+
+        {/* Connector Node (Right) */}
+        <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-neutral-200 rounded-full z-20 flex items-center justify-center">
+             {/* UPDATED: Made black and added animate-pulse */}
+            <div className="w-1 h-1 bg-black rounded-full animate-pulse" />
+        </div>
     </div>
 
-    {/* Icon Box */}
-    <div className="w-10 h-10 bg-neutral-50 border border-neutral-100 flex items-center justify-center text-neutral-400 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors duration-500">
-      <Icon size={18} strokeWidth={1.5} />
-    </div>
-
-    {/* Text Stack */}
-    <div className="flex flex-col">
-      <span className="text-xs font-bold text-neutral-900 tracking-wide uppercase">
-        {label}
-      </span>
-      <span className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider">
-        {subLabel}
-      </span>
-    </div>
-
-    {/* Connector Node (Right) */}
-    <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border border-neutral-200 rounded-full z-20 flex items-center justify-center">
-         <div className="w-1 h-1 bg-neutral-300 rounded-full group-hover:bg-indigo-500 transition-colors" />
+    {/* Chevron Arrow Flow Indicator */}
+    <div className="absolute -bottom-7 text-neutral-300">
+        <ChevronDown size={20} strokeWidth={2} />
     </div>
   </motion.div>
 );
@@ -132,7 +145,7 @@ const RoiDashboard = ({ index }: { index: number }) => (
     className="relative z-20 bg-white border border-neutral-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col"
     style={{ width: DASHBOARD_WIDTH }}
   >
-    {/* Header - Inverted for Contrast/Finality */}
+    {/* Header */}
     <div className="bg-neutral-900 px-5 py-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="p-1 bg-white/10 rounded">
@@ -151,54 +164,54 @@ const RoiDashboard = ({ index }: { index: number }) => (
     </div>
 
     {/* Metrics Grid */}
-<div className="p-6 grid grid-cols-2 gap-8 bg-white">
-  
-  {/* Metric A */}
-  <div className="flex flex-col gap-2 items-center text-center">
-    <div className="flex items-center justify-center gap-2">
-      <TrendingUp size={14} className="text-neutral-400" />
-      <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-        Efficiency
-      </span>
-    </div>
-    <div>
-        <span className="text-4xl font-bold text-neutral-900 tracking-tighter block text-center">
-        32%
-        </span>
-        {/* Removed translate-y-3 here */}
-        <div className="flex items-center justify-center gap-1 mt-1 text-green-600">
-            <span className="text-[10px] font-bold uppercase tracking-wide">+12.5% vs Last Mo</span>
+    <div className="p-6 grid grid-cols-2 gap-8 bg-white">
+      
+      {/* Metric A - GREEN */}
+      <div className="flex flex-col gap-4 items-center text-center">
+        <div className="flex items-center justify-center gap-2">
+          <TrendingUp size={14} className="text-neutral-400" />
+          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+            Efficiency
+          </span>
         </div>
-    </div>
-  </div>
-
-  {/* Metric B */}
-  <div className="flex flex-col gap-2 relative items-center text-center">
-    {/* Divider Line */}
-    <div className="absolute -left-4 top-2 bottom-2 w-px bg-neutral-100" />
-    
-    <div className="flex items-center justify-center gap-2">
-      <Timer size={14} className="text-neutral-400" />
-      <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-        Workload
-      </span>
-    </div>
-    <div>
-        <span className="text-4xl font-bold text-neutral-900 tracking-tighter block text-center">
-        -41%
-        </span>
-        {/* Kept mt-1 to match Metric A */}
-         <div className="flex items-center justify-center gap-1 mt-1">
-            <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-wide">
-                120hrs Saved
+        <div>
+            <span className="text-4xl font-bold text-green-600 tracking-tighter block text-center">
+            32%
             </span>
+            <div className="flex items-center justify-center gap-1.5 mt-2 text-green-600">
+                <TrendingUp size={12} strokeWidth={3} />
+                <span className="text-[10px] font-bold uppercase tracking-wide">12.5% vs Last Mo</span>
+            </div>
         </div>
+      </div>
+
+      {/* Metric B - RED */}
+      <div className="flex flex-col gap-4 relative items-center text-center">
+        {/* Divider Line */}
+        <div className="absolute -left-4 top-2 bottom-2 w-px bg-neutral-100" />
+        
+        <div className="flex items-center justify-center gap-2">
+          <Timer size={14} className="text-neutral-400" />
+          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+            Workload
+          </span>
+        </div>
+        <div>
+            <span className="text-4xl font-bold text-red-600 tracking-tighter block text-center">
+            41%
+            </span>
+             <div className="flex items-center justify-center gap-1.5 mt-2 text-indigo-700">
+                <TrendingDown size={12} strokeWidth={3} />
+                <span className="text-[10px] font-bold uppercase tracking-wide">
+                    120hrs Saved
+                </span>
+            </div>
+        </div>
+      </div>
+
     </div>
-  </div>
 
-</div>
-
-  
+      
   </motion.div>
 );
 

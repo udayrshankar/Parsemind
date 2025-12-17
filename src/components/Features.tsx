@@ -67,7 +67,6 @@ const FlickeringGrid = ({
     };
 
     const drawGrid = () => {
-      // Opacity is set to 0.4 for distinct but subtle lines
       ctx.strokeStyle = `rgba(${gridRgb}, 1)`; 
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -140,8 +139,6 @@ const FlickeringGrid = ({
         ref={canvasRef} 
         className="w-full h-full"
         style={{
-          // Use 'white' in the gradient to mask properly on a light background if needed, 
-          // but 'transparent' usually works best for the fade out.
           maskImage: `radial-gradient(circle at center, black 0%, transparent ${maskCoverage})`,
           WebkitMaskImage: `radial-gradient(circle at center, black 0%, transparent ${maskCoverage})`
         }}
@@ -182,6 +179,13 @@ const features = [
 export const Features = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // UPDATED: Logic to ensure hover only works on Desktop (lg breakpoint = 1024px)
+  const handleMouseEnter = (index: number) => {
+    if (window.innerWidth >= 1024) {
+      setActiveIndex(index);
+    }
+  };
+
   return (
     <section className="px-6 md:px-12 py-16 md:py-10 relative">
       <div className="max-w-7xl mx-auto">
@@ -201,25 +205,29 @@ export const Features = () => {
               return (
                 <Reveal delay={feature.id * 0.1} key={feature.id}>
                   <div
-                    onMouseEnter={() => setActiveIndex(index)}
+                    // UPDATED: Hover for desktop (guarded), Click for mobile
+                    onMouseEnter={() => handleMouseEnter(index)}
                     onClick={() => setActiveIndex(index)}
                     className={`
-                      relative p-6 md:p-8 cursor-pointer transition-all duration-500 ease-out border
+                      relative p-6 md:p-8 cursor-pointer transition-all duration-500 ease-out border overflow-hidden
                       ${
                         isActive
-                          ? 'bg-black border-black shadow-2xl scale-[1.02]'
+                          ? 'lg:bg-black lg:border-black lg:shadow-2xl lg:scale-[1.02] bg-white border-gray-200'
                           : 'bg-white border-transparent hover:bg-gray-50 hover:border-gray-100'
                       }
                     `}
                   >
-                    {isActive && <div className="absolute inset-0 bg-black -z-10" />}
+                    {/* Dark background overlay - Desktop Only */}
+                    {isActive && <div className="hidden lg:block absolute inset-0 bg-black -z-10" />}
+                    
+                    {/* Header Content */}
                     <div className="flex gap-6 items-start relative z-10">
                       <div
                         className={`
                           w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-colors duration-500 font-inter font-medium
                           ${
                             isActive
-                              ? 'border-white/20 text-black bg-white'
+                              ? 'lg:border-white/20 lg:text-black lg:bg-white border-gray-200 text-gray-900 bg-gray-100'
                               : 'border-gray-200 text-gray-500 bg-gray-50'
                           }
                         `}
@@ -227,33 +235,59 @@ export const Features = () => {
                         {index + 1}
                       </div>
                       <div className="flex flex-col gap-3">
-                        <h3 className={`text-xl md:text-2xl font-semibold transition-colors duration-500 ${isActive ? 'text-white' : 'text-gray-900'}`}>
+                        <h3 className={`text-xl md:text-2xl font-semibold transition-colors duration-500 ${isActive ? 'lg:text-white text-gray-900' : 'text-gray-900'}`}>
                           {feature.title}
                         </h3>
-                        <p className={`text-base md:text-lg leading-relaxed transition-colors duration-500 ${isActive ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <p className={`text-base md:text-lg leading-relaxed transition-colors duration-500 ${isActive ? 'lg:text-gray-400 text-gray-500' : 'text-gray-500'}`}>
                           {feature.description}
                         </p>
                       </div>
                     </div>
+
+                    {/* MOBILE EXPANSION */}
+                    <AnimatePresence>
+                      {isActive && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "circOut" }}
+                          className="lg:hidden w-full relative mt-0 overflow-hidden"
+                        >
+                            <div className="relative w-full h-[350px] overflow-hidden rounded-md mt-6 border border-gray-100">
+                                {/* Mobile Grid - Light Theme */}
+                                <FlickeringGrid 
+                                    gridGap={40}
+                                    gridColor="#e4e3df"        
+                                    flickerColor="#A3A3A3"     
+                                    backgroundColor="#f7f6f2"  
+                                    maskCoverage="100%" 
+                                />
+                                <div className="relative z-10 w-full h-full flex items-center justify-center">
+                                    {feature.animation}
+                                </div>
+                            </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
                   </div>
                 </Reveal>
               );
             })}
           </div>
 
+          {/* DESKTOP STICKY VIEW */}
           <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[600px] w-full overflow-hidden relative border border-gray-200 shadow-sm">
             
-            {/* --------------------------------------------------
-                DULL WHITE THEME
-            -------------------------------------------------- */}
+            {/* Dull White Theme Grid */}
             <FlickeringGrid 
               gridGap={40}
-              gridColor="#e4e3df"        // Light Gray Lines
-              flickerColor="#A3A3A3"     // Medium Gray Flickers
-              backgroundColor="#f7f6f2"  // Dull White Background
+              gridColor="#e4e3df"        
+              flickerColor="#A3A3A3"     
+              backgroundColor="#f7f6f2"  
               maskCoverage="100%" 
             />
-            {/* -------------------------------------------------- */}
 
             <div className="relative z-30 w-full h-full">
               <AnimatePresence mode="wait">
