@@ -1,7 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 export const useCalendly = () => {
-  const [isOpen, setIsOpen] = useState(false);
 
   // Only load the script when this function is called (onHover or onClick)
   const loadScript = useCallback(() => {
