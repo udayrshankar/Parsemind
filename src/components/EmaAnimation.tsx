@@ -1,5 +1,5 @@
 // src/components/EmaAnimation.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Hexagon, 
@@ -15,36 +15,8 @@ import IntegrationVisualDark from './Animation/IntegrationVisualDark';
 import EnterpriseTrustVisualDark from './Animation/EnterpriceTrustVisualDark';
 
 /* ------------------------------------------------------------
-   1. CONFIGURATION
+   1. HELPER CONFIG (Static Data)
 ------------------------------------------------------------ */
-type Slide = {
-  id: string;
-  component: React.ReactNode;
-  duration: number; 
-};
-
-const COMPONENT_LIST: Slide[] = [
-  { 
-    id: 'agent-core', 
-    component: <AgentSystemVisual scale={0.8} />, 
-    duration: 8000 
-  },
-  { 
-    id: 'fast-results', 
-    component: <FastResultsDark scale={0.65} />, 
-    duration: 4000 
-  },
-  { 
-    id: 'integration', 
-    component: <IntegrationVisualDark scale={0.9} />, 
-    duration: 10000 
-  },
-  { 
-    id: 'enterprise-trust', 
-    component: <EnterpriseTrustVisualDark scale={0.9} />, 
-    duration: 4000 
-  },
-];
 
 // Pre-calculated random positions for background particles
 const PARTICLES = Array.from({ length: 15 }).map((_, i) => ({
@@ -122,18 +94,59 @@ const GhostNode = ({
 const EmaAnimation = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 1. Detect Screen Size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Check on mount
+    checkMobile();
+
+    // Check on resize
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // 2. Define Component List with Dynamic Scale
+  // Using useMemo so it updates when `isMobile` changes
+  const componentList = useMemo(() => [
+    { 
+      id: 'agent-core', 
+      component: <AgentSystemVisual scale={0.8} />, 
+      duration: 8000 
+    },
+    { 
+      id: 'fast-results', 
+      component: <FastResultsDark scale={0.65} />, 
+      duration: 4000 
+    },
+    { 
+      id: 'integration', 
+      // CHANGE HERE: If mobile, use 0.55, else use 0.9
+      component: <IntegrationVisualDark scale={isMobile ? 0.55 : 0.9} />, 
+      duration: 10000 
+    },
+    { 
+      id: 'enterprise-trust', 
+      component: <EnterpriseTrustVisualDark scale={0.9} />, 
+      duration: 4000 
+    },
+  ], [isMobile]); // Re-calculate list if screen size changes
 
   useEffect(() => {
     if (isPaused) return;
-    const currentDuration = COMPONENT_LIST[currentIndex].duration;
+    const currentDuration = componentList[currentIndex].duration;
     const timer = setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % COMPONENT_LIST.length);
+      setCurrentIndex((prev) => (prev + 1) % componentList.length);
     }, currentDuration);
     return () => clearTimeout(timer);
-  }, [currentIndex, isPaused]);
+  }, [currentIndex, isPaused, componentList]);
 
-  const handleNext = () => setCurrentIndex((prev) => (prev + 1) % COMPONENT_LIST.length);
-  const handlePrev = () => setCurrentIndex((prev) => (prev - 1 + COMPONENT_LIST.length) % COMPONENT_LIST.length);
+  const handleNext = () => setCurrentIndex((prev) => (prev + 1) % componentList.length);
+  const handlePrev = () => setCurrentIndex((prev) => (prev - 1 + componentList.length) % componentList.length);
 
   return (
     <div 
@@ -237,7 +250,7 @@ const EmaAnimation = () => {
         <div className="pointer-events-auto flex items-center justify-center"> 
             <AnimatePresence mode='wait'>
                 <motion.div
-                    key={COMPONENT_LIST[currentIndex].id}
+                    key={componentList[currentIndex].id}
                     initial={{ opacity: 0, y: 30, scale: 0.9, filter: "blur(8px)" }}
                     animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                     exit={{ opacity: 0, y: -30, scale: 0.9, filter: "blur(8px)" }}
@@ -247,7 +260,7 @@ const EmaAnimation = () => {
                     }}
                     className="absolute flex items-center justify-center"
                 >
-                    {COMPONENT_LIST[currentIndex].component}
+                    {componentList[currentIndex].component}
                 </motion.div>
             </AnimatePresence>
         </div>
@@ -255,7 +268,7 @@ const EmaAnimation = () => {
 
       {/* --- LAYER 3: Carousel Controls --- */}
       
-      {/* Left Arrow - Scale Animation Added */}
+      {/* Left Arrow */}
       <motion.button 
         initial={{ scale: 1 }}
         animate={{ scale: [1, 1.15, 1] }} // Pulse effect
@@ -273,7 +286,7 @@ const EmaAnimation = () => {
         <ChevronLeft size={24} strokeWidth={1.5} />
       </motion.button>
 
-      {/* Right Arrow - Scale Animation Added */}
+      {/* Right Arrow */}
       <motion.button 
         initial={{ scale: 1 }}
         animate={{ scale: [1, 1.15, 1] }} // Pulse effect
@@ -294,7 +307,7 @@ const EmaAnimation = () => {
 
       {/* Pagination Dots */}
       <div className="absolute bottom-4 z-40 flex gap-2">
-        {COMPONENT_LIST.map((slide, idx) => (
+        {componentList.map((slide, idx) => (
             <button
                 key={slide.id}
                 onClick={() => setCurrentIndex(idx)}
