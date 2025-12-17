@@ -80,7 +80,6 @@ const PipelineStep = ({
   label, 
   subLabel,
   index,
-  isLast = false
 }: { 
   icon: any, 
   label: string, 
