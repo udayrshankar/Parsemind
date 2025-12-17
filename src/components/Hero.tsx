@@ -102,30 +102,20 @@ export const Hero = () => {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   useEffect(() => {
-    // 1. Check if Calendly is already loaded (e.g., by Footer)
     if (window.Calendly) {
       setIsScriptLoaded(true);
       return;
     }
-
-    // 2. Load Calendly CSS
     const link = document.createElement('link');
     link.href = 'https://assets.calendly.com/assets/external/widget.css';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
-    // 3. Load Calendly JS
     const script = document.createElement('script');
     script.src = 'https://assets.calendly.com/assets/external/widget.js';
     script.async = true;
     script.onload = () => setIsScriptLoaded(true);
     document.body.appendChild(script);
-
-    return () => {
-      // Optional cleanup: usually we keep the script for other components
-      // document.head.removeChild(link);
-      // document.body.removeChild(script);
-    };
   }, []);
 
   const openCalendly = () => {
@@ -160,7 +150,7 @@ export const Hero = () => {
       />
 
       {/* 3. Content Layer */}
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center mt-23">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center mt-23 pb-12 md:pb-0">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-12 md:items-center">
           
           {/* Left: Text Content & Actions */}
@@ -195,7 +185,7 @@ export const Hero = () => {
             <Reveal delay={0.4}>
               <div className="flex flex-wrap gap-4" style={{ fontFamily: '"Inter", sans-serif' }}>
                 <button 
-                  onClick={openCalendly} // Added onClick handler
+                  onClick={openCalendly}
                   className="bg-white text-black font-medium px-8 py-3 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300"
                 >
                   Book a Strategy Call
@@ -233,11 +223,11 @@ export const Hero = () => {
                 </div>
               </div>
             </Reveal>
-
           </div>
 
           {/* Right: Visual Animation */}
-          <div className="hidden md:block md:col-span-5 w-full relative">
+          {/* CHANGED: Removed 'hidden', added 'mt-12 md:mt-0' */}
+          <div className="md:col-span-5 w-full relative mt-12 md:mt-0">
             <EmaAnimation />
           </div>
 
