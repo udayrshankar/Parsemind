@@ -6,7 +6,6 @@ import {
   Slack,
   Github,
   Workflow,
-  Radio
 } from "lucide-react";
 
 /* ------------------------------
@@ -57,7 +56,7 @@ const describeArc = (x1: number, y1: number, x2: number, y2: number, r: number) 
    SUB-COMPONENTS
 -------------------------------- */
 const RadialBeam = ({ angle, isActive }: { angle: number; isActive: boolean; }) => {
-  const start = toCartesian(angle, 50); 
+  const start = toCartesian(angle, 70); // Adjusted start point for larger center box
   const end = toCartesian(angle, RADIUS - 60); 
 
   return (
@@ -165,7 +164,6 @@ export default function IntegrationVisual({ scale = 1 }: { scale?: number }) {
   };
 
   return (
-    // OPTIMIZED: Added overflow-hidden to prevent scrollbars from absolute SVG elements
     <div 
       className="relative flex items-center justify-center font-sans overflow-hidden"
       style={{ width: BASE_SIZE * scale, height: BASE_SIZE * scale }}
@@ -190,30 +188,34 @@ export default function IntegrationVisual({ scale = 1 }: { scale?: number }) {
           })}
         </svg>
 
+        {/* CENTER COMPONENT - AI ORCHESTRATOR */}
         <div className="absolute z-30" style={{ left: CENTER, top: CENTER, transform: "translate(-50%, -50%)" }}>
           <motion.div
-            className="w-24 h-24 bg-white border border-neutral-100 shadow-xl flex items-center justify-center relative overflow-hidden"
+            className="w-28 h-28 bg-white border border-neutral-100 shadow-xl flex flex-col items-center justify-center relative overflow-hidden"
             animate={{ 
                 scale: activeId ? 1.05 : 1,
                 boxShadow: activeId ? "0 20px 40px -10px rgba(79, 70, 229, 0.15)" : "0 10px 20px -5px rgba(0,0,0,0.05)"
             }}
             transition={{ ease: EASE_SWISS }}
           >
-            <div className="relative z-10 text-neutral-900">
-                <Workflow size={36} strokeWidth={1.5} />
+            {/* Content Container */}
+            <div className="relative z-10 text-neutral-900 flex flex-col items-center gap-1.5">
+                <div className="p-2 bg-indigo-50 rounded-lg">
+                    <Workflow size={24} strokeWidth={1.5} className="text-indigo-600" />
+                </div>
+                <div className="flex flex-col items-center leading-none">
+                    <span className="text-lg font-bold tracking-tight text-neutral-900">AI</span>
+                    <span className="text-[9px] font-bold tracking-widest text-neutral-400">ORCHESTRATOR</span>
+                </div>
             </div>
+
+            {/* Background Glow */}
             <motion.div 
                className="absolute inset-0 bg-indigo-50/50 blur-xl"
                animate={{ opacity: [0.2, 0.6, 0.2] }}
                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-neutral-200 shadow-sm">
-                <Radio size={12} className="text-indigo-600 animate-pulse" />
-                <span className="text-[10px] font-bold tracking-widest text-neutral-500">AI ORCHESTRATOR</span>
-            </div>
-          </div>
         </div>
 
         {ITEMS.map((item) => (

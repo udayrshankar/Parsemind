@@ -38,7 +38,7 @@ export default function EnterpriseTrustVisual({ scale = 1 }: EnterpriseTrustVisu
 
   return (
     <div 
-      className="relative w-[330px] lg:w-full flex items-center justify-center font-sans overflow-hidden" 
+      className="relative w-[3100px] lg:w-full flex items-center justify-center font-sans overflow-hidden" 
       style={{ height: containerHeight }}
     >
       <div 
