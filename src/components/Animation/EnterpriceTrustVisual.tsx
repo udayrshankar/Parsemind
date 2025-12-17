@@ -4,15 +4,18 @@ import { useState } from "react";
 /* ------------------------------
    CONSTANTS
 -------------------------------- */
-const SIZE = 700;
+// OPTIMIZED SIZE: 600px
+// This provides a ~40px safety margin around the 260px ring
+// ensuring the "COMPLIANCE" label and shadows are not clipped.
+const SIZE = 600;
 const CENTER = SIZE / 2;
-const CORE_RADIUS = 88; 
+const CORE_RADIUS = 80; 
 
 const LAYERS = [
-  { id: "compliance", label: "COMPLIANCE", radius: 310, speed: 50, dashArray: "4 8", width: 1, description: "SOC2 • GDPR • HIPAA" },
-  { id: "security", label: "DATA SECURITY", radius: 245, speed: 35, dashArray: "40 120", width: 1.5, description: "AES-256 ENCRYPTION" },
-  { id: "observability", label: "OBSERVABILITY", radius: 180, speed: 25, dashArray: "10 10", width: 1, description: "REAL-TIME LOGGING" },
-  { id: "oversight", label: "HUMAN OVERSIGHT", radius: 115, speed: 20, dashArray: "80 180", width: 2, description: "MANUAL REVIEW" },
+  { id: "compliance", label: "COMPLIANCE", radius: 260, speed: 50, dashArray: "4 8", width: 1, description: "SOC2 • GDPR • HIPAA" },
+  { id: "security", label: "DATA SECURITY", radius: 205, speed: 35, dashArray: "40 120", width: 1.5, description: "AES-256 ENCRYPTION" },
+  { id: "observability", label: "OBSERVABILITY", radius: 155, speed: 25, dashArray: "10 10", width: 1, description: "REAL-TIME LOGGING" },
+  { id: "oversight", label: "HUMAN OVERSIGHT", radius: 105, speed: 20, dashArray: "80 180", width: 2, description: "MANUAL REVIEW" },
 ];
 
 const ShieldIcon = () => (
@@ -30,29 +33,43 @@ interface EnterpriseTrustVisualProps {
 export default function EnterpriseTrustVisual({ scale = 1 }: EnterpriseTrustVisualProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
+  // Dynamic Height based on Scale
+  const containerHeight = SIZE * scale;
+
   return (
-    // OPTIMIZED: Added overflow-hidden
-    <div className="relative w-full flex items-center justify-center font-sans overflow-hidden" style={{ height: SIZE * scale }}>
+    <div 
+      className="relative w-[330px] lg:w-full flex items-center justify-center font-sans overflow-hidden" 
+      style={{ height: containerHeight }}
+    >
       <div 
-        className="relative origin-center" 
-        style={{ width: SIZE, height: SIZE, transform: `scale(${scale})` }}
+        className="relative origin-center shrink-0" 
+        style={{ 
+          width: SIZE, 
+          height: SIZE, 
+          transform: `scale(${scale})` 
+        }}
       >
         <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none" viewBox={`0 0 ${SIZE} ${SIZE}`}>
+            {/* 1. Radar Waves */}
             {[0, 1, 2].map((i) => (
               <motion.circle
                 key={`wave-${i}`} cx={CENTER} cy={CENTER} r={CORE_RADIUS} fill="none" stroke="#3b82f6" strokeWidth="1"
                 initial={{ opacity: 0.3, scale: 1 }}
-                animate={{ opacity: 0, r: SIZE / 2 }}
+                animate={{ opacity: 0, r: SIZE / 2 - 10 }} // Expands to edge safely
                 transition={{ duration: 4, repeat: Infinity, ease: "easeOut", delay: i * 1.3 }}
               />
             ))}
+
+            {/* 2. Rotating Rings */}
             {LAYERS.map((layer) => {
                 const isHovered = hoveredId === layer.id;
                 const isDimmed = hoveredId !== null && !isHovered;
                 return (
                     <motion.g key={layer.id} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: layer.radius * 0.002 }}>
                           <motion.g style={{ originX: "50%", originY: "50%" }} animate={{ rotate: 360 }} transition={{ duration: layer.speed, repeat: Infinity, ease: "linear" }}>
+                            {/* Hit Area */}
                             <circle cx={CENTER} cy={CENTER} r={layer.radius} fill="none" stroke="transparent" strokeWidth="40" className="pointer-events-auto cursor-pointer" onMouseEnter={() => setHoveredId(layer.id)} onMouseLeave={() => setHoveredId(null)} />
+                            {/* Visual Ring */}
                             <motion.circle cx={CENTER} cy={CENTER} r={layer.radius} fill="none" strokeWidth={layer.width} strokeDasharray={layer.dashArray} strokeLinecap="square" animate={{ stroke: isHovered ? "#2563eb" : "#000000", opacity: isDimmed ? 0.1 : 1 }} transition={{ duration: 0.3 }} />
                           </motion.g>
                     </motion.g>
@@ -60,6 +77,7 @@ export default function EnterpriseTrustVisual({ scale = 1 }: EnterpriseTrustVisu
             })}
         </svg>
 
+        {/* 3. Floating Labels */}
         {LAYERS.map((layer) => {
               const isHovered = hoveredId === layer.id;
               const isDimmed = hoveredId !== null && !isHovered;
@@ -74,20 +92,24 @@ export default function EnterpriseTrustVisual({ scale = 1 }: EnterpriseTrustVisu
               );
         })}
 
+        {/* 4. Center Core */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-            <motion.div className="w-44 h-44 bg-white rounded-full border border-neutral-100 shadow-2xl flex flex-col items-center justify-center gap-3" animate={{ borderColor: hoveredId ? "rgba(37, 99, 235, 0.2)" : "rgba(245, 245, 245, 1)", boxShadow: hoveredId ? "0 20px 50px -10px rgba(37, 99, 235, 0.15)" : "0 20px 50px -10px rgba(0,0,0,0.05)" }}>
+            <motion.div 
+              className="w-40 h-40 bg-white rounded-full border border-neutral-100 shadow-2xl flex flex-col items-center justify-center gap-2"
+              animate={{ borderColor: hoveredId ? "rgba(37, 99, 235, 0.2)" : "rgba(245, 245, 245, 1)", boxShadow: hoveredId ? "0 20px 50px -10px rgba(37, 99, 235, 0.15)" : "0 20px 50px -10px rgba(0,0,0,0.05)" }}
+            >
                 <motion.div animate={{ color: hoveredId ? "#2563eb" : "#000000" }} transition={{ duration: 0.3 }}><ShieldIcon /></motion.div>
                 <div className="h-10 flex flex-col items-center justify-center w-full px-4 text-center">
                     <AnimatePresence mode="wait">
                         {hoveredId ? (
                             <motion.div key="hovered" initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.2 }} className="flex flex-col items-center">
                                 <span className="text-[10px] font-bold tracking-widest text-blue-600 uppercase">STATUS: ACTIVE</span>
-                                <span className="text-xs font-medium tracking-wide text-neutral-600 mt-1 truncate w-full">{LAYERS.find(l => l.id === hoveredId)?.description}</span>
+                                <span className="text-[10px] font-medium tracking-wide text-neutral-600 mt-0.5 truncate w-full">{LAYERS.find(l => l.id === hoveredId)?.description}</span>
                             </motion.div>
                         ) : (
                             <motion.div key="default" initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.2 }} className="flex flex-col items-center">
                                 <span className="text-[10px] font-medium tracking-widest text-neutral-400">SYSTEM</span>
-                                <span className="text-sm font-bold tracking-wider text-black mt-0.5">PROTECTED</span>
+                                <span className="text-xs font-bold tracking-wider text-black mt-0.5">PROTECTED</span>
                             </motion.div>
                         )}
                     </AnimatePresence>
