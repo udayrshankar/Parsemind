@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
+import { useCalendly } from './hooks/useCalendly';
 
 // Imported Visuals
 import AgentSystemVisual from './Animation/CustomAI';
@@ -126,6 +127,7 @@ const FlickeringGrid = ({
       cancelAnimationFrame(animationFrameId);
     };
   }, [gridGap, gridColor, flickerColor, maxFlickers, flickerChance]);
+
 
   return (
     <div className="absolute inset-0 z-0" style={{ backgroundColor }}>

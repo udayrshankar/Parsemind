@@ -1,5 +1,4 @@
 // src/components/Booking.tsx
-import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCalendly } from "./hooks/useCalendly";

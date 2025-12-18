@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { Reveal } from './Reveal';
+import { useCalendly } from './hooks/useCalendly';
 
 // Images
 import discoverImage from '../assets/markus-spiske-jG8nlwLRZTM-unsplash.jpg';
@@ -83,6 +84,8 @@ const tabContent = {
 type TabKey = 'discover' | 'develop' | 'deploy' | 'scale';
 
 export default function Concept() {
+  const {loadScript, openPopup} = useCalendly()
+
   const [activeTab, setActiveTab] = useState<TabKey>('discover');
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -207,7 +210,10 @@ export default function Concept() {
                     ))}
                   </ul>
 
-                  <button className="bg-black text-white px-8 py-4 rounded-full font-medium font-inter hover:bg-gray-800 transition">
+                  <button 
+                  onMouseEnter={loadScript}
+                  onClick={openPopup}
+                  className="bg-black text-white px-8 py-4 rounded-full font-medium font-inter hover:bg-gray-800 transition">
                     {tabContent[activeTab].buttonText}
                   </button>
                 </div>
