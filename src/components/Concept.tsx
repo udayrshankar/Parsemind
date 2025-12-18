@@ -117,7 +117,7 @@ export default function Concept() {
                     overflow-hidden
                     cursor-pointer
                     flex flex-col justify-between
-                    h-[240px] md:h-[220px]
+                    h-60 md:h-[220px]
                   "
                   onMouseEnter={() => handleInteraction(step.tableKey)}
                   onClick={() => handleInteraction(step.tableKey)}
@@ -139,7 +139,7 @@ export default function Concept() {
                   </span>
 
                   <div className="relative z-10 flex flex-col gap-4">
-                    <h3 className="text-2xl font-fraunces font-medium group-hover:text-white transition-colors">
+                    <h3 className="text-2xl font-semibold group-hover:text-white transition-colors">
                       {step.title}
                     </h3>
 
