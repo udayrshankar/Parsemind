@@ -120,8 +120,8 @@ export const Hero = () => {
       <div
         className="absolute inset-0 z-0"
         style={{
-          maskImage: 'radial-gradient(circle at 70% 50%, white 0px, white 300px, transparent 400px)',
-          WebkitMaskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 300px, transparent 400px)',
+          maskImage: 'radial-gradient(circle at 30% 50%, white 0px, white 800px, transparent 800px)',
+          WebkitMaskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 500px, transparent 400px)',
           pointerEvents: 'none',
         }}
        >
@@ -144,19 +144,19 @@ export const Hero = () => {
           <div className="md:col-span-7 pt-16">
             <Reveal delay={0.1}>
               <h1 className="text-4xl md:text-5xl type-h1 text-white tracking-tight leading-[1.1] mb-10 font-fraunces">
-                We Engineer Systems That Run Your Business {" "}
-                <span className='inline-block min-w-60 text-transparent bg-clip-text bg-linear-to-r from-gray-300 to-gray-500'>
-                  {typedText}
+                We Engineer Intelligent <br/>
+                <span className='inline-block min-w-60 text-7xl text-transparent bg-clip-text py-3 bg-linear-to-r from-gray-300 to-gray-500'>
+                  {typedText} 
                   <span className="animate-pulse text-white">|</span>
                 </span>
-                <span>Systems That Run Your Business</span>
+                <span><br/>Architectures and Solutions <br/> for your Buisness Growth</span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.3}>
-              <div className="space-y-6 text-gray-400 mb-10 max-w-xl leading-relaxed text-lg font-inter">
+              <div className="space-y-6 text-gray-400 mb-10 max-w-[590px] leading-relaxed text-lg font-inter">
                 <p>
-                  Design, deploy, and scale autonomous AI agents that deliver measurable business outcomes. Parsemind builds production-ready agentic systems that automate workflows, integrate seamlessly, and operate securely at scale.
+                  At Parsemind we design, deploy, and scale production-ready agentic systems that automate workflows, integrate seamlessly, and operate securely at scale that deliver measurable business outcomes.
                 </p>
               </div>
             </Reveal>
@@ -183,15 +183,15 @@ export const Hero = () => {
 
             {/* Trusted Partners Section - DESKTOP ONLY */}
             {/* hidden on mobile, block on medium+ screens */}
-            <div className="hidden md:block mt-14">
+            {/*<div className="hidden md:block mt-14">
               <Reveal delay={0.6}>
                 <TrustedPartnersContent />
               </Reveal>
-            </div>
+            </div>*/}
           </div>
 
           {/* Right: Visual Animation */}
-          <div className="md:col-span-5 w-full relative mt-12 md:mt-0">
+          <div className="md:col-span-5 w-full relative -translate-y-15 mt-12 md:mt-0">
             <EmaAnimation />
           </div>
 

@@ -3,7 +3,7 @@ import { Reveal } from './Reveal';
 
 const roles = [
   {
-    title: "AI Business Consultants",
+    title: "AI Consultants",
     description:
       "Strategy-first enterprise AI consulting that aligns executive vision, operating models, and AI initiatives to drive measurable business outcomes."
   },
@@ -36,11 +36,11 @@ const roles = [
 
 export const TeamRoles = () => {
   return (
-    <section className="px-6 bg-bg-main py-20">
+    <section className="px-6 bg-bg-main ">
       <div className="max-w-7xl mx-auto">
         
         {/* --- Header --- */}
-        <div className="flex flex-col text-center justify-center items-center mb-16">
+        <div className="flex flex-col text-center justify-center items-center mb-5">
           <Reveal>
             <span className="text-text-body uppercase tracking-wider">
               Not the ordinary
@@ -67,7 +67,7 @@ export const TeamRoles = () => {
                   {index + 1}
                 </span>
 
-                <div className="relative z-10 flex flex-col items-start gap-4 h-full min-h-[200px]">
+                <div className="relative z-10 flex flex-col items-start gap-4 h-full min-h-[150px]">
                   <div>
                     <h3 className="type-h3 text-text-main mb-3 group-hover:text-white transition-colors duration-500 leading-tight">
                       {role.title}

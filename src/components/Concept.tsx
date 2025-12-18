@@ -7,25 +7,82 @@ import { useCalendly } from './hooks/useCalendly';
 
 // Images
 
+const FlowLine = ({
+  startX,
+  startY,
+  endX,
+  endY,
+  delay = 0,
+  color = "#4f46e5"
+}: {
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+  delay?: number;
+  color?: string;
+}) => (
+  <div className="absolute inset-0 pointer-events-none z-0">
+    <svg className="absolute inset-0 w-full h-full overflow-visible">
+      <line
+        x1={`calc(50% + ${startX}px)`}
+        y1={startY}
+        x2={`calc(50% + ${endX}px)`}
+        y2={endY}
+        stroke="#E5E5E5"
+        strokeWidth="1"
+        strokeDasharray="4 4"
+      />
+    </svg>
+    <motion.div
+      className="absolute w-2 h-2 rounded-full shadow-sm"
+      style={{ 
+        backgroundColor: color,
+        boxShadow: `0 0 8px ${color}`
+      }}
+      initial={{ 
+        left: `calc(50% + ${startX}px)`, 
+        top: startY, 
+        opacity: 0,
+        x: "-50%", 
+        y: "-50%" 
+      }}
+      animate={{ 
+        left: `calc(50% + ${endX}px)`, 
+        top: endY, 
+        opacity: [0, 1, 1, 0] 
+      }}
+      transition={{
+        duration: 2,
+        repeat: Infinity,
+        ease: "linear",
+        repeatDelay: 0.5,
+        delay: delay
+      }}
+    />
+  </div>
+);
+
+
 const steps = [
   {
     title: 'Discover',
-    desc: 'Identify where agentic AI creates real business leverage by aligning objectives, workflows, data readiness, and ROI.',
+    desc: 'Define where Agentic AI creates leverage by aligning business strategy, workflows, ROI and adoption readiness.',
     tableKey: 'discover',
   },
   {
     title: 'Develop',
-    desc: 'Design and engineer custom agentic systems aligned to real enterprise workflows and standards.',
+    desc: 'Engineer agentic systems designed for real workflows, autonomous execution, and enterprise governance.',
     tableKey: 'develop',
   },
   {
     title: 'Deploy',
-    desc: 'Launch securely into production with full control, observability, and compliance.',
+    desc: 'Operationalize Agentic AI securely in production with control, observability, and human oversight.',
     tableKey: 'deploy',
   },
   {
     title: 'Scale',
-    desc: 'Continuously expand and govern agent systems across teams with performance and visibility.',
+    desc: 'Expand and govern autonomous capabilities across the enterprise, evolving systems into reusable AI platforms.',
     tableKey: 'scale',
   },
 ];
@@ -97,10 +154,12 @@ export default function Concept() {
                 End-to-end execution
               </span>
               <h2 className="text-4xl md:text-5xl font-fraunces font-medium text-black">
-                From Concept to Deployment — and Beyond
+                From Concept to Deployment - and Beyond
               </h2>
             </Reveal>
           </div>
+
+          <FlowLine startX={10} startY={10} endX={0} endY={0}/>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {steps.map((step, index) => (
@@ -115,7 +174,7 @@ export default function Concept() {
                     overflow-hidden
                     cursor-pointer
                     flex flex-col justify-between
-                    h-60 md:h-[220px]
+                    h-60 md:h-[200px]
                   "
                   onMouseEnter={() => setActiveTab(step.tableKey as TabKey)}
                   onClick={() => setActiveTab(step.tableKey as TabKey)}

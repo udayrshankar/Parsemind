@@ -209,7 +209,7 @@ export const Features = () => {
                     className={`relative p-6 md:p-8 cursor-pointer transition-all duration-500 ease-out border overflow-hidden ${
                       isActive
                         ? 'lg:bg-black lg:border-black lg:shadow-2xl lg:scale-[1.02] bg-white border-gray-200'
-                        : 'bg-white border-transparent hover:bg-gray-50 hover:border-gray-100'
+                        : 'bg-bg-card border-transparent hover:bg-gray-50 hover:border-gray-100'
                     }`}
                   >
                     {isActive && (
@@ -228,7 +228,7 @@ export const Features = () => {
                       </div>
                       <div className="flex flex-col gap-3">
                         <h3
-                          className={`text-xl md:text-2xl font-semibold transition-colors duration-500 ${
+                          className={`text-2xl md:text-2xl font-semibold transition-colors duration-500 ${
                             isActive ? 'lg:text-white text-gray-900' : 'text-gray-900'
                           }`}
                         >

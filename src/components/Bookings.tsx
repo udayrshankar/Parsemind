@@ -49,7 +49,7 @@ export const Booking = () => {
 
                 <p className="text-lg md:text-xl text-gray-600 font-inter leading-relaxed mb-8">
                   Align business objectives, operating models, and technology with a clear,
-                  execution-ready AI strategy built for real production environments.
+                  execution-ready AI strategy <br/> built for real production environments.
                 </p>
 
                 <ul className="space-y-5 mb-8">

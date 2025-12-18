@@ -9,6 +9,7 @@ import { Booking } from "../components/Bookings";
 import { Blogs } from "../components/Blogs";
 import { Footer } from "../components/Footer";
 import { TransitionProvider } from "../components/TransitionContext";
+import Cta from "../components/Cta";
 
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
         <CaseStudies/>
         <Booking/>
         <Blogs/>
+        <Cta/>
         <Footer/>
       </TransitionProvider>
     </div>

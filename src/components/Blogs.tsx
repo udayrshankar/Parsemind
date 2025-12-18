@@ -40,7 +40,7 @@ export const Blogs = () => {
       <div className="max-w-7xl mx-auto">
         
         {/* --- Header --- */}
-        <div className="flex justify-center text-center mb-16">
+        <div className="flex justify-center text-center mb-5">
           <Reveal>
             <span className="text-text-body uppercase">
               Enterprise AI Insights
@@ -57,7 +57,7 @@ export const Blogs = () => {
             <Reveal key={index} delay={index * 0.1}>
               <motion.div
                 whileHover={{ y: -10 }}
-                className="group cursor-pointer flex flex-col h-[550px] shadow shadow-5xl shadow-black/25 bg-bg-card hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
+                className="group cursor-pointer flex flex-col h-[590px] shadow shadow-5xl shadow-black/25 bg-bg-card hover:bg-black transition-all duration-500 ease-out hover:border-black/50 overflow-hidden"
               >
                 
                 {/* Image */}

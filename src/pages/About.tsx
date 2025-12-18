@@ -153,7 +153,7 @@ export default function AboutPage() {
       <TransitionProvider>
         <Navbar />
 
-        <main className="w-full max-w-7xl mx-auto pt-32 pb-32 px-6 space-y-32">
+        <main className="w-full max-w-7xl mx-auto pt-32 pb-32 px-6 space-y-16">
           <section className="w-full">
             <Reveal>
               <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
@@ -188,7 +188,6 @@ export default function AboutPage() {
             bg-black text-white
             border-2 border-black
             text-sm font-bold uppercase tracking-widest
-            rounded-md
             transition-all duration-300
             hover:bg-white hover:text-black
           "
