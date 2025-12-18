@@ -6,10 +6,6 @@ import { Reveal } from './Reveal';
 import { useCalendly } from './hooks/useCalendly';
 
 // Images
-import discoverImage from '../assets/markus-spiske-jG8nlwLRZTM-unsplash.jpg';
-import developImage from '../assets/nadine-e-VA9xSQekC8c-unsplash.jpg';
-import deployImage from '../assets/premium_photo-1681488265680-dccd1c52d8a8.jpg';
-import scaleImage from '../assets/premium_photo-1681488265680-dccd1c52d8a8.jpg';
 
 const steps = [
   {
