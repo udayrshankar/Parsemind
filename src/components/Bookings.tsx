@@ -1,8 +1,8 @@
 // src/components/Booking.tsx
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { Reveal } from "./Reveal";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCalendly } from "./hooks/useCalendly";
 
 // Replace this with the actual path to your uploaded image
 import CalendarImage from "../assets/Calendar.png";
@@ -19,6 +19,9 @@ declare global {
     Calendly: any;
   }
 }
+
+const { loadScript, openPopup } = useCalendly(); // Use the hook
+
 
 export const Booking = () => {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
@@ -101,7 +104,10 @@ export const Booking = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <button className="bg-black text-white px-8 py-4 rounded-full font-medium font-inter hover:bg-gray-800 transition-all hover:scale-105 active:scale-95 shadow-lg w-full md:w-auto">
+                  <button 
+                  onMouseEnter={loadScript}
+                  onClick={openPopup}
+                  className="bg-black text-white px-8 py-4 rounded-full font-medium font-inter hover:bg-gray-800 transition-all hover:scale-105 active:scale-95 shadow-lg w-full md:w-auto">
                     Talk to Our AI Expert
                   </button>
                 </motion.div>
@@ -116,6 +122,8 @@ export const Booking = () => {
                 >
                   <img
                     src={CalendarImage}
+                    onMouseEnter={loadScript}
+                    onClick={openPopup}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
