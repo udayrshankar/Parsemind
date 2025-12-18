@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { Reveal } from './Reveal';
 
-// Images
+// Images - Note: Ensure you have a 'scale' image or update the path
 import discoverImage from '../assets/markus-spiske-jG8nlwLRZTM-unsplash.jpg';
 import developImage from '../assets/nadine-e-VA9xSQekC8c-unsplash.jpg';
 import deployImage from '../assets/premium_photo-1681488265680-dccd1c52d8a8.jpg';
+import scaleImage from '../assets/premium_photo-1681488265680-dccd1c52d8a8.jpg'; // Placeholder or your fourth image
 
 const steps = [
   {
@@ -22,8 +23,13 @@ const steps = [
   },
   {
     title: 'Deploy',
-    desc: 'We launch your agents with secure access and continuous monitoring throughout.',
+    desc: 'We launch your agents with secure access and continuous monitoring.',
     tableKey: 'deploy',
+  },
+  {
+    title: 'Scale',
+    desc: 'Expand AI across your organization with unified governance and optimization.',
+    tableKey: 'scale',
   },
 ];
 
@@ -58,15 +64,24 @@ const tabContent = {
     buttonText: 'Check Security Specs',
     image: deployImage,
   },
+  scale: {
+    title: 'Enterprise-Wide Growth',
+    bullets: [
+      'Multi-departmental orchestration for shared organizational intelligence',
+      'Cost-optimization through advanced token management and caching',
+      'Centralized governance and compliance across all AI agents',
+    ],
+    buttonText: 'Explore Scale Solutions',
+    image: scaleImage,
+  },
 };
 
-type TabKey = 'discover' | 'develop' | 'deploy';
+type TabKey = 'discover' | 'develop' | 'deploy' | 'scale';
 
 export default function Concept() {
   const [activeTab, setActiveTab] = useState<TabKey>('discover');
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Helper to handle interaction (Click for mobile, Hover intent for desktop)
   const handleInteraction = (key: string) => {
     setActiveTab(key as TabKey);
   };
@@ -89,9 +104,9 @@ export default function Concept() {
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {steps.map((step, index) => (
-              <Reveal key={index} delay={index * 0.15}>
+              <Reveal key={index} delay={index * 0.1}>
                 <div
                   className="
                     group relative
@@ -102,7 +117,7 @@ export default function Concept() {
                     overflow-hidden
                     cursor-pointer
                     flex flex-col justify-between
-                    h-[220px]
+                    h-[240px] md:h-[220px]
                   "
                   onMouseEnter={() => handleInteraction(step.tableKey)}
                   onClick={() => handleInteraction(step.tableKey)}
@@ -111,7 +126,7 @@ export default function Concept() {
                   <span
                     className="
                       absolute -bottom-8 -right-2
-                      text-[8rem] md:text-[9rem] lg:text-[10rem]
+                      text-[8rem] md:text-[9rem]
                       font-bold leading-none
                       text-black opacity-[0.03]
                       group-hover:text-white group-hover:opacity-[0.1]
@@ -128,7 +143,7 @@ export default function Concept() {
                       {step.title}
                     </h3>
 
-                    <p className="text-base md:text-lg text-gray-500 leading-relaxed font-inter group-hover:text-gray-300 transition-colors">
+                    <p className="text-base text-gray-500 leading-relaxed font-inter group-hover:text-gray-300 transition-colors">
                       {step.desc}
                     </p>
                   </div>
@@ -143,11 +158,11 @@ export default function Concept() {
       <section className="w-full px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           
-          {/* Tab Navigation (Scrollable on Mobile) */}
+          {/* Tab Navigation */}
           <div className="flex justify-center mb-[-26px] relative z-20">
             <div className="max-w-full overflow-x-auto pb-4 md:pb-0 px-2 no-scrollbar">
               <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-full inline-flex gap-1 border border-gray-200 shadow-xl min-w-max">
-                {(['discover', 'develop', 'deploy'] as const).map((tab) => (
+                {(['discover', 'develop', 'deploy', 'scale'] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
@@ -179,7 +194,6 @@ export default function Concept() {
           {/* Main Content Card */}
           <div className="bg-[#f7f8fa] border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-16 shadow-2xl relative w-full z-10 min-h-[600px] md:min-h-[550px] flex flex-col justify-center overflow-hidden">
             
-            {/* Mac Window Controls Decoration */}
             <div className="absolute top-6 left-6 flex gap-2 z-20 opacity-50">
               <div className="w-3 h-3 rounded-full bg-red-400" />
               <div className="w-3 h-3 rounded-full bg-amber-400" />
@@ -196,7 +210,6 @@ export default function Concept() {
                 className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center h-full pt-8 lg:pt-0"
               >
                 
-                {/* Text Content (Order 2 on Mobile, Order 1 on Desktop) */}
                 <div className="flex flex-col justify-center order-2 lg:order-1">
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-black mb-6 leading-[1.1]">
                     {tabContent[activeTab].title}
@@ -232,7 +245,6 @@ export default function Concept() {
                   </motion.div>
                 </div>
 
-                {/* Image / Window (Order 1 on Mobile, Order 2 on Desktop) */}
                 <div className="order-1 lg:order-2 w-full">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.98, y: 10 }}
@@ -246,8 +258,7 @@ export default function Concept() {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
                     />
-                    {/* Overlay gradient */}
-                    <div className="absolute inset-0 bg-linear-to-t from-black/10 to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
                   </motion.div>
                 </div>
 
