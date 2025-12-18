@@ -13,7 +13,7 @@ const FlickeringGrid = () => {
   const [squares, setSquares] = useState<{ id: number; r: number; c: number; delay: number }[]>([]);
 
   useEffect(() => {
-    const count = 35;
+    const count = 3;
     const newSquares = Array.from({ length: count }).map((_, i) => ({
       id: i,
       r: Math.floor(Math.random() * 20),
