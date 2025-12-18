@@ -1,16 +1,17 @@
 // src/components/Booking.tsx
-import { useEffect, useState } from 'react';
-import { Check } from 'lucide-react';
-import { Reveal } from './Reveal';
+import { useEffect, useState } from "react";
+import { Check } from "lucide-react";
+import { Reveal } from "./Reveal";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Replace this with the actual path to your uploaded image
-import CalendarImage from '../assets/Calendar.png';
+import CalendarImage from "../assets/Calendar.png";
 
 const benefits = [
-  'Strategic AI Consulting',
-  'Custom Solution Driven Approach',
-  'AI System Integration',
-  'Ongoing Support & Optimization',
+  "Strategic AI Consulting",
+  "Custom Solution Driven Approach",
+  "AI System Integration",
+  "Ongoing Support & Optimization",
 ];
 
 declare global {
@@ -24,14 +25,14 @@ export const Booking = () => {
 
   useEffect(() => {
     // 1. Load Calendly CSS
-    const link = document.createElement('link');
-    link.href = 'https://assets.calendly.com/assets/external/widget.css';
-    link.rel = 'stylesheet';
+    const link = document.createElement("link");
+    link.href = "https://assets.calendly.com/assets/external/widget.css";
+    link.rel = "stylesheet";
     document.head.appendChild(link);
 
     // 2. Load Calendly JS
-    const script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    const script = document.createElement("script");
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
     script.async = true;
     script.onload = () => setIsScriptLoaded(true);
     document.body.appendChild(script);
@@ -45,72 +46,84 @@ export const Booking = () => {
   const openCalendly = () => {
     if (!isScriptLoaded || !window.Calendly) return;
     window.Calendly.initPopupWidget({
-      url: 'https://calendly.com/kg-goutham-anseru/30min',
+      url: "https://calendly.com/kg-goutham-anseru/30min",
     });
   };
 
   return (
     <section id="booking" className="bg-white px-4 md:px-6 py-24">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0 items-center">
-          {/* --- Left Column: Image Trigger --- */}
-          <Reveal>
-            <div
-              onClick={openCalendly}
-              className="relative w-full max-w-md mx-auto group cursor-pointer mb-8 lg:mb-0"
-            >
-              <div className="overflow-hidden rounded-2xl shadow-xl transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-2xl border border-gray-100">
-                <img
-                  src={CalendarImage}
-                  alt="Book a strategy call"
-                  className="w-full h-auto object-cover"
-                />
-              </div>
-            </div>
-          </Reveal>
-
-          {/* --- Right Column: Text Content --- */}
-          <div>
-            <Reveal delay={0.2}>
-              <span className="text-text-main uppercase font-medium tracking-wider text-xs md:text-sm">
-                Not the ordinary
-              </span>
-              <h2 className="type-h2 mb-5 text-text-main mt-2">
-                Let&apos;s talk about your AI Strategy
-              </h2>
-            </Reveal>
-
-            <div className="flex flex-col gap-5 md:gap-6 mt-6 md:mt-8">
-              {benefits.map((item, index) => (
-                <Reveal key={index} delay={0.3 + index * 0.1}>
-                  <div className="flex items-center gap-4 group cursor-default">
-                    <div className="w-8 h-8 rounded-full bg-functional flex items-center justify-center shrink-0 group-hover:bg-black transition-colors duration-300">
-                      <Check size={16} className="text-white" strokeWidth={3} />
-                    </div>
-
-                    <span className="text-base md:text-lg text-text-body font-inter group-hover:text-black transition-colors duration-300">
-                      {item}
-                    </span>
-                  </div>
-                </Reveal>
-              ))}
-
-              <div className="mt-4 md:mt-6">
-                <Reveal>
-                  <div className="flex flex-wrap gap-3">
-                    <button
-                      onClick={openCalendly}
-                      className="bg-black text-white px-8 py-3 md:py-3.5 hover:bg-white hover:text-black hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
-                    >
-                      Talk to our AI Expert
-                    </button>
-
-                  
-                  </div>
-                </Reveal>
-              </div>
-            </div>
+        <div className="bg-[#f7f8fa] border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-16 shadow-2xl relative w-full z-10 min-h-[600px] md:min-h-[550px] flex flex-col justify-center overflow-hidden">
+          <div className="absolute top-6 left-6 flex gap-2 z-20 opacity-50">
+            <div className="w-3 h-3 rounded-full bg-red-400" />
+            <div className="w-3 h-3 rounded-full bg-amber-400" />
+            <div className="w-3 h-3 rounded-full bg-green-400" />
           </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center h-full pt-8 lg:pt-0"
+            >
+              <div className="flex flex-col justify-center order-2 lg:order-1">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-black mb-6 leading-[1.1]">
+                  Let's talk about your AI Strategy{" "}
+                </h2>
+
+                <ul className="space-y-5 mb-8">
+                  {benefits.map((item, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + i * 0.1 }}
+                      className="flex items-start gap-4"
+                    >
+                      <div className="mt-1 w-5 h-5 rounded-full bg-black flex items-center justify-center shrink-0">
+                        <Check
+                          size={12}
+                          className="text-white"
+                          strokeWidth={3}
+                        />
+                      </div>
+                      <p className="text-base md:text-lg text-gray-600 font-inter leading-relaxed">
+                        {item}
+                      </p>
+                    </motion.li>
+                  ))}
+                </ul>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <button className="bg-black text-white px-8 py-4 rounded-full font-medium font-inter hover:bg-gray-800 transition-all hover:scale-105 active:scale-95 shadow-lg w-full md:w-auto">
+                    Talk to Our AI Expert
+                  </button>
+                </motion.div>
+              </div>
+
+              <div className="order-1 lg:order-2 w-full">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+                  className="relative w-full aspect-video md:aspect-4/3 rounded-xl overflow-hidden shadow-xl border border-black/5 bg-white group"
+                >
+                  <img
+                    src={CalendarImage}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/10 to-transparent pointer-events-none" />
+                </motion.div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>
