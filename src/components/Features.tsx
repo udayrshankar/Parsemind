@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from './Reveal';
-import { useCalendly } from './hooks/useCalendly';
 
 // Imported Visuals
 import AgentSystemVisual from './Animation/CustomAI';
