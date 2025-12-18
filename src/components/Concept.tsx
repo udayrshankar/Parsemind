@@ -44,7 +44,7 @@ const tabContent = {
       'Define success metrics, governance models, and ownership',
     ],
     buttonText: 'Initiate AI Strategy Assessment',
-    image: discoverImage,
+    image: "https://plus.unsplash.com/premium_photo-1688821131205-52f5c633ce69?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   develop: {
     title: 'Engineering Purpose-Built AI Agents',
@@ -55,7 +55,7 @@ const tabContent = {
       'Implement observability, escalation paths, and human oversight',
     ],
     buttonText: 'Design AI Architecture',
-    image: developImage,
+    image: "https://images.unsplash.com/photo-1631624210938-539575f92e3c?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   deploy: {
     title: 'Production-Grade Deployment',
@@ -66,7 +66,7 @@ const tabContent = {
       'Align deployments with enterprise security and compliance standards',
     ],
     buttonText: 'Deploy into Production',
-    image: deployImage,
+    image: "https://plus.unsplash.com/premium_photo-1661431001625-3941be8723c1?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   scale: {
     title: 'Enterprise-Scale AI Operations',
@@ -77,7 +77,7 @@ const tabContent = {
       'Drive continuous improvement through feedback and data intelligence',
     ],
     buttonText: 'Scale Across the Enterprise',
-    image: scaleImage,
+    image: "https://plus.unsplash.com/premium_photo-1733317248765-0b0da954e7fe?q=80&w=1855&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
 };
 

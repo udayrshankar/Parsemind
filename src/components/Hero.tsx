@@ -58,6 +58,22 @@ const FlickeringGrid = () => {
   );
 };
 
+// --- Reusable Sub-component for Partners ---
+// Extracted to avoid code duplication since we need it in two places now
+const TrustedPartnersContent = () => (
+  <div className="pt-8 border-t border-white/10 max-w-lg">
+    <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6 font-inter">
+      Trusted by industry leaders
+    </p>
+    <div className="flex flex-wrap items-center gap-8 opacity-60 grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0">
+      <svg className="h-7 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.1 2H24v20L15.1 2zM8.9 2H0v20L8.9 2zM12 9.4L17.6 22h-3.8l-1.6-4H8.1L12 9.4z"/></svg>
+      <svg className="h-6 w-auto fill-current text-white" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h11v11H0zM12 0h11v11H12zM0 12h11v11H0zM12 12h11v11H12z"/></svg>
+      <svg className="h-6 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+      <svg className="h-5 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.924 5.587c-.896 0-1.84.237-2.61.59-1.57.717-2.31 1.76-2.31 1.76s-.738-1.042-2.31-1.76c-.77-.353-1.714-.59-2.61-.59C3.155 5.587 0 8.52 0 13.918c0 2.227.674 4.498 3.52 4.498 1.488 0 2.502-.455 3.33-1.054.82-.592 1.258-1.284 1.258-1.284s.48 1.255 2.105 1.725c.717.208 1.435.313 2.055.313 3.69 0 6.13-2.66 6.13-6.576 0-3.363-2.196-5.953-6.074-5.953zM7.09 15.776c-1.355 0-2.454-1.14-2.454-2.546 0-1.405 1.1-2.546 2.454-2.546 1.355 0 2.454 1.14 2.454 2.546 0 1.405-1.1 2.546-2.454 2.546zm9.82 0c-1.354 0-2.454-1.14-2.454-2.546 0-1.405 1.1-2.546 2.454-2.546 1.354 0 2.454 1.14 2.454 2.546 0 1.405-1.1 2.546-2.454 2.546z"/></svg>
+    </div>
+  </div>
+);
+
 // --- Logic Hooks ---
 
 const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) => {
@@ -165,26 +181,26 @@ export const Hero = () => {
               </div>
             </Reveal>
 
-            {/* Trusted Partners Section */}
-            <Reveal delay={0.6}>
-              <div className="mt-14 pt-8 border-t border-white/10 max-w-lg">
-                <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6 font-inter">
-                  Trusted by industry leaders
-                </p>
-                <div className="flex flex-wrap items-center gap-8 opacity-60 grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0">
-                  <svg className="h-7 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.1 2H24v20L15.1 2zM8.9 2H0v20L8.9 2zM12 9.4L17.6 22h-3.8l-1.6-4H8.1L12 9.4z"/></svg>
-                  <svg className="h-6 w-auto fill-current text-white" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h11v11H0zM12 0h11v11H12zM0 12h11v11H0zM12 12h11v11H12z"/></svg>
-                  <svg className="h-6 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
-                  <svg className="h-5 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.924 5.587c-.896 0-1.84.237-2.61.59-1.57.717-2.31 1.76-2.31 1.76s-.738-1.042-2.31-1.76c-.77-.353-1.714-.59-2.61-.59C3.155 5.587 0 8.52 0 13.918c0 2.227.674 4.498 3.52 4.498 1.488 0 2.502-.455 3.33-1.054.82-.592 1.258-1.284 1.258-1.284s.48 1.255 2.105 1.725c.717.208 1.435.313 2.055.313 3.69 0 6.13-2.66 6.13-6.576 0-3.363-2.196-5.953-6.074-5.953zM7.09 15.776c-1.355 0-2.454-1.14-2.454-2.546 0-1.405 1.1-2.546 2.454-2.546 1.355 0 2.454 1.14 2.454 2.546 0 1.405-1.1 2.546-2.454 2.546zm9.82 0c-1.354 0-2.454-1.14-2.454-2.546 0-1.405 1.1-2.546 2.454-2.546 1.354 0 2.454 1.14 2.454 2.546 0 1.405-1.1 2.546-2.454 2.546z"/></svg>
-
-                </div>
-              </div>
-            </Reveal>
+            {/* Trusted Partners Section - DESKTOP ONLY */}
+            {/* hidden on mobile, block on medium+ screens */}
+            <div className="hidden md:block mt-14">
+              <Reveal delay={0.6}>
+                <TrustedPartnersContent />
+              </Reveal>
+            </div>
           </div>
 
           {/* Right: Visual Animation */}
           <div className="md:col-span-5 w-full relative mt-12 md:mt-0">
             <EmaAnimation />
+          </div>
+
+          {/* Trusted Partners Section - MOBILE ONLY */}
+          {/* block on mobile, hidden on medium+ screens. Placed at end of grid to render last. */}
+          <div className="block md:hidden col-span-1 mt-12">
+            <Reveal delay={0.6}>
+              <TrustedPartnersContent />
+            </Reveal>
           </div>
 
         </div>
