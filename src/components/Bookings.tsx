@@ -20,38 +20,12 @@ declare global {
   }
 }
 
-const { loadScript, openPopup } = useCalendly(); // Use the hook
+; // Use the hook
 
 
 export const Booking = () => {
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-
-  useEffect(() => {
-    // 1. Load Calendly CSS
-    const link = document.createElement("link");
-    link.href = "https://assets.calendly.com/assets/external/widget.css";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-
-    // 2. Load Calendly JS
-    const script = document.createElement("script");
-    script.src = "https://assets.calendly.com/assets/external/widget.js";
-    script.async = true;
-    script.onload = () => setIsScriptLoaded(true);
-    document.body.appendChild(script);
-
-    return () => {
-      document.head.removeChild(link);
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  const openCalendly = () => {
-    if (!isScriptLoaded || !window.Calendly) return;
-    window.Calendly.initPopupWidget({
-      url: "https://calendly.com/kg-goutham-anseru/30min",
-    });
-  };
+  const { loadScript, openPopup } = useCalendly()
+ 
 
   return (
     <section id="booking" className="bg-white px-4 md:px-6 py-24">
