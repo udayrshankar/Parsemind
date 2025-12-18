@@ -69,9 +69,9 @@ export default function PartnersPage() {
           <Reveal delay={0.3}>
             <div className="border border-gray-200 p-10 bg-card flex flex-col gap-6">
               {/* UPDATED: Changed font-serif to font-fraunces */}
-              <h2 className="text-3xl font-fraunces font-medium">
+              <h3 className="text-3xl font-bold">
                 Join the Alliance
-              </h2>
+              </h3>
               <p className="text-gray-600 leading-relaxed">
                 Partner with us to shape the next generation of enterprise AI.
                 We work deeply with a small group of trusted collaborators.

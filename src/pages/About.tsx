@@ -6,9 +6,9 @@ import { Footer } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 import { TransitionProvider } from "../components/TransitionContext";
 
-// --------------------
-// Types
-// --------------------
+/* --------------------
+   Types
+-------------------- */
 type Person = {
   id: number;
   name: string;
@@ -18,66 +18,77 @@ type Person = {
   image: string;
 };
 
-// --------------------
-// Data
-// --------------------
+/* --------------------
+   Founders
+-------------------- */
 const founders: Person[] = [
   {
     id: 0,
     name: "Sudharshan Bala",
     role: "Founder & CEO",
-    bio: "Leads product strategy and long-term vision. Focused on building enduring systems with clarity, intent, and trust.",
-    qualities: ["Product Vision", "Strategy", "Design Leadership"],
+    bio: "Leads Parsemind’s security-first vision and long-term technical strategy, focused on building enterprise-grade AI systems that are secure, compliant, and dependable at scale.",
+    qualities: [
+      "Cybersecurity & Compliance",
+      "Enterprise AI Architecture",
+      "System Reliability",
+    ],
     image:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1600",
   },
   {
     id: 1,
     name: "KG Goutham",
-    role: "Co-Founder & Head of Engineering",
-    bio: "Architects scalable platforms and resilient systems with an obsession for correctness, performance, and reliability.",
-    qualities: ["System Architecture", "Cloud Infrastructure", "Engineering Culture"],
+    role: "Founder & CEO",
+    bio: "Leads product direction and go-to-market strategy, driving adoption of AI systems through clear positioning, scalable execution, and customer-centric design.",
+    qualities: [
+      "Go-To-Market Strategy",
+      "Product Leadership",
+      "Growth & Partnerships",
+    ],
     image:
       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=1600",
   },
 ];
 
+/* --------------------
+   Principles
+-------------------- */
 const principles = [
   {
     title: "Our Mission",
     description:
-      "To design and engineer dependable AI systems that simplify complexity, empower people, and create long-term economic value. We focus on foundations, not hype.",
+      "To build AI systems enterprises can trust—secure, governable, and engineered to deliver sustained business value in real-world environments.",
   },
   {
-    title: "Clarity Over Complexity",
+    title: "Intentional by Design",
     description:
-      "We prioritize clear thinking, well-defined outcomes, and systems that are understandable, auditable, and maintainable.",
+      "Every system begins with clear outcomes, ownership, and accountability—not experimentation for its own sake.",
   },
   {
-    title: "Craft & Precision",
+    title: "Responsible & Secure",
     description:
-      "Every detail matters. From architecture to interface, we build with restraint, intention, and long-term quality in mind.",
+      "Security, compliance, and governance are foundational. They are designed in from day one, never bolted on later.",
   },
   {
-    title: "Human-Centered AI",
+    title: "Human-in-the-Loop",
     description:
-      "AI should augment human judgment, not replace it. We design systems that keep people in control.",
+      "AI should augment human judgment, not replace it. Control, oversight, and escalation paths matter.",
   },
   {
-    title: "Enterprise Trust",
+    title: "Built to Scale",
     description:
-      "Security, reliability, and compliance are engineered into every system we build — never bolted on later.",
+      "We design architectures that scale across teams, geographies, and use cases without constant rework.",
   },
   {
-    title: "Impact That Compounds",
+    title: "Enduring Impact",
     description:
-      "We focus on high-leverage work — systems that improve over time and create sustained business value.",
+      "We focus on systems that compound value over time—technically, operationally, and commercially.",
   },
 ];
 
-// --------------------
-// Founder Block (Fixed Parallax)
-// --------------------
+/* --------------------
+   Founder Block (UNCHANGED)
+-------------------- */
 const FounderBlock = ({ person }: { person: Person }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -85,30 +96,29 @@ const FounderBlock = ({ person }: { person: Person }) => {
     offset: ["start end", "end start"],
   });
 
-  // Smooth parallax movement
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
     <div ref={ref} className="pt-8">
-      {/* Image Container */}
       <div className="relative h-[520px] w-full overflow-hidden border border-neutral-200 bg-neutral-100">
-        <motion.div style={{ y }} className="h-[120%] w-full relative -top-[10%]">
-             <img
-                src={person.image}
-                alt={person.name}
-                className="w-full h-full object-cover grayscale" 
-             />
+        <motion.div
+          style={{ y }}
+          className="h-[120%] w-full relative -top-[10%]"
+        >
+          <img
+            src={person.image}
+            alt={person.name}
+            className="w-full h-full object-cover grayscale"
+          />
         </motion.div>
         <div className="absolute inset-0 bg-black/5" />
       </div>
 
-      {/* Content */}
       <div className="pt-8">
         <span className="text-xs uppercase tracking-widest font-bold text-neutral-400">
           {person.role}
         </span>
 
-        {/* UPDATED: Changed font-serif to font-fraunces */}
         <h3 className="mt-4 text-4xl font-fraunces font-medium text-neutral-900">
           {person.name}
         </h3>
@@ -134,59 +144,72 @@ const FounderBlock = ({ person }: { person: Person }) => {
   );
 };
 
-// --------------------
-// Page
-// --------------------
+/* --------------------
+   Page
+-------------------- */
 export default function AboutPage() {
   return (
-    // UPDATED: Added font-inter to wrapper to ensure defaults
     <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 font-inter">
       <TransitionProvider>
         <Navbar />
 
-        <main className="w-full max-w-7xl mx-auto pt-32 pb-32 px-6">
-
-          {/* ====================
-              Header
-          ==================== */}
-          <section className=" border-b border-neutral-200 pb-16">
+        <main className="w-full max-w-7xl mx-auto pt-32 pb-32 px-6 space-y-32">
+          <section className="w-full">
             <Reveal>
-              <div className="flex flex-col lg:flex-row justify-between items-center gap-12 bg-white border border-neutral-200 p-12">
-                
-                {/* Primary Content Node */}
+              <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
+                {/* LEFT: TEXT */}
                 <div className="max-w-4xl">
-                  <span className="text-neutral-500 uppercase tracking-[0.25em] mb-4 block font-medium text-xs">
+                  <span className="text-neutral-500 uppercase tracking-[0.25em] mb-4 block text-xs font-bold">
                     Who We Are
                   </span>
+
                   <h1 className="type-h1 text-text-main">
-                    We build systems that scale with trust.
+                    We build AI systems enterprises can trust.
                   </h1>
+
+                  <p className="mt-8 text-xl text-neutral-600 leading-relaxed">
+                    Parsemind is an enterprise AI consulting and engineering
+                    firm focused on designing, deploying, and scaling agentic AI
+                    systems inside real organizations—where reliability,
+                    governance, and accountability matter.
+                  </p>
                 </div>
 
-                {/* Secondary CTA Node */}
-                <div className="w-full lg:w-auto min-w-[240px]">
-                  <button 
-                    onClick={() => document.getElementById('mission-principles')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="w-full bg-neutral-900 text-white border border-neutral px-8 py-5 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300"
+                {/* RIGHT: BUTTON (VERTICALLY CENTERED) */}
+                <div className="flex items-center">
+                  <button
+                    onClick={() =>
+                      document
+                        .getElementById("mission-principles")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                    className="
+            px-14 py-4
+            bg-black text-white
+            border-2 border-black
+            text-sm font-bold uppercase tracking-widest
+            rounded-md
+            transition-all duration-300
+            hover:bg-white hover:text-black
+          "
                   >
                     View Principles
                   </button>
                 </div>
-
               </div>
             </Reveal>
           </section>
 
           {/* ====================
-              Founders
+              LEADERSHIP (FIRST)
           ==================== */}
-          <section className="mb-32">
-            <div className="border-b py-2 border-neutral-200 flex justify-between items-center mb-5">
+          <section>
+            <div className="border-b py-2 border-neutral-200 flex justify-between items-center mb-8">
               <Reveal>
-                <h2 className="text-6xl font-medium">Meet Our Founders</h2>
+                <h2 className="type-h1 text-text-main">Leadership</h2>
               </Reveal>
-              <span className="text-sm font-bold uppercase tracking-widest text-neutral-400">
-                Leadership
+              <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                Founders
               </span>
             </div>
 
@@ -200,49 +223,42 @@ export default function AboutPage() {
           </section>
 
           {/* ====================
-              Mission & Principles
+              CONTEXT (HOME-STYLE)
           ==================== */}
-          <section id="mission-principles" className="border-t border-neutral-200 pt-24">
+
+          {/* ====================
+              PRINCIPLES (UNCHANGED)
+          ==================== */}
+          <section
+            id="mission-principles"
+            className="border-t border-neutral-200 pt-24"
+          >
             <div className="flex flex-col text-center justify-center items-center mb-16">
               <Reveal>
                 <span className="text-neutral-500 uppercase tracking-wider text-xs font-bold">
                   How We Think
                 </span>
-                <h2 className="text-4xl font-medium text-neutral-900 mt-4">
-                  Mission & Principles
+                <h2 className="type-h2 text-text-main mt-4">
+                  Mission and Principles
                 </h2>
               </Reveal>
             </div>
 
-            {/* Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {principles.map((item, index) => (
                 <Reveal key={index} delay={index * 0.1}>
-                  <div
-                    className="group relative h-full bg-white border border-neutral-200 p-10
-                               hover:bg-neutral-900 transition-all duration-500 ease-out
-                               cursor-default overflow-hidden"
-                  >
-                    {/* Background Number */}
-                    <span
-                      className="absolute -bottom-10 -right-4 text-[10rem] font-bold leading-none
-                                 text-neutral-100
-                                 group-hover:text-neutral-800
-                                 transition-colors duration-500 pointer-events-none select-none z-0"
-                    >
+                  <div className="group relative h-full bg-white border border-neutral-200 p-10 hover:bg-neutral-900 transition-all duration-500 ease-out cursor-default overflow-hidden">
+                    <span className="absolute -bottom-10 -right-4 text-[10rem] font-bold leading-none text-neutral-100 group-hover:text-neutral-800 transition-colors duration-500 pointer-events-none select-none z-0">
                       {index + 1}
                     </span>
 
-                    <div className="relative z-10 flex flex-col items-start gap-4 h-full min-h-[200px]">
-                      <div>
-                        <h3 className="text-xl font-semibold text-neutral-900 mb-3 group-hover:text-white transition-colors duration-500 leading-tight">
-                          {item.title}
-                        </h3>
-
-                        <p className="text-[16px] text-neutral-600 group-hover:text-neutral-400 transition-colors duration-500 leading-relaxed">
-                          {item.description}
-                        </p>
-                      </div>
+                    <div className="relative z-10 flex flex-col gap-4 min-h-[200px]">
+                      <h3 className="text-xl font-semibold text-neutral-900 mb-3 group-hover:text-white transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-[16px] text-neutral-600 group-hover:text-neutral-400 leading-relaxed transition-colors">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
                 </Reveal>
@@ -250,6 +266,17 @@ export default function AboutPage() {
             </div>
           </section>
 
+          {/* ====================
+              CLOSING (HOME-STYLE)
+          ==================== */}
+          <section className="max-w-3xl">
+            <Reveal>
+              <p className="text-2xl text-neutral-700 leading-relaxed">
+                Enterprise AI succeeds not through speed alone, but through
+                clarity, discipline, and systems designed to endure.
+              </p>
+            </Reveal>
+          </section>
         </main>
 
         <Footer />

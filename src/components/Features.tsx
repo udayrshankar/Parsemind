@@ -78,10 +78,21 @@ const FlickeringGrid = ({
 
     const updateFlickers = () => {
       if (flickers.length < maxFlickers && Math.random() < flickerChance) {
-        flickers.push({ id: Math.random(), r: Math.floor(Math.random() * rows), c: Math.floor(Math.random() * cols), opacity: 0, dying: false });
+        flickers.push({
+          id: Math.random(),
+          r: Math.floor(Math.random() * rows),
+          c: Math.floor(Math.random() * cols),
+          opacity: 0,
+          dying: false
+        });
       }
       flickers.forEach((f) => {
-        if (f.dying) { f.opacity -= 0.02; } else { f.opacity += 0.02; if (f.opacity >= 0.5) f.dying = true; }
+        if (f.dying) {
+          f.opacity -= 0.02;
+        } else {
+          f.opacity += 0.02;
+          if (f.opacity >= 0.5) f.dying = true;
+        }
       });
       flickers = flickers.filter((f) => f.opacity > 0);
     };
@@ -89,7 +100,12 @@ const FlickeringGrid = ({
     const drawFlickers = () => {
       flickers.forEach((f) => {
         ctx.fillStyle = `rgba(${flickerRgb}, ${f.opacity})`;
-        ctx.fillRect(f.c * gridGap + 1, f.r * gridGap + 1, gridGap - 2, gridGap - 2);
+        ctx.fillRect(
+          f.c * gridGap + 1,
+          f.r * gridGap + 1,
+          gridGap - 2,
+          gridGap - 2
+        );
       });
     };
 
@@ -112,41 +128,48 @@ const FlickeringGrid = ({
   }, [gridGap, gridColor, flickerColor, maxFlickers, flickerChance]);
 
   return (
-    <div className="absolute inset-0 z-0" style={{ backgroundColor: backgroundColor }}>
-      <canvas ref={canvasRef} className="w-full h-full" style={{ maskImage: `radial-gradient(circle at center, black 0%, transparent ${maskCoverage})`, WebkitMaskImage: `radial-gradient(circle at center, black 0%, transparent ${maskCoverage})` }} />
+    <div className="absolute inset-0 z-0" style={{ backgroundColor }}>
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full"
+        style={{
+          maskImage: `radial-gradient(circle at center, black 0%, transparent ${maskCoverage})`,
+          WebkitMaskImage: `radial-gradient(circle at center, black 0%, transparent ${maskCoverage})`
+        }}
+      />
     </div>
   );
 };
 
-// --- Feature Data with Custom Mobile Scales ---
+// --- Feature Data (CONTENT UPDATED ONLY) ---
 const features = [
   { 
     id: 0, 
     title: "Custom AI Agent Engineering", 
-    description: "We architect, deploy, and maintain AI systems tailored specifically to your business goals and infrastructure.", 
-    animation: <AgentSystemVisual/>,
+    description: "Enterprise-grade agentic AI systems purpose-built for your workflows, data landscape, and governance requirements.", 
+    animation: <AgentSystemVisual />,
     mobileScale: 0.5 
   },
   { 
     id: 1, 
-    title: "Achieve Fast Results", 
-    description: "Track ROI and efficiency gains with custom dashboards designed to visualize your AI impact in real-time.", 
-    animation: <FastResultsVisual/>,
+    title: "Fast, Measurable Business Impact", 
+    description: "Move from pilot to ROI quickly with production-ready agents that deliver efficiency gains and cost reduction.", 
+    animation: <FastResultsVisual />,
     mobileScale: 0.45 
   },
   { 
     id: 2, 
-    title: "Integrate With Tools You Use", 
-    description: "Seamlessly connect our agents with your existing stack—Slack, Salesforce, HubSpot, and proprietary databases.", 
-    animation: <IntegrationsVisual/>,
+    title: "Seamless Enterprise Integration", 
+    description: "Integrate AI agents directly into your existing systems, APIs, data platforms, and enterprise tools.", 
+    animation: <IntegrationsVisual />,
     mobileScale: 0.45 
   },
   { 
     id: 3, 
     title: "Trusted, Enterprise-Ready AI", 
-    description: "Deliver safe, reliable, and transparent generative AI that adheres to strict enterprise compliance standards.", 
+    description: "Secure, compliant, and governed AI systems designed for regulated and mission-critical environments.", 
     animation: <EnterpriseTrustVisual />,
-    mobileScale: 0.55 // Matches the 600px Size
+    mobileScale: 0.55
   },
 ];
 
@@ -160,12 +183,16 @@ export const Features = () => {
   };
 
   return (
-    <section className="px-6 md:px-12 py-16 md:py-10 relative">
+    <section className="px-6 md:px-12 relative">
       <div className="max-w-7xl mx-auto">
         <div className="text-center flex justify-center mb-8 md:mb-10">
           <Reveal>
-            <span className="text-text-body uppercase mx-auto mb-1 block">Unique Features</span>
-            <h2 className="type-h2 text-text-main">Our Key Features</h2>
+            <span className="text-text-body uppercase mx-auto mb-1 block">
+              Production-ready capabilities
+            </span>
+            <h2 className="type-h2 text-text-main">
+              Our Key Features
+            </h2>
           </Reveal>
         </div>
 
@@ -178,32 +205,69 @@ export const Features = () => {
                   <div
                     onMouseEnter={() => handleMouseEnter(index)}
                     onClick={() => setActiveIndex(index)}
-                    className={`relative p-6 md:p-8 cursor-pointer transition-all duration-500 ease-out border overflow-hidden ${isActive ? 'lg:bg-black lg:border-black lg:shadow-2xl lg:scale-[1.02] bg-white border-gray-200' : 'bg-white border-transparent hover:bg-gray-50 hover:border-gray-100'}`}
+                    className={`relative p-6 md:p-8 cursor-pointer transition-all duration-500 ease-out border overflow-hidden ${
+                      isActive
+                        ? 'lg:bg-black lg:border-black lg:shadow-2xl lg:scale-[1.02] bg-white border-gray-200'
+                        : 'bg-white border-transparent hover:bg-gray-50 hover:border-gray-100'
+                    }`}
                   >
-                    {isActive && <div className="hidden lg:block absolute inset-0 bg-black -z-10" />}
+                    {isActive && (
+                      <div className="hidden lg:block absolute inset-0 bg-black -z-10" />
+                    )}
                     
                     <div className="flex gap-6 items-start relative z-10">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-colors duration-500 font-inter font-medium ${isActive ? 'lg:border-white/20 lg:text-black lg:bg-white border-gray-200 text-gray-900 bg-gray-100' : 'border-gray-200 text-gray-500 bg-gray-50'}`}>
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-colors duration-500 font-inter font-medium ${
+                          isActive
+                            ? 'lg:border-white/20 lg:text-black lg:bg-white border-gray-200 text-gray-900 bg-gray-100'
+                            : 'border-gray-200 text-gray-500 bg-gray-50'
+                        }`}
+                      >
                         {index + 1}
                       </div>
                       <div className="flex flex-col gap-3">
-                        <h3 className={`text-xl md:text-2xl font-semibold transition-colors duration-500 ${isActive ? 'lg:text-white text-gray-900' : 'text-gray-900'}`}>{feature.title}</h3>
-                        <p className={`text-base md:text-lg leading-relaxed transition-colors duration-500 ${isActive ? 'lg:text-gray-400 text-gray-500' : 'text-gray-500'}`}>{feature.description}</p>
+                        <h3
+                          className={`text-xl md:text-2xl font-semibold transition-colors duration-500 ${
+                            isActive ? 'lg:text-white text-gray-900' : 'text-gray-900'
+                          }`}
+                        >
+                          {feature.title}
+                        </h3>
+                        <p
+                          className={`text-base md:text-lg leading-relaxed transition-colors duration-500 ${
+                            isActive ? 'lg:text-gray-400 text-gray-500' : 'text-gray-500'
+                          }`}
+                        >
+                          {feature.description}
+                        </p>
                       </div>
                     </div>
 
                     <AnimatePresence>
                       {isActive && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: "circOut" }} className="lg:hidden w-full relative mt-0 overflow-hidden">
-                            <div className="relative w-full h-[350px] overflow-hidden rounded-md mt-6 border border-gray-100 bg-[#f7f6f2]">
-                                <FlickeringGrid gridGap={40} gridColor="#e4e3df" flickerColor="#A3A3A3" backgroundColor="#f7f6f2" maskCoverage="100%" />
-                                <div className="relative z-10 w-full h-full flex items-center justify-center">
-                                    {/* USE INDIVIDUAL MOBILE SCALE */}
-                                    {React.isValidElement(feature.animation) && 
-                                      React.cloneElement(feature.animation as React.ReactElement<any>, { scale: feature.mobileScale })
-                                    }
-                                </div>
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "circOut" }}
+                          className="lg:hidden w-full relative overflow-hidden"
+                        >
+                          <div className="relative w-full h-[350px] rounded-md mt-6 border border-gray-100 bg-[#f7f6f2] overflow-hidden">
+                            <FlickeringGrid
+                              gridGap={40}
+                              gridColor="#e4e3df"
+                              flickerColor="#A3A3A3"
+                              backgroundColor="#f7f6f2"
+                              maskCoverage="100%"
+                            />
+                            <div className="relative z-10 w-full h-full flex items-center justify-center">
+                              {React.isValidElement(feature.animation) &&
+                                React.cloneElement(
+                                  feature.animation as React.ReactElement<any>,
+                                  { scale: feature.mobileScale }
+                                )}
                             </div>
+                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -214,7 +278,13 @@ export const Features = () => {
           </div>
 
           <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[600px] w-full overflow-hidden relative border border-gray-200 shadow-sm bg-[#f7f6f2]">
-            <FlickeringGrid gridGap={40} gridColor="#e4e3df" flickerColor="#A3A3A3" backgroundColor="#f7f6f2" maskCoverage="100%" />
+            <FlickeringGrid
+              gridGap={40}
+              gridColor="#e4e3df"
+              flickerColor="#A3A3A3"
+              backgroundColor="#f7f6f2"
+              maskCoverage="100%"
+            />
             <div className="relative z-30 w-full h-full">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -225,10 +295,11 @@ export const Features = () => {
                   transition={{ duration: 0.4, ease: 'circOut' }}
                   className="absolute inset-0 w-full h-full flex items-center justify-center"
                 >
-                  {/* Default Desktop Scale: 1 */}
-                  {React.isValidElement(features[activeIndex].animation) && 
-                    React.cloneElement(features[activeIndex].animation as React.ReactElement<any>, { scale: 1 })
-                  }
+                  {React.isValidElement(features[activeIndex].animation) &&
+                    React.cloneElement(
+                      features[activeIndex].animation as React.ReactElement<any>,
+                      { scale: 1 }
+                    )}
                 </motion.div>
               </AnimatePresence>
             </div>

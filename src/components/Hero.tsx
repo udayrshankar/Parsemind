@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Reveal } from './Reveal';
 import EmaAnimation from './EmaAnimation';
-import { motion } from 'framer-motion';
 import { useCalendly } from './hooks/useCalendly'; 
+import { motion } from 'framer-motion';
 
 // --- Visual Components ---
 
@@ -93,6 +93,7 @@ const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) 
 // --- Main Component ---
 
 export const Hero = () => {
+  // Updated to match PDF Headline "intelligent Agentic architectures"
   const typedText = useTypewriter("Agentic AI", 150, 2000);
   const { loadScript, openPopup } = useCalendly();
 
@@ -126,30 +127,26 @@ export const Hero = () => {
           {/* Left: Text Content & Actions */}
           <div className="md:col-span-7 pt-16">
             <Reveal delay={0.1}>
-              {/* UPDATED: Removed inline style, added font-fraunces */}
               <h1 className="text-4xl md:text-5xl type-h1 text-white tracking-tight leading-[1.1] mb-10 font-fraunces">
-                We engineer intelligent <br />
+                We Engineer Systems That Run Your Business {" "}
                 <span className='inline-block min-w-60 text-transparent bg-clip-text bg-linear-to-r from-gray-300 to-gray-500'>
                   {typedText}
                   <span className="animate-pulse text-white">|</span>
                 </span>
-                <span className=''>architectures <br/> for your Business Growth</span>
+                <span>Systems That Run Your Business</span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.3}>
-              {/* UPDATED: Removed inline style, added font-inter */}
               <div className="space-y-6 text-gray-400 mb-10 max-w-xl leading-relaxed text-lg font-inter">
                 <p>
-                  We don’t just build AI bots or prototypes. 
-                  <span className="text-gray-200 font-medium"> Parsemind</span> designs and deploys fully managed, secure agentic AI systems that operate.
+                  Design, deploy, and scale autonomous AI agents that deliver measurable business outcomes. Parsemind builds production-ready agentic systems that automate workflows, integrate seamlessly, and operate securely at scale.
                 </p>
               </div>
             </Reveal>
 
             {/* CTA Buttons */}
             <Reveal delay={0.4}>
-              {/* UPDATED: Removed inline style, added font-inter */}
               <div className="flex flex-wrap gap-4 font-inter">
                 <button 
                   onMouseEnter={loadScript}
@@ -171,12 +168,10 @@ export const Hero = () => {
             {/* Trusted Partners Section */}
             <Reveal delay={0.6}>
               <div className="mt-14 pt-8 border-t border-white/10 max-w-lg">
-                {/* UPDATED: Removed inline style, added font-inter */}
                 <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6 font-inter">
                   Trusted by industry leaders
                 </p>
                 <div className="flex flex-wrap items-center gap-8 opacity-60 grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0">
-                  {/* Logos remain unchanged... */}
                   <svg className="h-7 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.1 2H24v20L15.1 2zM8.9 2H0v20L8.9 2zM12 9.4L17.6 22h-3.8l-1.6-4H8.1L12 9.4z"/></svg>
                   <svg className="h-6 w-auto fill-current text-white" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h11v11H0zM12 0h11v11H12zM0 12h11v11H0zM12 12h11v11H12z"/></svg>
                   <svg className="h-6 w-auto fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
