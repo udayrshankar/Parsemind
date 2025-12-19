@@ -149,21 +149,21 @@ const features = [
     title: "Custom AI Agent Engineering", 
     description: "Enterprise-grade agentic AI systems purpose-built for your workflows, data landscape, and governance requirements.", 
     animation: <AgentSystemVisual />,
-    mobileScale: 0.5 
+    mobileScale: 0.6
   },
   { 
     id: 1, 
     title: "Fast, Measurable Business Impact", 
     description: "Move from pilot to ROI quickly with production-ready agents that deliver efficiency gains and cost reduction.", 
     animation: <FastResultsVisual />,
-    mobileScale: 0.45 
+    mobileScale: 0.6
   },
   { 
     id: 2, 
     title: "Seamless Enterprise Integration", 
     description: "Integrate AI agents directly into your existing systems, APIs, data platforms, and enterprise tools.", 
     animation: <IntegrationsVisual />,
-    mobileScale: 0.45 
+    mobileScale: 0.52
   },
   { 
     id: 3, 

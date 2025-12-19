@@ -264,7 +264,7 @@ export default function Concept() {
                     {tabContent[activeTab].title}
                   </h2>
 
-                  <ul className="space-y-5 mb-8">
+                  <ul className="space-y-2 mb-8">
                     {tabContent[activeTab].bullets.map((item, i) => (
                       <li key={i} className="flex gap-4">
                         <div className="mt-1 w-5 h-5 rounded-full bg-black flex items-center justify-center">

@@ -43,7 +43,7 @@ export const Booking = () => {
               
               {/* Left Column */}
               <div className="flex flex-col justify-center order-2 lg:order-1">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-black mb-6 leading-[1.1]">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-black mb-4 leading-[1.1]">
                   Let’s Talk About Your Enterprise AI Strategy
                 </h2>
 
@@ -52,7 +52,7 @@ export const Booking = () => {
                   execution-ready AI strategy <br/> built for real production environments.
                 </p>
 
-                <ul className="space-y-5 mb-8">
+                <ul className="space-y-2 mb-8">
                   {benefits.map((item, i) => (
                     <motion.li
                       key={i}
