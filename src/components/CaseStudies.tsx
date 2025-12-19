@@ -10,7 +10,7 @@ export const CaseStudies = () => {
       <div className="max-w-7xl mx-auto">
         
         {/* --- Header --- */}
-        <div className="flex text-center justify-center mb-10 md:mb-16">
+        <div className="flex text-center justify-center mb-10">
           <Reveal>
             <span className="text-gray-500 uppercase tracking-[0.2em] text-xs font-bold font-inter mb-3 block">
               Real Results

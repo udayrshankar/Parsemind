@@ -1,10 +1,38 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Tag, Clock, ChevronRight, X, Send, PenTool } from 'lucide-react';
-import { Reveal } from '../components/Reveal';
-import { Footer } from '../components/Footer';
-import { Navbar } from '../components/Navbar';
-import { TransitionProvider } from '../components/TransitionContext';
+
+// Mock components
+const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay }}
+  >
+    {children}
+  </motion.div>
+);
+
+const Footer = () => (
+  <footer className="border-t border-gray-200 py-12 px-6">
+    <div className="max-w-7xl mx-auto text-center text-sm text-gray-500">
+      © 2025 Company. All rights reserved.
+    </div>
+  </footer>
+);
+
+const Navbar = () => (
+  <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-40 px-6 py-4">
+    <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <div className="font-bold text-xl">Company</div>
+      <div className="flex gap-6 text-sm">
+        <a href="#" className="hover:text-gray-600">Home</a>
+        <a href="#" className="hover:text-gray-600">Blog</a>
+        <a href="#" className="hover:text-gray-600">Partners</a>
+      </div>
+    </div>
+  </nav>
+);
 
 // --- Dummy Data ---
 const CATEGORIES = ["All", "Strategy", "Engineering", "Design", "Culture"];
@@ -58,7 +86,7 @@ const POSTS = [
   }
 ];
 
-// --- Submit Modal (Kept functionality, matched style) ---
+// --- Submit Modal ---
 const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   return (
     <AnimatePresence>
@@ -79,7 +107,7 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="fixed inset-0 m-auto z-50 w-full max-w-lg h-fit p-6 md:p-0"
           >
-            <div className="bg-bg-card border border-border shadow-2xl overflow-hidden relative">
+            <div className="bg-white border border-gray-200 shadow-2xl overflow-hidden relative">
               <button 
                 onClick={onClose}
                 className="absolute top-4 right-4 p-2 hover:bg-black/5 rounded-full transition-colors z-10"
@@ -93,8 +121,8 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                    <span className="text-xs font-bold uppercase tracking-widest">Writer's Program</span>
                 </div>
 
-                <h3 className="type-h3 text-2xl mb-2">Submit your Newsletter</h3>
-                <p className="text-text-body/80 mb-8 text-sm leading-relaxed">
+                <h3 className="text-2xl font-bold mb-2">Submit your Newsletter</h3>
+                <p className="text-gray-600 mb-8 text-sm leading-relaxed">
                   Join our network of AI thought leaders. We feature high-quality technical deep dives and strategic analysis.
                 </p>
 
@@ -104,7 +132,7 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                     <input 
                       type="text" 
                       placeholder="Jane Doe"
-                      className="w-full bg-bg-main border border-border p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
+                      className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
                     />
                   </div>
                   
@@ -113,7 +141,7 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                     <input 
                       type="email" 
                       placeholder="jane@example.com"
-                      className="w-full bg-bg-main border border-border p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
+                      className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
                     />
                   </div>
 
@@ -122,7 +150,7 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                     <textarea 
                       rows={3}
                       placeholder="Link to your substack or a brief pitch..."
-                      className="w-full bg-bg-main border border-border p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300 resize-none"
+                      className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300 resize-none"
                     />
                   </div>
 
@@ -131,7 +159,7 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                   </button>
                 </form>
               </div>
-              <div className="h-1.5 w-full bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600" />
+              <div className="h-1.5 w-full bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600" />
             </div>
           </motion.div>
         </>
@@ -140,176 +168,186 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
   );
 };
 
-
 export default function BlogsPage() {
   const [activeCat, setActiveCat] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg-main text-text-main font-inter selection:bg-black selection:text-white">
-      <TransitionProvider>
-        <Navbar />
+    <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
+      <Navbar />
 
-        <SubmitModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <SubmitModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-        <main className="max-w-7xl mx-auto px-6 pt-32 pb-32">
-          
-          {/* --- HEADER: Clean Layout (New) + Original Fonts (Old) --- */}
-          <section className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-10 border-b border-border pb-16">
-            <div className="max-w-4xl">
-              <Reveal>
-                <span className="text-text-body uppercase tracking-[0.2em] mb-4 block font-medium">
-                  The Journal
-                </span>
-                <h1 className="type-h1 text-text-main">
-                  Insights and <br /> Perspectives.
-                </h1>
-              </Reveal>
-            </div>
-            
-            {/* The Layout Change: Clean Text Link CTA on right (No Dashed Box) */}
-            <div className="flex flex-col gap-6 max-w-md pb-2 items-start md:items-end md:text-right">
-               <Reveal delay={0.2}>
-                 <p className="type-body-main text-text-body/80 leading-relaxed">
-                   Thoughts on building the future of autonomous software and intelligent infrastructure.
-                 </p>
-               </Reveal>
+      {/* =========================
+          HERO / LANDING CTA (New Design - Partners Style)
+      ========================= */}
+      <section className="px-6 pt-32 pb-24 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
 
-               <Reveal delay={0.3}>
-                 <div className="flex flex-col md:items-end gap-1">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Do you love to write about AI?</span>
-                    <button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="group flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-black border-b-2 border-black pb-1 hover:text-blue-600 hover:border-blue-600 transition-all"
-                    >
-                        Submit Newsletter 
-                        <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </button>
-                 </div>
-               </Reveal>
-            </div>
-          </section>
-
-          {/* --- FEATURED: Original Design (Borders, Cards) --- */}
-          <section className="mb-32">
+          {/* Left */}
+          <div>
             <Reveal>
-              <div className="group relative border border-border bg-bg-card overflow-hidden shadow-card grid grid-cols-1 lg:grid-cols-2 cursor-pointer transition-all duration-500 hover:shadow-2xl">
-                
-                {/* Image Side */}
-                <div className="relative h-[400px] lg:h-[550px] overflow-hidden border-b lg:border-b-0 lg:border-r border-border">
-                  <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
-                  <img 
-                    src={FEATURED.image} 
-                    alt={FEATURED.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-in-out"
-                  />
-                  <div className="absolute top-0 left-0 bg-black text-white px-4 py-2 text-xs font-bold uppercase tracking-widest z-20">
-                    Featured Story
-                  </div>
-                </div>
-
-                {/* Content Side */}
-                <div className="p-10 lg:p-16 flex flex-col justify-between group-hover:bg-black transition-colors duration-500 relative">
-                  <div>
-                      <div className="flex items-center gap-4 mb-8 text-xs font-bold uppercase tracking-widest text-text-body/60 group-hover:text-gray-400">
-                        <span className="flex items-center gap-2"><Tag className="w-4 h-4" /> {FEATURED.category}</span>
-                        <span className="w-px h-3 bg-current opacity-30"></span>
-                        <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> {FEATURED.readTime}</span>
-                      </div>
-                      
-                      <h2 className="type-h2 mb-6 leading-[1.1] group-hover:text-white transition-colors duration-500">
-                       {FEATURED.title}
-                      </h2>
-                      
-                      <p className="type-body-main text-text-body/80 leading-relaxed group-hover:text-gray-300 transition-colors duration-500">
-                        {FEATURED.excerpt}
-                      </p>
-                  </div>
-
-                  <div className="mt-12 flex items-center gap-3 text-sm font-bold uppercase tracking-widest group-hover:text-white transition-colors duration-500">
-                      Read Full Story 
-                      <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-                  </div>
-                </div>
-
-              </div>
+              <span className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3 block">
+                The Journal
+              </span>
+              <h1 className="text-6xl md:text-8xl font-serif font-medium leading-[0.95] tracking-tight">
+                Insights and <br /> Perspectives.
+              </h1>
             </Reveal>
-          </section>
 
-          {/* --- TABS: Original Design --- */}
-          <section className="mb-12 border-b border-border">
-            <div className="flex flex-wrap gap-8">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCat(cat)}
-                  className={`
-                    pb-4 text-xs font-bold uppercase tracking-widest transition-all relative
-                    ${activeCat === cat ? 'text-black' : 'text-gray-400 hover:text-black'}
-                  `}
-                >
-                  {cat}
-                  {activeCat === cat && (
-                    <motion.div 
-                      layoutId="activeTab" 
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" 
-                    />
-                  )}
-                </button>
-              ))}
+            <Reveal delay={0.2}>
+              <p className="mt-6 text-lg text-gray-600 max-w-xl leading-relaxed">
+                Thoughts on building the future of autonomous software and intelligent infrastructure.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* Right CTA */}
+          <Reveal delay={0.3}>
+            <div className="border border-gray-200 p-10 bg-white flex flex-col gap-6">
+              <h3 className="text-3xl font-bold">
+                Submit Newsletter
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Join our network of AI thought leaders. We feature high-quality technical deep dives and strategic analysis.
+              </p>
+
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-3 text-lg font-medium
+                           border border-black px-6 py-4 bg-black text-white
+                           hover:bg-white hover:text-black transition-colors"
+              >
+                Become a Contributor
+                <ArrowUpRight className="w-5 h-5" />
+              </button>
             </div>
-          </section>
+          </Reveal>
 
-          {/* --- GRID: Original Design (Watermarks + Black Hover) --- */}
-          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {POSTS.filter(p => activeCat === "All" || p.category === activeCat).map((post, index) => (
-              <Reveal key={index} delay={index * 0.05}>
-                <article 
-                  className="group relative h-full bg-bg-card border border-border p-8 
-                             hover:bg-black transition-all duration-500 ease-out 
-                             hover:shadow-2xl cursor-pointer overflow-hidden flex flex-col justify-between min-h-[360px]"
-                >
-                   {/* --- Background Number (Watermark) --- */}
-                   <span className="absolute -bottom-10 -right-4 text-[10rem] font-bold leading-none 
-                                    text-black opacity-[0.03] 
-                                    group-hover:text-white group-hover:opacity-[0.08] 
-                                    transition-all duration-500 pointer-events-none select-none z-0">
-                     0{index + 1}
-                   </span>
+        </div>
+      </section>
 
-                   <div className="relative z-10">
-                      <div className="flex items-center justify-between mb-6 border-b border-black/5 pb-4 group-hover:border-white/10 transition-colors">
-                         <span className="text-xs font-bold uppercase tracking-widest text-blue-600 group-hover:text-blue-400 transition-colors">
-                           {post.category}
-                         </span>
-                         <span className="text-xs font-mono text-gray-400 group-hover:text-gray-500 transition-colors">
-                           {post.date}
-                         </span>
-                      </div>
+      <main className="max-w-7xl mx-auto px-6 pt-16 pb-32">
 
-                      <h3 className="type-h3 text-2xl mb-4 leading-tight group-hover:text-white transition-colors duration-500">
-                        {post.title}
-                      </h3>
+        {/* --- FEATURED: Original Design --- */}
+        <section className="mb-32">
+          <Reveal>
+            <div className="group relative border border-gray-200 bg-white overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-2 cursor-pointer transition-all duration-500 hover:shadow-2xl">
+              
+              {/* Image Side */}
+              <div className="relative h-[400px] lg:h-[550px] overflow-hidden border-b lg:border-b-0 lg:border-r border-gray-200">
+                <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
+                <img 
+                  src={FEATURED.image} 
+                  alt={FEATURED.title} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-in-out"
+                />
+                <div className="absolute top-0 left-0 bg-black text-white px-4 py-2 text-xs font-bold uppercase tracking-widest z-20">
+                  Featured Story
+                </div>
+              </div>
 
-                      <p className="text-base text-text-body/80 leading-relaxed mb-8 group-hover:text-gray-400 transition-colors duration-500 line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                   </div>
+              {/* Content Side */}
+              <div className="p-10 lg:p-16 flex flex-col justify-between group-hover:bg-black transition-colors duration-500 relative">
+                <div>
+                    <div className="flex items-center gap-4 mb-8 text-xs font-bold uppercase tracking-widest text-gray-500 group-hover:text-gray-400">
+                      <span className="flex items-center gap-2"><Tag className="w-4 h-4" /> {FEATURED.category}</span>
+                      <span className="w-px h-3 bg-current opacity-30"></span>
+                      <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> {FEATURED.readTime}</span>
+                    </div>
+                    
+                    <h2 className="text-4xl font-serif font-medium mb-6 leading-[1.1] group-hover:text-white transition-colors duration-500">
+                     {FEATURED.title}
+                    </h2>
+                    
+                    <p className="text-base text-gray-600 leading-relaxed group-hover:text-gray-300 transition-colors duration-500">
+                      {FEATURED.excerpt}
+                    </p>
+                </div>
 
-                   {/* Bottom Action */}
-                   <div className="relative z-10 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black group-hover:text-white transition-colors duration-500">
-                      Read Article <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                   </div>
+                <div className="mt-12 flex items-center gap-3 text-sm font-bold uppercase tracking-widest group-hover:text-white transition-colors duration-500">
+                    Read Full Story 
+                    <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                </div>
+              </div>
 
-                </article>
-              </Reveal>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* --- TABS: Original Design --- */}
+        <section className="mb-12 border-b border-gray-200">
+          <div className="flex flex-wrap gap-8">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCat(cat)}
+                className={`
+                  pb-4 text-xs font-bold uppercase tracking-widest transition-all relative
+                  ${activeCat === cat ? 'text-black' : 'text-gray-400 hover:text-black'}
+                `}
+              >
+                {cat}
+                {activeCat === cat && (
+                  <motion.div 
+                    layoutId="activeTab" 
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" 
+                  />
+                )}
+              </button>
             ))}
-          </section>
+          </div>
+        </section>
 
-        </main>
-        
-        <Footer />
-      </TransitionProvider>
+        {/* --- GRID: Original Design --- */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {POSTS.filter(p => activeCat === "All" || p.category === activeCat).map((post, index) => (
+            <Reveal key={index} delay={index * 0.05}>
+              <article 
+                className="group relative h-full bg-white border border-gray-100 p-8 
+                           hover:bg-black transition-all duration-500 ease-out 
+                           hover:shadow-2xl cursor-pointer overflow-hidden flex flex-col justify-between min-h-[360px]"
+              >
+                 {/* --- Background Number --- */}
+                 <span className="absolute -bottom-10 -right-4 text-[10rem] font-bold leading-none 
+                                  text-black opacity-[0.03] 
+                                  group-hover:text-white group-hover:opacity-[0.08] 
+                                  transition-all duration-500 pointer-events-none select-none z-0">
+                   0{index + 1}
+                 </span>
+
+                 <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-6 border-b border-black/5 pb-4 group-hover:border-white/10 transition-colors">
+                       <span className="text-xs font-bold uppercase tracking-widest text-blue-600 group-hover:text-blue-400 transition-colors">
+                         {post.category}
+                       </span>
+                       <span className="text-xs font-mono text-gray-400 group-hover:text-gray-500 transition-colors">
+                         {post.date}
+                       </span>
+                    </div>
+
+                    <h3 className="text-2xl font-serif font-medium mb-4 leading-tight group-hover:text-white transition-colors duration-500">
+                      {post.title}
+                    </h3>
+
+                    <p className="text-base text-gray-600 leading-relaxed mb-8 group-hover:text-gray-400 transition-colors duration-500 line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                 </div>
+
+                 {/* Bottom Action */}
+                 <div className="relative z-10 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black group-hover:text-white transition-colors duration-500">
+                    Read Article <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                 </div>
+
+              </article>
+            </Reveal>
+          ))}
+        </section>
+
+      </main>
+      
+      <Footer />
     </div>
   );
 }

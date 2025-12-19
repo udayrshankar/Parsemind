@@ -1,7 +1,7 @@
 // src/components/Concept.tsx
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react'; // Added ChevronRight
 import { Reveal } from './Reveal';
 import { useCalendly } from './hooks/useCalendly';
 
@@ -148,7 +148,7 @@ export default function Concept() {
       {/* --- SECTION 1: Steps Grid --- */}
       <section id="process" className="w-full px-6 md:px-12">
         <div className="max-w-7xl mx-auto" ref={containerRef}>
-          <div className="text-center flex flex-col items-center mb-12 md:mb-16">
+          <div className="text-center flex flex-col items-center mb-10">
             <Reveal>
               <span className="text-gray-500 uppercase tracking-[0.2em] mb-3 block text-xs font-bold font-inter">
                 End-to-end execution
@@ -164,44 +164,56 @@ export default function Concept() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {steps.map((step, index) => (
               <Reveal key={index} delay={index * 0.1}>
-                <div
-                  className="
-                    group relative
-                    bg-bg-card border border-gray-100
-                    p-4 md:px-6
-                    hover:bg-black hover:text-white
-                    transition-colors duration-500 ease-out
-                    overflow-hidden
-                    cursor-pointer
-                    flex flex-col justify-between
-                    h-60 md:h-[200px]
-                  "
-                  onMouseEnter={() => setActiveTab(step.tableKey as TabKey)}
-                  onClick={() => setActiveTab(step.tableKey as TabKey)}
-                >
-                  <span
+                {/* Wrap card in 'relative' so we can position the arrow outside of it.
+                   The arrow logic is placed here as a sibling to the card.
+                */}
+                <div className="relative h-full">
+                  <div
                     className="
-                      absolute -bottom-8 -right-2
-                      text-[8rem] md:text-[9rem]
-                      font-bold leading-none
-                      text-black opacity-[0.03]
-                      group-hover:text-white group-hover:opacity-[0.1]
-                      transition-all duration-500
-                      pointer-events-none select-none
-                      font-inter
+                      group relative
+                      bg-bg-card border border-gray-100
+                      p-4 md:px-6
+                      hover:bg-black hover:text-white
+                      transition-colors duration-500 ease-out
+                      overflow-hidden
+                      cursor-pointer
+                      flex flex-col justify-between
+                      h-60 md:h-[200px]
                     "
+                    onMouseEnter={() => setActiveTab(step.tableKey as TabKey)}
+                    onClick={() => setActiveTab(step.tableKey as TabKey)}
                   >
-                    {index + 1}
-                  </span>
+                    <span
+                      className="
+                        absolute -bottom-8 -right-2
+                        text-[8rem] md:text-[9rem]
+                        font-bold leading-none
+                        text-black opacity-[0.03]
+                        group-hover:text-white group-hover:opacity-[0.1]
+                        transition-all duration-500
+                        pointer-events-none select-none
+                        font-inter
+                      "
+                    >
+                      {index + 1}
+                    </span>
 
-                  <div className="relative z-10 flex flex-col gap-4">
-                    <h3 className="text-2xl font-semibold">
-                      {step.title}
-                    </h3>
-                    <p className="text-base text-gray-500 leading-relaxed font-inter group-hover:text-gray-300 transition-colors">
-                      {step.desc}
-                    </p>
+                    <div className="relative z-10 flex flex-col gap-4">
+                      <h3 className="text-2xl font-semibold">
+                        {step.title}
+                      </h3>
+                      <p className="text-base text-gray-500 leading-relaxed font-inter group-hover:text-gray-300 transition-colors">
+                        {step.desc}
+                      </p>
+                    </div>
                   </div>
+
+                  {/* Arrow Logic: Show between cards, only on Large screens */}
+                  {index < steps.length - 1 && (
+                    <div className="hidden lg:flex absolute -right-[1.5rem] top-1/2 -translate-y-1/2 z-20 items-center justify-center w-6 h-6 text-gray-300 pointer-events-none">
+                      <ChevronRight size={20} strokeWidth={2.5} />
+                    </div>
+                  )}
                 </div>
               </Reveal>
             ))}

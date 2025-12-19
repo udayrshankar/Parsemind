@@ -7,58 +7,8 @@ import { usePageTransition } from "./TransitionContext";
 import { useCalendly } from "./hooks/useCalendly";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { FlickeringGrid } from "./FlickerGrid"
 
-
-const FlickeringGrid = () => {
-  const [squares, setSquares] = useState<{ id: number; r: number; c: number; delay: number }[]>([]);
-
-  useEffect(() => {
-    const count = 3;
-    const newSquares = Array.from({ length: count }).map((_, i) => ({
-      id: i,
-      r: Math.floor(Math.random() * 20),
-      c: Math.floor(Math.random() * 20),
-      delay: Math.random() * 5,
-    }));
-    setSquares(newSquares);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 pointer-events-none z-0">
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundPosition: "0 0",
-          backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-      {squares.map((sq) => (
-        <motion.div
-          key={sq.id}
-          className="absolute bg-indigo-400/20 border border-indigo-400/30 shadow-[0_0_15px_rgba(129,140,248,0.3)]"
-          style={{
-            width: 40,
-            height: 40,
-            top: sq.r * 40,
-            left: sq.c * 40,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0.9, 1, 0.9],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 4,
-            repeat: Infinity,
-            delay: sq.delay,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
 
 
 const links = [

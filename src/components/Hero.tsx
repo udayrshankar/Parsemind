@@ -3,63 +3,10 @@ import { useState, useEffect } from 'react';
 import { Reveal } from './Reveal';
 import EmaAnimation from './EmaAnimation';
 import { useCalendly } from './hooks/useCalendly'; 
-import { motion } from 'framer-motion';
-
-// --- Visual Components ---
-
-const FlickeringGrid = () => {
-  const [squares, setSquares] = useState<{ id: number; r: number; c: number; delay: number }[]>([]);
-
-  useEffect(() => {
-    const count = 25;
-    const newSquares = Array.from({ length: count }).map((_, i) => ({
-      id: i,
-      r: Math.floor(Math.random() * 20),
-      c: Math.floor(Math.random() * 20),
-      delay: Math.random() * 5,
-    }));
-    setSquares(newSquares);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 pointer-events-none z-0">
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundPosition: "0 0",
-          backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-      {squares.map((sq) => (
-        <motion.div
-          key={sq.id}
-          className="absolute bg-indigo-400/20 border border-indigo-400/30 shadow-[0_0_15px_rgba(129,140,248,0.3)]"
-          style={{
-            width: 40,
-            height: 40,
-            top: sq.r * 40,
-            left: sq.c * 40,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0.9, 1, 0.9],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 4,
-            repeat: Infinity,
-            delay: sq.delay,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+// Import the new component
+import { FlickeringGrid } from './FlickerGrid'; 
 
 // --- Reusable Sub-component for Partners ---
-// Extracted to avoid code duplication since we need it in two places now
 const TrustedPartnersContent = () => (
   <div className="pt-8 border-t border-white/10 max-w-lg">
     <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6 font-inter">
@@ -121,7 +68,7 @@ export const Hero = () => {
         className="absolute inset-0 z-0"
         style={{
           maskImage: 'radial-gradient(circle at 30% 50%, white 0px, white 800px, transparent 800px)',
-          WebkitMaskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 500px, transparent 400px)',
+          WebkitMaskImage: 'radial-gradient(circle at 75% 50%, white 0px, white 500px, transparent 800px)',
           pointerEvents: 'none',
         }}
        >
