@@ -38,21 +38,21 @@ export const Booking = () => {
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center h-full pt-8 lg:pt-0"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center h-full pt-3 lg:pt-0"
             >
               
               {/* Left Column */}
               <div className="flex flex-col justify-center order-2 lg:order-1">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-black mb-4 leading-[1.1]">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-fraunces text-black mb-2 leading-[1.1]">
                   Let’s Talk About Your Enterprise AI Strategy
                 </h2>
 
-                <p className="text-lg md:text-xl text-gray-600 font-inter leading-relaxed mb-8">
+                <p className="text-lg md:text-xl text-gray-600 font-inter leading-relaxed mb-4">
                   Align business objectives, operating models, and technology with a clear,
                   execution-ready AI strategy <br/> built for real production environments.
                 </p>
 
-                <ul className="space-y-2 mb-8">
+                <ul className="space-y-2 mb-4">
                   {benefits.map((item, i) => (
                     <motion.li
                       key={i}
