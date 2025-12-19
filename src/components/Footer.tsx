@@ -5,8 +5,6 @@ import { Reveal } from "./Reveal";
 import { Link } from "react-router-dom";
 import { usePageTransition } from "./TransitionContext";
 import { useCalendly } from "./hooks/useCalendly";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { FlickeringGrid } from "./FlickerGrid"
 
 

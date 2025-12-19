@@ -249,7 +249,7 @@ export default function Concept() {
           </div>
 
           {/* Content Card */}
-          <div className="bg-[#f7f8fa] border border-gray-200 rounded-3xl p-6 md:p-12 lg:p-16 shadow-2xl min-h-[560px] flex items-center">
+          <div className="bg-[#f7f8fa] border border-gray-200 rounded-3xl px-6 py-12 md:p-12 lg:p-16 shadow-2xl min-h-[560px] flex items-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
