@@ -1,3 +1,4 @@
+// src/components/Cta.tsx
 import { Reveal } from "./Reveal";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -28,12 +29,11 @@ const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) 
 };
 
 const Cta = () => {
-  // FIXED: Moved inside the component
   const { triggerTransition } = usePageTransition();
   const typedText = useTypewriter("AI B2B", 150, 2000);
 
   return (
-    <section className="relative px-6 py-16 bg-black w-full text-white overflow-hidden flex justify-center max-w-7xl">
+    <section className="relative px-6 py-16 mb-20 bg-black w-full text-white overflow-hidden flex justify-center max-w-7xl">
       <div
         className="absolute inset-0 opacity-[0.15] w-full"
         style={{
@@ -67,7 +67,7 @@ const Cta = () => {
             }}
           >
             <button
-              onClick={() => triggerTransition('/anseru')} // Ensure this path matches your router
+              onClick={() => triggerTransition('https://anseru.ai')} 
               className="inline-flex items-center gap-3 text-2xl font-medium
                          border border-white bg-white text-black px-12 py-4
                          hover:bg-transparent hover:text-white transition-all duration-300 cursor-pointer"

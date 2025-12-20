@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Reveal } from '../components/Reveal';
-import { Footer } from '../components/Footer';
 import { PartnerFormModal } from '../components/PartnerForModal';
 
 // --------------------
@@ -181,7 +180,6 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      <Footer />
 
       {/* =========================
           PARTNER FORM MODAL

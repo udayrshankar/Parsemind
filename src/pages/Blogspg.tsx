@@ -1,8 +1,12 @@
+// src/pages/Blogspg.tsx
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Tag, Clock, ChevronRight, X, Send, PenTool } from 'lucide-react';
+import { ArrowUpRight, Tag, Clock, ChevronRight, X, Send, PenTool, Loader2, CheckCircle } from 'lucide-react';
 
-// Mock components
+// ✅ USE THE SAME SCRIPT URL
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5rOfLJ7T6k0INjkbSLaRXGKT4FiXgU7e5FZHw3GTQ9Kmf335Y19Fc8CJcwFh_CvTc/exec';
+
+// Mock components (Keep these if you are using them, or replace with real imports)
 const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -13,26 +17,9 @@ const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   </motion.div>
 );
 
-const Footer = () => (
-  <footer className="border-t border-gray-200 py-12 px-6">
-    <div className="max-w-7xl mx-auto text-center text-sm text-gray-500">
-      © 2025 Company. All rights reserved.
-    </div>
-  </footer>
-);
 
-const Navbar = () => (
-  <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-40 px-6 py-4">
-    <div className="max-w-7xl mx-auto flex justify-between items-center">
-      <div className="font-bold text-xl">Company</div>
-      <div className="flex gap-6 text-sm">
-        <a href="#" className="hover:text-gray-600">Home</a>
-        <a href="#" className="hover:text-gray-600">Blog</a>
-        <a href="#" className="hover:text-gray-600">Partners</a>
-      </div>
-    </div>
-  </nav>
-);
+
+
 
 // --- Dummy Data ---
 const CATEGORIES = ["All", "Strategy", "Engineering", "Design", "Culture"];
@@ -86,8 +73,60 @@ const POSTS = [
   }
 ];
 
-// --- Submit Modal ---
+// --- UPDATED Submit Modal ---
 const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    pitch: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const params = new URLSearchParams();
+      // Map fields to what the Google Script expects
+      params.append('name', formData.name);
+      params.append('email', formData.email);
+      params.append('message', formData.pitch); // Map 'pitch' to 'message' column
+      params.append('company', 'Newsletter Applicant'); // Hardcode identifier for filtering
+      params.append('category', 'Writer\'s Program'); // Send category if script accepts it
+
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: params,
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setFormData({ name: '', email: '', pitch: '' });
+        onClose();
+      }, 3000);
+
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -116,50 +155,88 @@ const SubmitModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
               </button>
 
               <div className="p-8 md:p-10">
-                <div className="flex items-center gap-3 mb-6 text-blue-600">
-                   <PenTool className="w-6 h-6" />
-                   <span className="text-xs font-bold uppercase tracking-widest">Writer's Program</span>
-                </div>
-
-                <h3 className="text-2xl font-bold mb-2">Submit your Newsletter</h3>
-                <p className="text-gray-600 mb-8 text-sm leading-relaxed">
-                  Join our network of AI thought leaders. We feature high-quality technical deep dives and strategic analysis.
-                </p>
-
-                <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Full Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Jane Doe"
-                      className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
-                    />
+                
+                {isSuccess ? (
+                  // --- Success State ---
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                      <CheckCircle className="w-8 h-8 text-green-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2">Application Sent!</h3>
+                    <p className="text-gray-500 text-sm">
+                      We'll review your submission and get back to you shortly.
+                    </p>
                   </div>
-                  
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Email Address</label>
-                    <input 
-                      type="email" 
-                      placeholder="jane@example.com"
-                      className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
-                    />
-                  </div>
+                ) : (
+                  // --- Form State ---
+                  <>
+                    <div className="flex items-center gap-3 mb-6 text-blue-600">
+                      <PenTool className="w-6 h-6" />
+                      <span className="text-xs font-bold uppercase tracking-widest">Writer's Program</span>
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Newsletter URL / Pitch</label>
-                    <textarea 
-                      rows={3}
-                      placeholder="Link to your substack or a brief pitch..."
-                      className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300 resize-none"
-                    />
-                  </div>
+                    <h3 className="text-2xl font-bold mb-2">Submit your Newsletter</h3>
+                    <p className="text-gray-600 mb-8 text-sm leading-relaxed">
+                      Join our network of AI thought leaders. We feature high-quality technical deep dives and strategic analysis.
+                    </p>
 
-                  <button className="w-full bg-black text-white font-bold uppercase tracking-widest text-xs py-4 flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors duration-300">
-                    Submit Application <Send className="w-4 h-4" />
-                  </button>
-                </form>
+                    <form className="space-y-5" onSubmit={handleSubmit}>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Full Name</label>
+                        <input 
+                          required
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          type="text" 
+                          placeholder="Jane Doe"
+                          className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Email Address</label>
+                        <input 
+                          required
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          type="email" 
+                          placeholder="jane@example.com"
+                          className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Newsletter URL / Pitch</label>
+                        <textarea 
+                          required
+                          name="pitch"
+                          value={formData.pitch}
+                          onChange={handleChange}
+                          rows={3}
+                          placeholder="Link to your substack or a brief pitch..."
+                          className="w-full bg-gray-50 border border-gray-200 p-3 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-gray-300 resize-none"
+                        />
+                      </div>
+
+                      {error && <p className="text-red-500 text-xs font-medium">{error}</p>}
+
+                      <button 
+                        disabled={isSubmitting}
+                        className="w-full bg-black text-white font-bold uppercase tracking-widest text-xs py-4 flex items-center justify-center gap-2 hover:bg-white hover:text-black border-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? (
+                          <>Sending... <Loader2 className="w-4 h-4 animate-spin"/></>
+                        ) : (
+                          <>Submit Application <Send className="w-4 h-4" /></>
+                        )}
+                      </button>
+                    </form>
+                  </>
+                )}
               </div>
-              <div className="h-1.5 w-full bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600" />
+              <div className="h-1.5 w-full bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600" />
             </div>
           </motion.div>
         </>
@@ -174,12 +251,11 @@ export default function BlogsPage() {
 
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
-      <Navbar />
 
       <SubmitModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* =========================
-          HERO / LANDING CTA (New Design - Partners Style)
+          HERO / LANDING CTA
       ========================= */}
       <section className="px-6 pt-32 pb-24 border-b border-gray-200">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
@@ -229,7 +305,7 @@ export default function BlogsPage() {
 
       <main className="max-w-7xl mx-auto px-6 pt-16 pb-32">
 
-        {/* --- FEATURED: Original Design --- */}
+        {/* --- FEATURED --- */}
         <section className="mb-32">
           <Reveal>
             <div className="group relative border border-gray-200 bg-white overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-2 cursor-pointer transition-all duration-500 hover:shadow-2xl">
@@ -275,7 +351,7 @@ export default function BlogsPage() {
           </Reveal>
         </section>
 
-        {/* --- TABS: Original Design --- */}
+        {/* --- TABS --- */}
         <section className="mb-12 border-b border-gray-200">
           <div className="flex flex-wrap gap-8">
             {CATEGORIES.map((cat) => (
@@ -299,7 +375,7 @@ export default function BlogsPage() {
           </div>
         </section>
 
-        {/* --- GRID: Original Design --- */}
+        {/* --- GRID --- */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {POSTS.filter(p => activeCat === "All" || p.category === activeCat).map((post, index) => (
             <Reveal key={index} delay={index * 0.05}>
@@ -347,7 +423,6 @@ export default function BlogsPage() {
 
       </main>
       
-      <Footer />
     </div>
   );
 }

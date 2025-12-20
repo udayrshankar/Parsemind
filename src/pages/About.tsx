@@ -2,9 +2,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Reveal } from "../components/Reveal";
-import { Footer } from "../components/Footer";
-import { Navbar } from "../components/Navbar";
-import { TransitionProvider } from "../components/TransitionContext";
 
 /* --------------------
    Types
@@ -150,8 +147,6 @@ const FounderBlock = ({ person }: { person: Person }) => {
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 font-inter">
-      <TransitionProvider>
-        <Navbar />
 
         <main className="w-full max-w-7xl mx-auto pt-32 pb-32 px-6 space-y-16">
           <section className="w-full">
@@ -199,9 +194,7 @@ export default function AboutPage() {
             </Reveal>
           </section>
 
-          {/* ====================
-              LEADERSHIP (FIRST)
-          ==================== */}
+       
           <section>
             <div className="border-b py-2 border-neutral-200 flex justify-between items-center mb-8">
               <Reveal>
@@ -221,13 +214,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* ====================
-              CONTEXT (HOME-STYLE)
-          ==================== */}
-
-          {/* ====================
-              PRINCIPLES (UNCHANGED)
-          ==================== */}
+    
           <section
             id="mission-principles"
             className="border-t border-neutral-200 pt-24"
@@ -265,9 +252,6 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* ====================
-              CLOSING (HOME-STYLE)
-          ==================== */}
           <section className="max-w-3xl">
             <Reveal>
               <p className="text-2xl text-neutral-700 leading-relaxed">
@@ -278,8 +262,6 @@ export default function AboutPage() {
           </section>
         </main>
 
-        <Footer />
-      </TransitionProvider>
     </div>
   );
 }

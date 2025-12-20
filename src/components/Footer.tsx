@@ -29,13 +29,13 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative w-full bg-black text-white isolate overflow-hidden border-t border-white/10">
+    <footer className="relative w-full mt-20 bg-black text-white isolate overflow-hidden border-t border-white/10">
       
       {/* Grid Background */}
       <FlickeringGrid/>
 
       {/* Gradient Fade */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent z-0 pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-24 space-y-24">
 
@@ -63,24 +63,23 @@ export const Footer: React.FC = () => {
                   bg-white text-black
                   hover:bg-black hover:text-white
                   transition-all duration-300
-                  border border-white
+                  border border-white cursor-pointer
                 "
               >
                 Start a Strategy Call
               </button>
-              <button
-                onMouseEnter={loadScript}
-                onClick={openPopup}
+              <a
+                href="/partners"
                 className="
                   px-8 py-4 text-sm font-bold uppercase tracking-widest
                   bg-black text-white
                   hover:bg-white hover:text-black
                   transition-all duration-300
-                  border border-white
+                  border border-white cursor-pointer text-center
                 "
               >
                 Join Our Partner Ecosystem
-              </button>
+              </a>
 
             </div>
           </div>
