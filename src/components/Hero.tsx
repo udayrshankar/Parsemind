@@ -88,7 +88,7 @@ export const Hero = () => {
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-12 md:items-center">
           
           {/* Left: Text Content & Actions */}
-          <div className="md:col-span-7 pt-16">
+          <div className="md:col-span-7 pt-10">
             <Reveal delay={0.1}>
               <h1 className="text-4xl md:text-5xl type-h1 text-white tracking-tight leading-[1.1] mb-10 font-fraunces">
                 We Engineer {" "}
@@ -120,7 +120,7 @@ export const Hero = () => {
                 </button>
 
                 <a 
-                  className="border-white border px-8 py-3 hover:bg-white hover:text-black hover:scale-105 cursor-pointer text-white transition-all duration-300"
+                  className="border-white hidden md:block border px-8 py-3 hover:bg-white hover:text-black hover:scale-105 cursor-pointer text-white transition-all duration-300"
                   href="/#process"
                 >
                   How we Work
@@ -138,7 +138,7 @@ export const Hero = () => {
           </div>
 
           {/* Right: Visual Animation */}
-          <div className="md:col-span-5 w-full relative mt-12 md:mt-0">
+          <div className="md:col-span-5 w-full relative">
             <EmaAnimation />
           </div>
 
