@@ -139,7 +139,7 @@ export const Hero = () => {
           </div>
 
           {/* Right: Visual Animation */}
-          <div className="md:col-span-5 w-full relative -translate-y-15 md:translate-y-0">
+          <div className="md:col-span-5 w-full relative -translate-y-20 md:translate-y-0">
             <EmaAnimation />
           </div>
 
