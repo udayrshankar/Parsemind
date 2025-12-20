@@ -146,7 +146,7 @@ export default function PartnersPage() {
       {/* =========================
           FINAL CTA (UPDATED)
       ========================= */}
-      <section className="relative px-6 py-32 bg-black text-white overflow-hidden m-15 flex justify-center">
+      <section className="relative max-w-7xl mx-auto py-32 bg-black text-white overflow-hidden m-15 flex justify-center">
         
         {/* Background Dot Pattern */}
         <div 
