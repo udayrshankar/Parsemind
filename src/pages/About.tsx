@@ -147,7 +147,7 @@ const FounderBlock = ({ person }: { person: Person }) => {
 -------------------- */
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 font-inter">
+    <div className="min-h-screen bg-[#FAFAFA] mt-10 md:mt-0 text-neutral-900 font-inter">
       {/* Main Container: Adjusted vertical padding for mobile vs desktop */}
       <main className="w-full max-w-7xl mx-auto pt-20 pb-20 md:pt-32 md:pb-32 px-6 space-y-20 md:space-y-32">
         
