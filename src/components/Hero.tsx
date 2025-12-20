@@ -7,6 +7,7 @@ import { useCalendly } from './hooks/useCalendly';
 import { FlickeringGrid } from './FlickerGrid'; 
 
 // --- Reusable Sub-component for Partners ---
+{/*
 const TrustedPartnersContent = () => (
   <div className="pt-8 border-t border-white/10 max-w-lg">
     <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6 font-inter">
@@ -20,7 +21,7 @@ const TrustedPartnersContent = () => (
     </div>
   </div>
 );
-
+*/}
 // --- Logic Hooks ---
 
 const useTypewriter = (text: string, speed: number = 100, pause: number = 2000) => {
