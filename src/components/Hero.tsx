@@ -138,17 +138,11 @@ export const Hero = () => {
           </div>
 
           {/* Right: Visual Animation */}
-          <div className="md:col-span-5 w-full relative">
+          <div className="md:col-span-5 w-full relative -translate-y-15 md:translate-y-0">
             <EmaAnimation />
           </div>
 
-          {/* Trusted Partners Section - MOBILE ONLY */}
-          {/* block on mobile, hidden on medium+ screens. Placed at end of grid to render last. */}
-          <div className="block md:hidden col-span-1 mt-12">
-            <Reveal delay={0.6}>
-              <TrustedPartnersContent />
-            </Reveal>
-          </div>
+         
 
         </div>
       </div>
