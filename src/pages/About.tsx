@@ -54,12 +54,12 @@ const principles = [
   {
     title: "Our Mission",
     description:
-      "To build AI systems enterprises can trust—secure, governable, and engineered to deliver sustained business value in real-world environments.",
+      "To build AI systems enterprises can trust - secure, governable, and engineered to deliver sustained business value in real-world environments.",
   },
   {
     title: "Intentional by Design",
     description:
-      "Every system begins with clear outcomes, ownership, and accountability—not experimentation for its own sake.",
+      "Every system begins with clear outcomes, ownership, and accountability - not experimentation for its own sake.",
   },
   {
     title: "Responsible & Secure",
@@ -79,7 +79,7 @@ const principles = [
   {
     title: "Enduring Impact",
     description:
-      "We focus on systems that compound value over time—technically, operationally, and commercially.",
+      "We focus on systems that compound value over time - technically, operationally, and commercially.",
   },
 ];
 
@@ -131,7 +131,7 @@ const FounderBlock = ({ person }: { person: Person }) => {
           <div className="flex flex-col gap-2">
             {person.qualities.map((q) => (
               <span key={q} className="text-sm text-neutral-800 font-medium">
-                — {q}
+                 -  {q}
               </span>
             ))}
           </div>
@@ -165,7 +165,7 @@ export default function AboutPage() {
                   <p className="mt-8 text-xl text-neutral-600 leading-relaxed">
                     Parsemind is an enterprise AI consulting and engineering
                     firm focused on designing, deploying, and scaling agentic AI
-                    systems inside real organizations—where reliability,
+                    systems inside real organizations - where reliability,
                     governance, and accountability matter.
                   </p>
                 </div>

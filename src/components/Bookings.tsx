@@ -2,8 +2,108 @@
 import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCalendly } from "./hooks/useCalendly";
+import { useState, useEffect, useMemo } from "react";
 
-import CalendarImage from "../assets/Calendar.png";
+// --- Helper to get dynamic dates ---
+const getUpcomingDates = () => {
+  const dates = [];
+  const today = new Date();
+  
+  // Generate current date + next 4 days
+  for (let i = 0; i < 5; i++) {
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + i);
+    
+    dates.push({
+      month: nextDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+      day: nextDate.getDate(),
+      weekday: nextDate.toLocaleDateString('en-US', { weekday: 'long' }),
+      key: nextDate.toISOString() // Unique key for React
+    });
+  }
+  return dates;
+};
+
+// --- Reusable Card UI ---
+const CalendarCard = ({ date, isBackCard = false }: { date: any, isBackCard?: boolean }) => (
+  <div className={`absolute inset-0 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col ${isBackCard ? 'z-0' : 'z-10 shadow-xl'}`}>
+    {/* Binder Rings */}
+    <div className="absolute top-0 left-0 right-0 flex justify-evenly -mt-2 z-20">
+        <div className="w-3 h-6 bg-gray-200 rounded-full border border-gray-300" />
+        <div className="w-3 h-6 bg-gray-200 rounded-full border border-gray-300" />
+    </div>
+
+    {/* Header (Month) */}
+    <div className="bg-red-500 h-14 md:h-16 flex items-center justify-center pt-2">
+      <span className="text-white font-bold tracking-widest text-lg font-inter">
+        {date.month}
+      </span>
+    </div>
+
+    {/* Body (Day) */}
+    <div className="flex-1 flex flex-col items-center justify-center bg-white relative">
+      <span className="text-6xl md:text-7xl font-bold text-gray-800 font-inter tracking-tighter">
+        {date.day}
+      </span>
+      <span className="text-gray-400 font-medium text-sm mt-2 uppercase tracking-wide">
+        {date.weekday}
+      </span>
+      {/* Texture Overlay */}
+      <div className="absolute inset-0 bg-linear-to-b from-black/5 to-transparent pointer-events-none" />
+    </div>
+  </div>
+);
+
+// --- The Fixed Animation Component ---
+const FlippingCalendar = () => {
+  const dates = useMemo(() => getUpcomingDates(), []);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % dates.length);
+    }, 2200); 
+    return () => clearInterval(timer);
+  }, [dates.length]);
+
+  const currentDate = dates[currentIndex];
+  const nextDate = dates[(currentIndex + 1) % dates.length];
+
+  return (
+    <div className="flex items-center justify-center w-full h-full bg-[#fcfcfc] perspective-1000">
+      <div className="relative w-48 h-56 md:w-56 md:h-64 preserve-3d">
+        
+        {/* 1. The Static Card (The one BEHIND) */}
+        {/* We render this statically so when the top one flies off, this is waiting underneath */}
+        <CalendarCard date={nextDate} isBackCard={true} />
+
+        {/* 2. The AnimatePresence Wrapper (The one FLIPPING) */}
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={currentDate.key} // Key change triggers the animation
+            className="absolute inset-0 origin-top"
+            initial={{ rotateX: 0, opacity: 1, zIndex: 20 }}
+            animate={{ rotateX: 0, opacity: 1, y: 0 }}
+            exit={{ 
+              rotateX: -140, // Flips down/forward
+              y: 20, 
+              opacity: 0,
+              zIndex: 30, // Stay on top while leaving
+              transition: { duration: 0.6, ease: "easeInOut" } 
+            }}
+          >
+             <CalendarCard date={currentDate} />
+          </motion.div>
+        </AnimatePresence>
+        
+        {/* Floor Shadow */}
+        <div className="absolute -bottom-6 left-4 right-4 h-4 bg-black/10 blur-xl rounded-full" />
+      </div>
+    </div>
+  );
+};
+
+// --- Main Component ---
 
 const benefits = [
   "Strategic AI Consulting",
@@ -87,21 +187,17 @@ export const Booking = () => {
               </div>
 
               {/* Right Column */}
-              <div className="order-1 lg:order-2 w-full">
+              <div className="order-1 lg:order-2 w-full h-full flex items-center justify-center">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.98, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
                   className="relative w-full aspect-video md:aspect-4/3 rounded-xl overflow-hidden shadow-xl border border-black/5 bg-white group"
                 >
-                  <img
-                    src={CalendarImage}
-                    onMouseEnter={loadScript}
-                    onClick={openPopup}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/10 to-transparent pointer-events-none" />
+                  <FlippingCalendar />
+                  
+                  {/* Vignette Overlay */}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/5 via-transparent to-transparent pointer-events-none" />
                 </motion.div>
               </div>
 

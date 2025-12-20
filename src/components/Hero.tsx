@@ -91,12 +91,12 @@ export const Hero = () => {
           <div className="md:col-span-7 pt-16">
             <Reveal delay={0.1}>
               <h1 className="text-4xl md:text-5xl type-h1 text-white tracking-tight leading-[1.1] mb-10 font-fraunces">
-                We Engineer Intelligent <br/>
+                We Engineer {" "}
                 <span className='inline-block min-w-60 text-7xl text-transparent bg-clip-text py-3 bg-linear-to-r from-gray-300 to-gray-500'>
                   {typedText} 
                   <span className="animate-pulse text-white">|</span>
                 </span>
-                <span><br/>Architectures and Solutions <br/> for your Buisness Growth</span>
+                <span><br/> Solutions for your Buisness Growth</span>
               </h1>
             </Reveal>
 

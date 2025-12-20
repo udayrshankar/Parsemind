@@ -27,7 +27,7 @@ const CATEGORIES = ["All", "Strategy", "Engineering", "Design", "Culture"];
 const FEATURED = {
   id: 'feat-1',
   title: "The Agentic Future: Beyond Chatbots",
-  excerpt: "Why the next generation of AI isn't about conversation—it's about autonomous execution. A deep dive into the architecture of agency.",
+  excerpt: "Why the next generation of AI isn't about conversation - it's about autonomous execution. A deep dive into the architecture of agency.",
   category: "Strategy",
   readTime: "8 min read",
   date: "Oct 12, 2025",

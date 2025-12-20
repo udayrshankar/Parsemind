@@ -18,7 +18,7 @@ const blogs = [
     date: "April 03, 2024",
     readTime: "6 min read",
     excerpt:
-      "Why SOC 2 is only the starting point—and how enterprises design secure, compliant, and trustworthy AI infrastructure at scale.",
+      "Why SOC 2 is only the starting point - and how enterprises design secure, compliant, and trustworthy AI infrastructure at scale.",
     imageColor:
       "https://images.unsplash.com/photo-1496368077930-c1e31b4e5b44?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8U2VjdXJpdHl8ZW58MHx8MHx8fDA%3D",
   },

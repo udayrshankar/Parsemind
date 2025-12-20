@@ -46,7 +46,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between gap-12 items-start md:items-start border-b border-white/10 pb-16">
             <div className="max-w-2xl space-y-6">
               <h2 className="text-4xl md:text-5xl font-medium leading-[1.1] tracking-tight font-fraunces">
-                Build enterprise AI <br /> with clarity and control
+                Build Enterprise AI <br /> with clarity and control
               </h2>
               <p className="text-neutral-400 text-lg leading-relaxed max-w-xl font-inter">
                 We help organizations design, deploy, and govern agentic AI systems
@@ -98,7 +98,7 @@ export const Footer: React.FC = () => {
                   Parsemind
                 </span>
                 <p className="text-neutral-500 text-base leading-relaxed max-w-md">
-                  Parsemind is an enterprise AI consulting and engineering firm
+                  Parsemind is an Enterprise AI consulting and engineering firm
                   focused on building secure, governable, and scalable agentic
                   systems for real-world operations.
                 </p>

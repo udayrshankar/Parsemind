@@ -122,7 +122,7 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
                 ))}
 
                 {/* 2. Rotating Layers */}
-                {LAYERS.map((layer) => {
+                {LAYERS.map((layer, index) => {
                     const isHovered = hoveredId === layer.id;
                     const isDimmed = hoveredId !== null && !isHovered;
 
@@ -151,7 +151,7 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
                                     onMouseLeave={() => setHoveredId(null)}
                                 />
 
-                                {/* Visible Ring */}
+                                {/* Visible Ring (Blinking) */}
                                 <motion.circle
                                     cx={CENTER}
                                     cy={CENTER}
@@ -162,9 +162,21 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
                                     strokeLinecap="square"
                                     animate={{
                                         stroke: isHovered ? "#6366f1" : "#404040",
-                                        opacity: isDimmed ? 0.1 : 1
+                                        opacity: isDimmed 
+                                            ? 0.1 
+                                            : isHovered 
+                                                ? 1 
+                                                : [0.3, 1, 0.3] // Pulse opacity strongly
                                     }}
-                                    transition={{ duration: 0.3 }}
+                                    transition={{
+                                        stroke: { duration: 0.3 },
+                                        opacity: {
+                                            duration: isHovered || isDimmed ? 0.3 : 3, // 3s Cycle
+                                            repeat: isHovered || isDimmed ? 0 : Infinity,
+                                            ease: "easeInOut",
+                                            delay: isHovered || isDimmed ? 0 : index * 0.5 // Sync with text
+                                        }
+                                    }}
                                 />
                             </motion.g>
                         </motion.g>
@@ -173,7 +185,7 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
             </svg>
 
             {/* B. HTML LAYER (Labels) */}
-            {LAYERS.map((layer) => {
+            {LAYERS.map((layer, index) => {
                 const isHovered = hoveredId === layer.id;
                 const isDimmed = hoveredId !== null && !isHovered;
 
@@ -197,12 +209,21 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
                                     borderColor: isHovered ? "rgba(99, 102, 241, 0.3)" : "rgba(255,255,255,0)"
                                 }}
                             >
-                                {/* Updated: text-[11px] -> text-xs (12px) to match standard */}
+                                {/* Blinking Text Animation */}
                                 <motion.span 
                                     className="text-xs font-bold tracking-[0.2em] whitespace-nowrap block"
                                     animate={{ 
-                                        color: isHovered ? "#818cf8" : "#a3a3a3",
-                                        scale: isHovered ? 1.05 : 1
+                                        // Pulse color from dark gray to white
+                                        color: isHovered ? "#818cf8" : isDimmed ? "#525252" : ["#525252", "#ffffff", "#525252"],
+                                        scale: isHovered ? 1.05 : 1,
+                                        // Pulse opacity along with color
+                                        opacity: isDimmed ? 0.5 : isHovered ? 1 : [0.5, 1, 0.5]
+                                    }}
+                                    transition={{
+                                        duration: isHovered || isDimmed ? 0.3 : 3, // Syncs with Ring duration
+                                        repeat: isHovered || isDimmed ? 0 : Infinity,
+                                        ease: "easeInOut",
+                                        delay: isHovered || isDimmed ? 0 : index * 0.5 // Syncs with Ring delay
                                     }}
                                 >
                                     {layer.label}
@@ -240,11 +261,9 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
                                     transition={{ duration: 0.2 }}
                                     className="flex flex-col items-center"
                                 >
-                                    {/* Secondary Label: text-[10px] */}
                                     <span className="text-[10px] font-bold tracking-widest text-indigo-400 uppercase">
                                         STATUS: ACTIVE
                                     </span>
-                                    {/* Primary Info: text-xs (12px) */}
                                     <span className="text-xs font-medium tracking-wide text-neutral-400 mt-1 truncate w-full">
                                         {LAYERS.find(l => l.id === hoveredId)?.description}
                                     </span>
@@ -258,11 +277,9 @@ export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrust
                                     transition={{ duration: 0.2 }}
                                     className="flex flex-col items-center"
                                 >
-                                    {/* Secondary Label: text-[10px] */}
                                     <span className="text-[10px] font-medium tracking-widest text-neutral-500">
                                         SYSTEM
                                     </span>
-                                    {/* Primary Info: text-xs (12px) */}
                                     <span className="text-xs font-bold tracking-wider text-white mt-0.5">
                                         PROTECTED
                                     </span>

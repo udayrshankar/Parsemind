@@ -20,7 +20,7 @@ const roles = [
   {
     title: "AI Solution Architects",
     description:
-      "Architecting secure, cloud-native AI platforms—from data pipelines to agent orchestration—integrated into enterprise systems."
+      "Architecting secure, cloud-native AI platforms - from data pipelines to agent orchestration - integrated into enterprise systems."
   },
   {
     title: "Data Scientists",

@@ -92,7 +92,7 @@ const tabContent = {
     title: 'Enterprise AI Strategy and Discovery',
     bullets: [
       'Assess critical business processes and operational bottlenecks',
-      'Identify high-impact AI agent use cases with measurable ROI',
+      'Identify high-impact Agentic AI use cases with measurable ROI',
       'Evaluate data maturity, system dependencies, and risk exposure',
       'Define success metrics, governance models, and ownership',
     ],
@@ -102,7 +102,7 @@ const tabContent = {
   develop: {
     title: 'Engineering Purpose-Built AI Agents',
     bullets: [
-      'Architect agent systems with planning, reasoning, memory, and tools',
+      'Architect Agentic AI systems with planning, reasoning, memory, and tools',
       'Build domain-specific agents aligned to business logic and policies',
       'Integrate securely with internal platforms, APIs, and proprietary data',
       'Implement observability, escalation paths, and human oversight',

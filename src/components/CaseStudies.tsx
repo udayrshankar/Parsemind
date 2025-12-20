@@ -33,7 +33,7 @@ export const CaseStudies = () => {
               {/* Left Column */}
               <div className="order-2 lg:order-1">
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-fraunces font-medium text-text-main mb-4 md:mb-6 leading-[1.15]">
-                  Harmonizing Complex, Disparate Data — Made Simple
+                  Harmonizing Complex, Disparate Data - Made Simple
                 </h3>
                 
                 <p className="text-lg md:text-xl text-gray-600 font-inter leading-relaxed mb-8 md:mb-10">
