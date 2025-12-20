@@ -201,7 +201,7 @@ export default function AboutPage() {
 
         {/* --- Founders Section --- */}
         <section>
-          <div className="border-b py-2 border-neutral-200 flex flex-col md:flex-row md:justify-between md:items-center mb-8 md:mb-12 gap-2 md:gap-0">
+          <div className="border-b border-neutral-200 flex flex-col md:flex-row md:justify-between md:items-center mb-8 md:mb-12 gap-2 md:gap-0">
             <Reveal>
               <h2 className="text-3xl md:text-4xl font-fraunces text-text-main">
                 Leadership

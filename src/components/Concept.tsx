@@ -178,7 +178,7 @@ export default function Concept() {
                       overflow-hidden
                       cursor-pointer
                       flex flex-col justify-between
-                      h-60 md:h-[200px]
+                      h-40 md:h-[200px]
                     "
                     onMouseEnter={() => setActiveTab(step.tableKey as TabKey)}
                     onClick={() => setActiveTab(step.tableKey as TabKey)}
