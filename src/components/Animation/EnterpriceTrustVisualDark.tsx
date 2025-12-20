@@ -9,41 +9,41 @@ const CENTER = SIZE / 2;
 const CORE_RADIUS = 88;
 
 const LAYERS = [
-  { 
+  {
     id: "compliance",
-    label: "COMPLIANCE", 
-    radius: 310, 
-    speed: 50, 
-    dashArray: "4 8", 
+    label: "COMPLIANCE",
+    radius: 310,
+    speed: 50,
+    dashArray: "4 8",
     width: 1,
-    description: "SOC2 • GDPR • HIPAA" 
+    description: "SOC2 • GDPR • HIPAA",
   },
-  { 
+  {
     id: "security",
-    label: "DATA SECURITY", 
-    radius: 245, 
-    speed: 35, 
-    dashArray: "40 120", 
+    label: "DATA SECURITY",
+    radius: 245,
+    speed: 35,
+    dashArray: "40 120",
     width: 1.5,
-    description: "AES-256 ENCRYPTION" 
+    description: "AES-256 ENCRYPTION",
   },
-  { 
+  {
     id: "observability",
-    label: "OBSERVABILITY", 
-    radius: 180, 
-    speed: 25, 
-    dashArray: "10 10", 
+    label: "OBSERVABILITY",
+    radius: 180,
+    speed: 25,
+    dashArray: "10 10",
     width: 1,
-    description: "REAL-TIME LOGGING" 
+    description: "REAL-TIME LOGGING",
   },
-  { 
+  {
     id: "oversight",
-    label: "HUMAN OVERSIGHT", 
-    radius: 115, 
-    speed: 20, 
-    dashArray: "80 180", 
+    label: "HUMAN OVERSIGHT",
+    radius: 115,
+    speed: 20,
+    dashArray: "80 180",
     width: 2,
-    description: "MANUAL REVIEW" 
+    description: "MANUAL REVIEW",
   },
 ];
 
@@ -51,7 +51,16 @@ const LAYERS = [
    ICON COMPONENT
 -------------------------------- */
 const ShieldIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+  <svg
+    width="32"
+    height="32"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+  >
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     <path d="M12 8v4" />
     <path d="M12 16h.01" />
@@ -62,235 +71,292 @@ const ShieldIcon = () => (
    MAIN COMPONENT
 -------------------------------- */
 interface EnterpriseTrustVisualDarkProps {
-    scale?: number;
+  scale?: number;
 }
 
-export default function EnterpriseTrustVisualDark({ scale = 1 }: EnterpriseTrustVisualDarkProps) {
+export default function EnterpriseTrustVisualDark({
+  scale = 1,
+}: EnterpriseTrustVisualDarkProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
     // 1. Bounding Box
-    <div 
-        className="relative mx-auto overflow-hidden"
-        style={{ 
-            width: SIZE * scale, 
-            height: SIZE * scale 
-        }}
+    <div
+      className="relative mx-auto overflow-hidden" // Added dark bg for preview
+      style={{
+        width: SIZE * scale,
+        height: SIZE * scale,
+      }}
     >
       {/* 2. Scaler Container */}
-      <div 
+      <div
         className="relative flex items-center justify-center font-sans text-white translate-y-20"
-        style={{ 
-            width: SIZE, 
-            height: SIZE,
-            transform: `scale(${scale})`,
-            transformOrigin: "top left"
+        style={{
+          width: SIZE,
+          height: SIZE,
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
         }}
       >
-      
-        <div 
-            className="relative" 
-            style={{ width: SIZE, height: SIZE }}
-        >
-            {/* A. SVG LAYER (Rings & Radiation) */}
-            <svg 
-                className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
-                viewBox={`0 0 ${SIZE} ${SIZE}`}
-            >
-                {/* 1. Radiating Radar Waves */}
-                {[0, 1, 2].map((i) => (
-                <motion.circle
-                    key={`wave-${i}`}
-                    cx={CENTER}
-                    cy={CENTER}
-                    r={CORE_RADIUS}
-                    fill="none"
-                    stroke="#6366f1" // Indigo-500
-                    strokeWidth="1"
-                    initial={{ opacity: 0.3, scale: 1 }}
-                    animate={{ 
-                    opacity: 0,
-                    r: SIZE / 2, 
-                    }}
-                    transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeOut",
-                    delay: i * 1.3,
-                    }}
-                />
-                ))}
+        <div className="relative" style={{ width: SIZE, height: SIZE }}>
+          {/* A. SVG LAYER (Rings & Radiation) */}
+          <svg
+            className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
+            viewBox={`0 0 ${SIZE} ${SIZE}`}
+          >
+            {/* 1. Radiating Radar Waves */}
+            {[0, 1, 2].map((i) => (
+              <motion.circle
+                key={`wave-${i}`}
+                cx={CENTER}
+                cy={CENTER}
+                r={CORE_RADIUS}
+                fill="none"
+                stroke="#6366f1" // Indigo-500
+                strokeWidth="1"
+                initial={{ opacity: 0.3, scale: 1 }}
+                animate={{
+                  opacity: 0,
+                  r: SIZE / 2,
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 1.3,
+                }}
+              />
+            ))}
 
-                {/* 2. Rotating Layers */}
-                {LAYERS.map((layer, index) => {
-                    const isHovered = hoveredId === layer.id;
-                    const isDimmed = hoveredId !== null && !isHovered;
-
-                    return (
-                        <motion.g
-                            key={layer.id}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, delay: layer.radius * 0.002 }}
-                        >
-                            <motion.g
-                                style={{ originX: "50%", originY: "50%" }}
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: layer.speed, repeat: Infinity, ease: "linear" }}
-                            >
-                                {/* Hit Area */}
-                                <circle
-                                    cx={CENTER}
-                                    cy={CENTER}
-                                    r={layer.radius}
-                                    fill="none"
-                                    stroke="transparent"
-                                    strokeWidth="40"
-                                    className="pointer-events-auto cursor-pointer"
-                                    onMouseEnter={() => setHoveredId(layer.id)}
-                                    onMouseLeave={() => setHoveredId(null)}
-                                />
-
-                                {/* Visible Ring (Blinking) */}
-                                <motion.circle
-                                    cx={CENTER}
-                                    cy={CENTER}
-                                    r={layer.radius}
-                                    fill="none"
-                                    strokeWidth={layer.width}
-                                    strokeDasharray={layer.dashArray}
-                                    strokeLinecap="square"
-                                    animate={{
-                                        stroke: isHovered ? "#6366f1" : "#404040",
-                                        opacity: isDimmed 
-                                            ? 0.1 
-                                            : isHovered 
-                                                ? 1 
-                                                : [0.3, 1, 0.3] // Pulse opacity strongly
-                                    }}
-                                    transition={{
-                                        stroke: { duration: 0.3 },
-                                        opacity: {
-                                            duration: isHovered || isDimmed ? 0.3 : 3, // 3s Cycle
-                                            repeat: isHovered || isDimmed ? 0 : Infinity,
-                                            ease: "easeInOut",
-                                            delay: isHovered || isDimmed ? 0 : index * 0.5 // Sync with text
-                                        }
-                                    }}
-                                />
-                            </motion.g>
-                        </motion.g>
-                    );
-                })}
-            </svg>
-
-            {/* B. HTML LAYER (Labels) */}
+            {/* 2. Rotating Layers */}
             {LAYERS.map((layer, index) => {
-                const isHovered = hoveredId === layer.id;
-                const isDimmed = hoveredId !== null && !isHovered;
+              const isHovered = hoveredId === layer.id;
+              const isDimmed = hoveredId !== null && !isHovered;
 
-                return (
-                    <div
-                        key={`label-${layer.id}`}
-                        className="absolute top-1/2 left-1/2 pointer-events-none" 
-                        style={{ 
-                            transform: `translate(-50%, calc(-50% - ${layer.radius}px))` 
-                        }} 
-                    >
-                        <div 
-                            className="pointer-events-auto cursor-pointer p-2"
-                            onMouseEnter={() => setHoveredId(layer.id)}
-                            onMouseLeave={() => setHoveredId(null)}
-                        >
-                            <motion.div 
-                                className="bg-neutral-900/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-transparent z-10"
-                                animate={{ 
-                                    opacity: isDimmed ? 0.2 : 1,
-                                    borderColor: isHovered ? "rgba(99, 102, 241, 0.3)" : "rgba(255,255,255,0)"
-                                }}
-                            >
-                                {/* Blinking Text Animation */}
-                                <motion.span 
-                                    className="text-xs font-bold tracking-[0.2em] whitespace-nowrap block"
-                                    animate={{ 
-                                        // Pulse color from dark gray to white
-                                        color: isHovered ? "#818cf8" : isDimmed ? "#525252" : ["#525252", "#ffffff", "#525252"],
-                                        scale: isHovered ? 1.05 : 1,
-                                        // Pulse opacity along with color
-                                        opacity: isDimmed ? 0.5 : isHovered ? 1 : [0.5, 1, 0.5]
-                                    }}
-                                    transition={{
-                                        duration: isHovered || isDimmed ? 0.3 : 3, // Syncs with Ring duration
-                                        repeat: isHovered || isDimmed ? 0 : Infinity,
-                                        ease: "easeInOut",
-                                        delay: isHovered || isDimmed ? 0 : index * 0.5 // Syncs with Ring delay
-                                    }}
-                                >
-                                    {layer.label}
-                                </motion.span>
-                            </motion.div>
-                        </div>
-                    </div>
-                );
-            })}
-
-            {/* C. CENTER CORE */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                <motion.div
-                    className="w-44 h-44 bg-neutral-900 rounded-full border border-neutral-800 shadow-2xl flex flex-col items-center justify-center gap-3"
-                    animate={{
-                        borderColor: hoveredId ? "rgba(99, 102, 241, 0.5)" : "rgba(38, 38, 38, 1)",
-                        boxShadow: hoveredId ? "0 0 50px -10px rgba(99, 102, 241, 0.3)" : "0 20px 50px -10px rgba(0,0,0,0.5)"
-                    }}
+              return (
+                <motion.g
+                  key={layer.id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: layer.radius * 0.002 }}
                 >
-                    <motion.div 
-                        animate={{ color: hoveredId ? "#818cf8" : "#ffffff" }}
-                        transition={{ duration: 0.3 }}
+                  <motion.g
+                    style={{ originX: "50%", originY: "50%" }}
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      duration: layer.speed,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  >
+                    {/* Hit Area */}
+                    <circle
+                      cx={CENTER}
+                      cy={CENTER}
+                      r={layer.radius}
+                      fill="none"
+                      stroke="transparent"
+                      strokeWidth="40"
+                      className="pointer-events-auto cursor-pointer"
+                      onMouseEnter={() => setHoveredId(layer.id)}
+                      onMouseLeave={() => setHoveredId(null)}
+                    />
+
+                    {/* Visible Ring (TECH BLINK EFFECT) */}
+                    <motion.circle
+                      cx={CENTER}
+                      cy={CENTER}
+                      r={layer.radius}
+                      fill="none"
+                      strokeWidth={layer.width}
+                      strokeDasharray={layer.dashArray}
+                      strokeLinecap="square"
+                      animate={{
+                        stroke: isHovered ? "#6366f1" : "#525252",
+                        // The array creates the "On, Hold, Off" sequence
+                        opacity: isDimmed
+                          ? 0.1
+                          : isHovered
+                          ? 1
+                          : [0.1, 1, 1, 0.1],
+                      }}
+                      transition={{
+                        stroke: { duration: 0.1 }, // Instant color change
+                        opacity: {
+                          duration: isHovered || isDimmed ? 0.2 : 2.5, // Cycle duration
+                          repeat: Infinity,
+                          // The times array makes it look like a radar blip:
+                          // 0% -> 5%: Fade In
+                          // 5% -> 20%: Hold ON
+                          // 20% -> 25%: Fade Out
+                          // 25% -> 100%: Stay OFF
+                          times:
+                            isHovered || isDimmed
+                              ? [0, 1]
+                              : [0, 0.05, 0.2, 0.25],
+                          ease: "linear",
+                          delay: isHovered || isDimmed ? 0 : index * 0.4, // Staggered blips
+                        },
+                      }}
+                    />
+                  </motion.g>
+                </motion.g>
+              );
+            })}
+          </svg>
+
+          {/* B. HTML LAYER (Labels) */}
+          {/* B. HTML LAYER (Labels) */}
+          {LAYERS.map((layer, index) => {
+            const isHovered = hoveredId === layer.id;
+            const isDimmed = hoveredId !== null && !isHovered;
+
+            return (
+              <div
+                key={`label-${layer.id}`}
+                className="absolute top-1/2 left-1/2 pointer-events-none"
+                style={{
+                  transform: `translate(-50%, calc(-50% - ${layer.radius}px))`,
+                }}
+              >
+                <div
+                  className="pointer-events-auto cursor-pointer p-2"
+                  onMouseEnter={() => setHoveredId(layer.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                >
+                  <motion.div
+                    className="bg-neutral-900/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-transparent z-10"
+                    animate={{
+                      opacity: isDimmed ? 0.2 : 1,
+                      borderColor: isHovered
+                        ? "rgba(99, 102, 241, 0.5)"
+                        : "rgba(255,255,255,0)",
+                    }}
+                  >
+                    {/* Digital Blink Text Animation */}
+                    <motion.span
+                      className="text-xs font-bold tracking-[0.2em] whitespace-nowrap block"
+                      animate={{
+                        // THE FIX: Define the 'glitch' manually using arrays
+                        // 1. Base State (Grey)
+                        // 2. Base State (Grey) -> Instant Switch next frame
+                        // 3. Active State (White)
+                        // 4. Active State (White) -> Instant Switch next frame
+                        // 5. Return to Base
+                        color: isHovered
+                          ? "#818cf8"
+                          : isDimmed
+                          ? "#525252"
+                          : [
+                              "#525252",
+                              "#525252",
+                              "#ffffff",
+                              "#ffffff",
+                              "#525252",
+                            ],
+
+                        opacity: isDimmed
+                          ? 0.5
+                          : isHovered
+                          ? 1
+                          : [0.5, 0.5, 1, 1, 0.5],
+                      }}
+                      transition={{
+                        color: {
+                          duration: isHovered || isDimmed ? 0.1 : 2.5,
+                          repeat: Infinity,
+                          // THE FIX: Use very close time values to simulate a "Step"
+                          // 0% -> 4.9%: Stay Grey
+                          // 5%: SNAP to White
+                          // 5% -> 25%: Stay White
+                          // 25.1%: SNAP to Grey
+                          times:
+                            isHovered || isDimmed
+                              ? [0, 1]
+                              : [0, 0.049, 0.05, 0.25, 0.251],
+                          ease: "linear",
+                          delay: isHovered || isDimmed ? 0 : index * 0.4,
+                        },
+                        opacity: {
+                          duration: isHovered || isDimmed ? 0.1 : 2.5,
+                          repeat: Infinity,
+                          times:
+                            isHovered || isDimmed
+                              ? [0, 1]
+                              : [0, 0.049, 0.05, 0.25, 0.251],
+                          ease: "linear",
+                          delay: isHovered || isDimmed ? 0 : index * 0.4,
+                        },
+                        scale: { duration: 0.2 },
+                      }}
                     >
-                        <ShieldIcon />
+                      {layer.label}
+                    </motion.span>
+                  </motion.div>
+                </div>
+              </div>
+            );
+          })}
+          {/* C. CENTER CORE */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+            <motion.div
+              className="w-44 h-44 bg-neutral-900 rounded-full border border-neutral-800 shadow-2xl flex flex-col items-center justify-center gap-3"
+              animate={{
+                borderColor: hoveredId
+                  ? "rgba(99, 102, 241, 0.5)"
+                  : "rgba(38, 38, 38, 1)",
+                boxShadow: hoveredId
+                  ? "0 0 50px -10px rgba(99, 102, 241, 0.3)"
+                  : "0 20px 50px -10px rgba(0,0,0,0.5)",
+              }}
+            >
+              <motion.div
+                animate={{ color: hoveredId ? "#818cf8" : "#ffffff" }}
+                transition={{ duration: 0.1 }} // Snappier icon change
+              >
+                <ShieldIcon />
+              </motion.div>
+
+              <div className="h-10 flex flex-col items-center justify-center w-full px-4 text-center">
+                <AnimatePresence mode="wait">
+                  {hoveredId ? (
+                    <motion.div
+                      key="hovered"
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex flex-col items-center"
+                    >
+                      <span className="text-[10px] font-bold tracking-widest text-indigo-400 uppercase">
+                        STATUS: ACTIVE
+                      </span>
+                      <span className="text-xs font-medium tracking-wide text-neutral-400 mt-1 truncate w-full">
+                        {LAYERS.find((l) => l.id === hoveredId)?.description}
+                      </span>
                     </motion.div>
-                    
-                    <div className="h-10 flex flex-col items-center justify-center w-full px-4 text-center">
-                        <AnimatePresence mode="wait">
-                            {hoveredId ? (
-                                <motion.div
-                                    key="hovered"
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -5 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="flex flex-col items-center"
-                                >
-                                    <span className="text-[10px] font-bold tracking-widest text-indigo-400 uppercase">
-                                        STATUS: ACTIVE
-                                    </span>
-                                    <span className="text-xs font-medium tracking-wide text-neutral-400 mt-1 truncate w-full">
-                                        {LAYERS.find(l => l.id === hoveredId)?.description}
-                                    </span>
-                                </motion.div>
-                            ) : (
-                                <motion.div
-                                    key="default"
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -5 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="flex flex-col items-center"
-                                >
-                                    <span className="text-[10px] font-medium tracking-widest text-neutral-500">
-                                        SYSTEM
-                                    </span>
-                                    <span className="text-xs font-bold tracking-wider text-white mt-0.5">
-                                        PROTECTED
-                                    </span>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </motion.div>
-            </div>
+                  ) : (
+                    <motion.div
+                      key="default"
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex flex-col items-center"
+                    >
+                      <span className="text-[10px] font-medium tracking-widest text-neutral-500">
+                        SYSTEM
+                      </span>
+                      <span className="text-xs font-bold tracking-wider text-white mt-0.5">
+                        PROTECTED
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      
       </div>
     </div>
   );

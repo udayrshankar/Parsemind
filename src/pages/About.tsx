@@ -16,7 +16,7 @@ type Person = {
 };
 
 /* --------------------
-   Founders
+   Founders Data
 -------------------- */
 const founders: Person[] = [
   {
@@ -48,7 +48,7 @@ const founders: Person[] = [
 ];
 
 /* --------------------
-   Principles
+   Principles Data
 -------------------- */
 const principles = [
   {
@@ -84,7 +84,7 @@ const principles = [
 ];
 
 /* --------------------
-   Founder Block (UNCHANGED)
+   Founder Block Component
 -------------------- */
 const FounderBlock = ({ person }: { person: Person }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -96,8 +96,9 @@ const FounderBlock = ({ person }: { person: Person }) => {
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <div ref={ref} className="pt-8">
-      <div className="relative h-[520px] w-full overflow-hidden border border-neutral-200 bg-neutral-100">
+    <div ref={ref} className="pt-4 md:pt-8">
+      {/* Responsive Image Height: shorter on mobile, tall on desktop */}
+      <div className="relative h-[400px] md:h-[520px] w-full overflow-hidden border border-neutral-200 bg-neutral-100">
         <motion.div
           style={{ y }}
           className="h-[120%] w-full relative -top-[10%]"
@@ -111,27 +112,27 @@ const FounderBlock = ({ person }: { person: Person }) => {
         <div className="absolute inset-0 bg-black/5" />
       </div>
 
-      <div className="pt-8">
+      <div className="pt-6 md:pt-8">
         <span className="text-xs uppercase tracking-widest font-bold text-neutral-400">
           {person.role}
         </span>
 
-        <h3 className="mt-4 text-4xl font-fraunces font-medium text-neutral-900">
+        <h3 className="mt-3 md:mt-4 text-3xl md:text-4xl font-fraunces font-medium text-neutral-900 leading-tight">
           {person.name}
         </h3>
 
-        <p className="mt-6 text-lg leading-relaxed text-neutral-600 max-w-xl">
+        <p className="mt-4 md:mt-6 text-base md:text-lg leading-relaxed text-neutral-600 max-w-xl">
           {person.bio}
         </p>
 
-        <div className="mt-10 pt-6">
+        <div className="mt-8 md:mt-10 pt-6 border-t border-neutral-100 md:border-none">
           <p className="text-xs uppercase tracking-widest font-bold text-neutral-400 mb-4">
             Focus Areas
           </p>
           <div className="flex flex-col gap-2">
             {person.qualities.map((q) => (
               <span key={q} className="text-sm text-neutral-800 font-medium">
-                 -  {q}
+                - &nbsp;{q}
               </span>
             ))}
           </div>
@@ -142,126 +143,135 @@ const FounderBlock = ({ person }: { person: Person }) => {
 };
 
 /* --------------------
-   Page
+   Page Component
 -------------------- */
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 font-inter">
+      {/* Main Container: Adjusted vertical padding for mobile vs desktop */}
+      <main className="w-full max-w-7xl mx-auto pt-20 pb-20 md:pt-32 md:pb-32 px-6 space-y-20 md:space-y-32">
+        
+        {/* --- Hero Section --- */}
+        <section className="w-full">
+          <Reveal>
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10 lg:gap-12">
+              {/* LEFT: TEXT */}
+              <div className="max-w-4xl">
+                <span className="text-neutral-500 uppercase tracking-[0.25em] mb-4 block text-xs font-bold">
+                  Who We Are
+                </span>
 
-        <main className="w-full max-w-7xl mx-auto pt-32 pb-32 px-6 space-y-16">
-          <section className="w-full">
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-fraunces font-medium text-text-main leading-[1.1]">
+                  We build AI systems enterprises can trust.
+                </h1>
+
+                <p className="mt-6 md:mt-8 text-lg md:text-xl text-neutral-600 leading-relaxed max-w-2xl">
+                  Parsemind is an enterprise AI consulting and engineering
+                  firm focused on designing, deploying, and scaling agentic AI
+                  systems inside real organizations - where reliability,
+                  governance, and accountability matter.
+                </p>
+              </div>
+
+              {/* RIGHT: BUTTON */}
+              <div className="flex items-center w-full lg:w-auto">
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("mission-principles")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="
+                    w-full lg:w-auto
+                    px-10 py-4 md:px-14
+                    bg-black text-white
+                    border-2 border-black
+                    text-sm font-bold uppercase tracking-widest
+                    transition-all duration-300
+                    hover:bg-white hover:text-black
+                    flex justify-center
+                  "
+                >
+                  View Principles
+                </button>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* --- Founders Section --- */}
+        <section>
+          <div className="border-b py-2 border-neutral-200 flex flex-col md:flex-row md:justify-between md:items-center mb-8 md:mb-12 gap-2 md:gap-0">
             <Reveal>
-              <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
-                {/* LEFT: TEXT */}
-                <div className="max-w-4xl">
-                  <span className="text-neutral-500 uppercase tracking-[0.25em] mb-4 block text-xs font-bold">
-                    Who We Are
+              <h2 className="text-3xl md:text-4xl font-fraunces text-text-main">
+                Leadership
+              </h2>
+            </Reveal>
+            <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+              Founders
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
+            {founders.map((person) => (
+              <Reveal key={person.id}>
+                <FounderBlock person={person} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* --- Principles Section --- */}
+        <section
+          id="mission-principles"
+          className="border-t border-neutral-200 pt-16 md:pt-24"
+        >
+          <div className="flex flex-col text-center justify-center items-center mb-12 md:mb-16">
+            <Reveal>
+              <span className="text-neutral-500 uppercase tracking-wider text-xs font-bold">
+                How We Think
+              </span>
+              <h2 className="text-3xl md:text-5xl font-fraunces text-text-main mt-4">
+                Mission and Principles
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {principles.map((item, index) => (
+              <Reveal key={index} delay={index * 0.1}>
+                {/* Card: Adjusted padding for mobile */}
+                <div className="group relative h-full bg-white border border-neutral-200 p-6 md:p-8 lg:p-10 hover:bg-neutral-900 transition-all duration-500 ease-out cursor-default overflow-hidden min-h-[250px]">
+                  
+                  {/* Background Number: Smaller on mobile to prevent overlap */}
+                  <span className="absolute -bottom-6 -right-2 md:-bottom-10 md:-right-4 text-[6rem] md:text-[8rem] lg:text-[10rem] font-bold leading-none text-neutral-100 group-hover:text-neutral-800 transition-colors duration-500 pointer-events-none select-none z-0">
+                    {index + 1}
                   </span>
 
-                  <h1 className="type-h1 text-text-main">
-                    We build AI systems enterprises can trust.
-                  </h1>
-
-                  <p className="mt-8 text-xl text-neutral-600 leading-relaxed">
-                    Parsemind is an enterprise AI consulting and engineering
-                    firm focused on designing, deploying, and scaling agentic AI
-                    systems inside real organizations - where reliability,
-                    governance, and accountability matter.
-                  </p>
-                </div>
-
-                {/* RIGHT: BUTTON (VERTICALLY CENTERED) */}
-                <div className="flex items-center">
-                  <button
-                    onClick={() =>
-                      document
-                        .getElementById("mission-principles")
-                        ?.scrollIntoView({ behavior: "smooth" })
-                    }
-                    className="
-            px-14 py-4
-            bg-black text-white
-            border-2 border-black
-            text-sm font-bold uppercase tracking-widest
-            transition-all duration-300
-            hover:bg-white hover:text-black
-          "
-                  >
-                    View Principles
-                  </button>
-                </div>
-              </div>
-            </Reveal>
-          </section>
-
-       
-          <section>
-            <div className="border-b py-2 border-neutral-200 flex justify-between items-center mb-8">
-              <Reveal>
-                <h2 className="type-h1 text-text-main">Leadership</h2>
-              </Reveal>
-              <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
-                Founders
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-              {founders.map((person) => (
-                <Reveal key={person.id}>
-                  <FounderBlock person={person} />
-                </Reveal>
-              ))}
-            </div>
-          </section>
-
-    
-          <section
-            id="mission-principles"
-            className="border-t border-neutral-200 pt-24"
-          >
-            <div className="flex flex-col text-center justify-center items-center mb-16">
-              <Reveal>
-                <span className="text-neutral-500 uppercase tracking-wider text-xs font-bold">
-                  How We Think
-                </span>
-                <h2 className="type-h2 text-text-main mt-4">
-                  Mission and Principles
-                </h2>
-              </Reveal>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {principles.map((item, index) => (
-                <Reveal key={index} delay={index * 0.1}>
-                  <div className="group relative h-full bg-white border border-neutral-200 p-10 hover:bg-neutral-900 transition-all duration-500 ease-out cursor-default overflow-hidden">
-                    <span className="absolute -bottom-10 -right-4 text-[10rem] font-bold leading-none text-neutral-100 group-hover:text-neutral-800 transition-colors duration-500 pointer-events-none select-none z-0">
-                      {index + 1}
-                    </span>
-
-                    <div className="relative z-10 flex flex-col gap-4 min-h-[200px]">
-                      <h3 className="text-xl font-semibold text-neutral-900 mb-3 group-hover:text-white transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-[16px] text-neutral-600 group-hover:text-neutral-400 leading-relaxed transition-colors">
-                        {item.description}
-                      </p>
-                    </div>
+                  <div className="relative z-10 flex flex-col gap-3 md:gap-4">
+                    <h3 className="text-lg md:text-xl font-semibold text-neutral-900 mb-1 md:mb-3 group-hover:text-white transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm md:text-[16px] text-neutral-600 group-hover:text-neutral-400 leading-relaxed transition-colors">
+                      {item.description}
+                    </p>
                   </div>
-                </Reveal>
-              ))}
-            </div>
-          </section>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
 
-          <section className="max-w-3xl">
-            <Reveal>
-              <p className="text-2xl text-neutral-700 leading-relaxed">
-                Enterprise AI succeeds not through speed alone, but through
-                clarity, discipline, and systems designed to endure.
-              </p>
-            </Reveal>
-          </section>
-        </main>
-
+        {/* --- Footer Quote --- */}
+        <section className="max-w-3xl">
+          <Reveal>
+            <p className="text-xl md:text-2xl text-neutral-700 leading-relaxed">
+              Enterprise AI succeeds not through speed alone, but through
+              clarity, discipline, and systems designed to endure.
+            </p>
+          </Reveal>
+        </section>
+      </main>
     </div>
   );
 }
