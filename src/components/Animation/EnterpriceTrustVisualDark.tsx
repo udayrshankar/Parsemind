@@ -1,4 +1,5 @@
-import { motion, AnimatePresence } from "framer-motion";
+// 1. Add 'Variants' to the import
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { useState } from "react";
 
 /* ------------------------------
@@ -9,6 +10,7 @@ const CENTER = SIZE / 2;
 const CORE_RADIUS = 88;
 
 const LAYERS = [
+  // ... (same as before) ...
   {
     id: "compliance",
     label: "COMPLIANCE",
@@ -48,6 +50,66 @@ const LAYERS = [
 ];
 
 /* ------------------------------
+   ANIMATION VARIANTS
+-------------------------------- */
+
+// 2. Explicitly type as ': Variants'
+const ringVariants: Variants = {
+  idle: (i: number) => ({
+    stroke: "#525252",
+    opacity: [0.1, 1, 0.1, 1, 0.1],
+    transition: {
+      stroke: { duration: 0.2 },
+      opacity: {
+        duration: 3,
+        repeat: Infinity,
+        delay: i * 0.8,
+        ease: "linear", // TypeScript now knows this is a valid Easing type
+        times: [0, 0.03, 0.06, 0.09, 1],
+      },
+    },
+  }),
+  active: {
+    stroke: "#6366f1",
+    opacity: 1,
+    transition: { duration: 0.2 },
+  },
+  dimmed: {
+    stroke: "#525252",
+    opacity: 0.1,
+    transition: { duration: 0.2 },
+  },
+};
+
+// 3. Explicitly type as ': Variants'
+const textVariants: Variants = {
+  idle: (i: number) => ({
+    color: "#525252",
+    opacity: [0.5, 1, 0.5, 1, 0.5],
+    transition: {
+      color: { duration: 0.2 },
+      opacity: {
+        duration: 3,
+        repeat: Infinity,
+        delay: i * 0.8,
+        ease: "linear",
+        times: [0, 0.03, 0.06, 0.09, 1],
+      },
+    },
+  }),
+  active: {
+    color: "#818cf8",
+    opacity: 1,
+    transition: { duration: 0.2 },
+  },
+  dimmed: {
+    color: "#525252",
+    opacity: 0.2,
+    transition: { duration: 0.2 },
+  },
+};
+
+/* ------------------------------
    ICON COMPONENT
 -------------------------------- */
 const ShieldIcon = () => (
@@ -80,15 +142,13 @@ export default function EnterpriseTrustVisualDark({
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    // 1. Bounding Box
     <div
-      className="relative mx-auto overflow-hidden" // Added dark bg for preview
+      className="relative mx-auto overflow-hidden "
       style={{
         width: SIZE * scale,
         height: SIZE * scale,
       }}
     >
-      {/* 2. Scaler Container */}
       <div
         className="relative flex items-center justify-center font-sans text-white translate-y-20"
         style={{
@@ -104,7 +164,7 @@ export default function EnterpriseTrustVisualDark({
             className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
             viewBox={`0 0 ${SIZE} ${SIZE}`}
           >
-            {/* 1. Radiating Radar Waves */}
+            {/* 1. Background Waves */}
             {[0, 1, 2].map((i) => (
               <motion.circle
                 key={`wave-${i}`}
@@ -112,7 +172,7 @@ export default function EnterpriseTrustVisualDark({
                 cy={CENTER}
                 r={CORE_RADIUS}
                 fill="none"
-                stroke="#6366f1" // Indigo-500
+                stroke="#6366f1"
                 strokeWidth="1"
                 initial={{ opacity: 0.3, scale: 1 }}
                 animate={{
@@ -130,8 +190,13 @@ export default function EnterpriseTrustVisualDark({
 
             {/* 2. Rotating Layers */}
             {LAYERS.map((layer, index) => {
-              const isHovered = hoveredId === layer.id;
-              const isDimmed = hoveredId !== null && !isHovered;
+              // Determine current state based on hover
+              const state =
+                hoveredId === layer.id
+                  ? "active"
+                  : hoveredId
+                  ? "dimmed"
+                  : "idle";
 
               return (
                 <motion.g
@@ -149,7 +214,7 @@ export default function EnterpriseTrustVisualDark({
                       ease: "linear",
                     }}
                   >
-                    {/* Hit Area */}
+                    {/* Hit Area (Invisible) */}
                     <circle
                       cx={CENTER}
                       cy={CENTER}
@@ -162,7 +227,7 @@ export default function EnterpriseTrustVisualDark({
                       onMouseLeave={() => setHoveredId(null)}
                     />
 
-                    {/* Visible Ring (TECH BLINK EFFECT) */}
+                    {/* Visible Ring */}
                     <motion.circle
                       cx={CENTER}
                       cy={CENTER}
@@ -171,33 +236,11 @@ export default function EnterpriseTrustVisualDark({
                       strokeWidth={layer.width}
                       strokeDasharray={layer.dashArray}
                       strokeLinecap="square"
-                      animate={{
-                        stroke: isHovered ? "#6366f1" : "#525252",
-                        // The array creates the "On, Hold, Off" sequence
-                        opacity: isDimmed
-                          ? 0.1
-                          : isHovered
-                          ? 1
-                          : [0.1, 1, 1, 0.1],
-                      }}
-                      transition={{
-                        stroke: { duration: 0.1 }, // Instant color change
-                        opacity: {
-                          duration: isHovered || isDimmed ? 0.2 : 2.5, // Cycle duration
-                          repeat: Infinity,
-                          // The times array makes it look like a radar blip:
-                          // 0% -> 5%: Fade In
-                          // 5% -> 20%: Hold ON
-                          // 20% -> 25%: Fade Out
-                          // 25% -> 100%: Stay OFF
-                          times:
-                            isHovered || isDimmed
-                              ? [0, 1]
-                              : [0, 0.05, 0.2, 0.25],
-                          ease: "linear",
-                          delay: isHovered || isDimmed ? 0 : index * 0.4, // Staggered blips
-                        },
-                      }}
+                      // Pass the index to custom for staggering
+                      custom={index} 
+                      // Switch between variants based on state string
+                      variants={ringVariants}
+                      animate={state}
                     />
                   </motion.g>
                 </motion.g>
@@ -206,10 +249,13 @@ export default function EnterpriseTrustVisualDark({
           </svg>
 
           {/* B. HTML LAYER (Labels) */}
-          {/* B. HTML LAYER (Labels) */}
           {LAYERS.map((layer, index) => {
-            const isHovered = hoveredId === layer.id;
-            const isDimmed = hoveredId !== null && !isHovered;
+            const state =
+              hoveredId === layer.id
+                ? "active"
+                : hoveredId
+                ? "dimmed"
+                : "idle";
 
             return (
               <div
@@ -227,68 +273,18 @@ export default function EnterpriseTrustVisualDark({
                   <motion.div
                     className="bg-neutral-900/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-transparent z-10"
                     animate={{
-                      opacity: isDimmed ? 0.2 : 1,
-                      borderColor: isHovered
-                        ? "rgba(99, 102, 241, 0.5)"
-                        : "rgba(255,255,255,0)",
+                      borderColor:
+                        state === "active"
+                          ? "rgba(99, 102, 241, 0.5)"
+                          : "rgba(255,255,255,0)",
                     }}
                   >
-                    {/* Digital Blink Text Animation */}
+                    {/* Label Text */}
                     <motion.span
                       className="text-xs font-bold tracking-[0.2em] whitespace-nowrap block"
-                      animate={{
-                        // THE FIX: Define the 'glitch' manually using arrays
-                        // 1. Base State (Grey)
-                        // 2. Base State (Grey) -> Instant Switch next frame
-                        // 3. Active State (White)
-                        // 4. Active State (White) -> Instant Switch next frame
-                        // 5. Return to Base
-                        color: isHovered
-                          ? "#818cf8"
-                          : isDimmed
-                          ? "#525252"
-                          : [
-                              "#525252",
-                              "#525252",
-                              "#ffffff",
-                              "#ffffff",
-                              "#525252",
-                            ],
-
-                        opacity: isDimmed
-                          ? 0.5
-                          : isHovered
-                          ? 1
-                          : [0.5, 0.5, 1, 1, 0.5],
-                      }}
-                      transition={{
-                        color: {
-                          duration: isHovered || isDimmed ? 0.1 : 2.5,
-                          repeat: Infinity,
-                          // THE FIX: Use very close time values to simulate a "Step"
-                          // 0% -> 4.9%: Stay Grey
-                          // 5%: SNAP to White
-                          // 5% -> 25%: Stay White
-                          // 25.1%: SNAP to Grey
-                          times:
-                            isHovered || isDimmed
-                              ? [0, 1]
-                              : [0, 0.049, 0.05, 0.25, 0.251],
-                          ease: "linear",
-                          delay: isHovered || isDimmed ? 0 : index * 0.4,
-                        },
-                        opacity: {
-                          duration: isHovered || isDimmed ? 0.1 : 2.5,
-                          repeat: Infinity,
-                          times:
-                            isHovered || isDimmed
-                              ? [0, 1]
-                              : [0, 0.049, 0.05, 0.25, 0.251],
-                          ease: "linear",
-                          delay: isHovered || isDimmed ? 0 : index * 0.4,
-                        },
-                        scale: { duration: 0.2 },
-                      }}
+                      custom={index}
+                      variants={textVariants}
+                      animate={state}
                     >
                       {layer.label}
                     </motion.span>
@@ -297,6 +293,7 @@ export default function EnterpriseTrustVisualDark({
               </div>
             );
           })}
+
           {/* C. CENTER CORE */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <motion.div
@@ -312,7 +309,7 @@ export default function EnterpriseTrustVisualDark({
             >
               <motion.div
                 animate={{ color: hoveredId ? "#818cf8" : "#ffffff" }}
-                transition={{ duration: 0.1 }} // Snappier icon change
+                transition={{ duration: 0.1 }}
               >
                 <ShieldIcon />
               </motion.div>
