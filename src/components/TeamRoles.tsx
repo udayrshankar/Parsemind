@@ -17,6 +17,7 @@ const roles = [
     description:
       "Production-grade engineers building, fine-tuning, and deploying secure AI, LLM, and agentic systems at enterprise scale."
   },
+  
   {
     title: "AI Solution Architects",
     description:
@@ -51,7 +52,6 @@ export const TeamRoles = () => {
           </Reveal>
         </div>
 
-        {/* --- 6-Card Grid --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {roles.map((role, index) => (
             <Reveal key={index} delay={index * 0.1}>
