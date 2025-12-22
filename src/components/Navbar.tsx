@@ -9,9 +9,9 @@ import { useCalendly } from './hooks/useCalendly'; // Import the new hook
 const links = [
   { name: "Home", href: "/" },
   { name: "Our Products", href: "#solutions" }, 
-  { name: "About", href: "/about" },
-  { name: "Partners", href: "/partners" },
-  { name: "Blogs", href: "/blogs" },
+  { name: "About", href: "/" },
+  { name: "Partners", href: "/" },
+  { name: "Blogs", href: "/" },
 ];
 
 export const Navbar = () => {
@@ -84,7 +84,7 @@ export const Navbar = () => {
             onClick={openPopup}
             className="bg-white text-black font-bold text-xs px-5 py-2 md:py-2 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
           >
-            Talk to founder
+            Talk to founders
           </button>
         </div>
 
@@ -122,7 +122,7 @@ export const Navbar = () => {
                 onClick={openPopup}
                 className="w-full bg-white text-black py-3 font-semibold mt-4"
               >
-                Talk to founder
+                Talk to founders
               </button>
             </div>
           </motion.div>

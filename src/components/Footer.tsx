@@ -12,8 +12,8 @@ import { FlickeringGrid } from "./FlickerGrid"
 const links = [
   { name: "Home", href: "/" },
   { name: "Our Products", href: "#solutions" },
-  { name: "About", href: "/about" },
-  { name: "Partners", href: "/partners" },
+  { name: "About", href: "/" },
+  { name: "Partners", href: "/" },
 ];
 
 export const Footer: React.FC = () => {

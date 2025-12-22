@@ -3,9 +3,7 @@ import { Hero } from "../components/Hero";
 import Concept from "../components/Concept";
 import { Features } from "../components/Features";
 import { TeamRoles } from "../components/TeamRoles";
-import { CaseStudies } from "../components/CaseStudies"; 
 import { Booking } from "../components/Bookings";
-import { Blogs } from "../components/Blogs";
 import Cta from "../components/Cta";
 
 export default function Home() {
@@ -15,9 +13,7 @@ export default function Home() {
       <Concept/>
       <Features/>
       <TeamRoles/>
-      <CaseStudies/>
       <Booking/>
-      <Blogs/>
       <Cta/>
     </div>
   );
