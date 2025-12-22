@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { usePageTransition } from './TransitionContext';
 import { Link } from 'react-router-dom';
-import { useCalendly } from './hooks/useCalendly'; // Import the new hook
+import { useCalendly } from './hooks/useCalendly';
 
 const links = [
   { name: "Home", href: "/" },
@@ -16,7 +16,7 @@ const links = [
 
 export const Navbar = () => {
   const { triggerTransition } = usePageTransition();
-  const { loadScript, openPopup } = useCalendly(); // Use the hook
+  const { loadScript, openPopup } = useCalendly();
   
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -48,6 +48,11 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Helper to determine if a link should look fully active
+  const isLinkActive = (name: string) => {
+    return name === "Home" || name === "Our Products";
+  };
+
   return (
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
@@ -70,17 +75,21 @@ export const Navbar = () => {
               key={link.name} 
               to={link.href}
               onClick={(e) => handleNavClick(e, link.name)}
-              className="text-sm font-medium text-gray-300 hover:text-white transition-colors cursor-pointer"
+              className={`text-sm font-medium transition-colors cursor-pointer ${
+                isLinkActive(link.name)
+                  ? "text-white" 
+                  : "text-white/50 "
+              }`}
             >
               {link.name}
             </Link>
           ))}
         </div>
 
-        {/* --- CTA Button (Optimized) --- */}
+        {/* --- CTA Button --- */}
         <div className="hidden lg:block">
           <button
-            onMouseEnter={loadScript} // Load heavy script only on hover
+            onMouseEnter={loadScript}
             onClick={openPopup}
             className="bg-white text-black font-bold text-xs px-5 py-2 md:py-2 hover:bg-black hover:text-white hover:scale-105 cursor-pointer transition-all duration-300 border border-black inline-flex items-center justify-center"
           >
@@ -112,7 +121,11 @@ export const Navbar = () => {
                   key={link.name} 
                   to={link.href}
                   onClick={(e) => handleNavClick(e, link.name)}
-                  className="text-lg font-medium text-gray-300 hover:text-white cursor-pointer"
+                  className={`text-lg font-medium transition-colors cursor-pointer ${
+                    isLinkActive(link.name)
+                      ? "text-white" 
+                      : "text-white/50"
+                  }`}
                 >
                   {link.name}
                 </Link>
